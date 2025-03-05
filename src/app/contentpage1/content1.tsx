@@ -108,7 +108,7 @@ export default function Content1page1() {
                   <p>
                     Drive with Confidence, Illuminate with Safety
                     <br />
-                    dasddsadsadsa dasdadasdasddsadsad
+                    Illuminate with Safety
                   </p>
                 </div>
               </div>

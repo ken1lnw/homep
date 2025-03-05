@@ -91,7 +91,7 @@ export default function Navbar2() {
     >
       <div className="flex">
         <Image
-          src="/image.png"
+          src="/brand-2023.png"
           alt="Logo"
           width={100}
           height={50}
@@ -123,7 +123,7 @@ export default function Navbar2() {
       >
         <Menu
           mode="horizontal"
-          defaultSelectedKeys={["1"]}
+          // defaultSelectedKeys={["1"]}
           items={navItems}
           style={{
             minWidth: 0,
