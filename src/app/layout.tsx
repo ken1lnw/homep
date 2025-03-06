@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css"; 
+import { Geist, Geist_Mono , Merriweather_Sans} from "next/font/google";
+import "./globals.css";
 // import Image from "next/image";
 import Navbar from "./navbar";
 import Navbar2 from "./navbar2";
 import Footer from "./footer";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,52 +19,41 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const MerriweatherSans = Merriweather_Sans({
+  // variable: "--font-salabo-13px",
+  subsets: ["latin"],
+  weight: "400"
+});
+
 export const metadata: Metadata = {
   title: "TYC Example",
   description: "TYC",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const locale = await getLocale();
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
   return (
-    <html lang="en">
-      {/* <nav className="bg-black/70 sticky top-0 z-10 border-b font-semibold border-gray-200 backdrop-filter backdrop-blur-3xl bg-opacity-30">
-        <div className=" mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <span className="text-2xl text-gray-900 font-semibold flex items-center">
-         
-
-              <Image
-                src="/image.png"
-                width={120}
-                height={30}
-                alt="Picture of the author"
-              />
-              <div className="text-white text-sm ml-4"> ISO 9001:2015 Certified </div>
-            </span>
-            <div className="flex space-x-4 text-white">
-              <a className="hover:bg-amber-700" href="#">
-                Dashboard
-              </a>
-              <a href="#">About</a>
-              <a href="#">Projects</a>
-              <a href="#">Contact</a>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-
+    <html lang={locale}>
+ 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={MerriweatherSans.className}
       >
-        {/* <Navbar/> */}
-        <Navbar2/>
+        <NextIntlClientProvider messages={messages}>
+          {/* <Navbar/> */}
+          <Navbar2 />
 
-        {children}
-        <Footer/>
+          {children}
+          <Footer />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

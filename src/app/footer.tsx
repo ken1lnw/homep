@@ -1,7 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { FacebookOutlined, MailOutlined, YoutubeOutlined } from "@ant-design/icons";
+import {
+  FacebookOutlined,
+  MailOutlined,
+  YoutubeOutlined,
+} from "@ant-design/icons";
 import Image from "next/image";
 
 const Footer = () => {
@@ -41,9 +45,17 @@ const Footer = () => {
 
         {/* ไอคอน Mail อยู่ข้างล่าง */}
         <div className="mt-4 text-3xl flex space-x-4">
-          <YoutubeOutlined className="text-4xl" />
-          <FacebookOutlined />
-          <MailOutlined />
+          <div className="hover:text-blue-500">
+            <YoutubeOutlined className="text-4xl" />
+          </div>
+
+          <div className="hover:text-blue-500">
+            <FacebookOutlined />
+          </div>
+
+          <div className="hover:text-blue-500">
+            <MailOutlined />
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,17 @@
+{
+  "HomePage": {
+    "title": "สวัสดี"
+  },
+  "Navbar": {
+    "Products": "ผลิตภัณฑ์",
+    "News": "ข่าวสาร",
+    "About Us": "เกี่ยวกับเรา",
+    "Join Us": "ร่วมงานกับเรา"
+  },
+  "Content1": {
+    "Products": "ผลิตภัณฑ์"
+  },
+  "Content2": {
+    "Products": "ผลิตภัณฑ์"
+  }
+}

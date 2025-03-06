@@ -6,6 +6,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { useTranslations } from "next-intl";
+
 
 // Import Swiper styles
 import "swiper/css";
@@ -28,6 +30,8 @@ const fadeUpVariant = {
 };
 
 const Content2page1 = () => {
+    const t = useTranslations("Content2");
+  
   // Type the state as SwiperType | null
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
@@ -44,7 +48,7 @@ const Content2page1 = () => {
   return (
     <>
 
-<h1 className="flex justify-center my-5 text-4xl font-bold">Products</h1>
+<h1 className="flex justify-center my-5 text-4xl font-bold">{t("Products")} </h1>
 
       <div className="mx-50 my-14 relative">
 

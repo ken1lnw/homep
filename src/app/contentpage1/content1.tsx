@@ -5,9 +5,10 @@
 import React from "react";
 import { Carousel } from "antd";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const contentStyle: React.CSSProperties = {
-  height: "600px",
+  height: "480px",
   color: "#fff",
   lineHeight: "400px",
   textAlign: "center",
@@ -26,17 +27,18 @@ const fadeUpVariant = {
 };
 
 export default function Content1page1() {
+  const t = useTranslations("Content1");
   return (
     <>
       <Carousel arrows draggable fade dots={false} className="">
         <div>
           <h3 style={contentStyle}>
             <div className="relative">
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-black opacity-50"/>
+            <div className="absolute top-0 left-0 w-full h-[480px] bg-black opacity-50"/>
 
               {/* รูปภาพ */}
               <img
-                className="h-[600px] w-full object-cover"
+                className="h-[480px] w-full object-cover"
                 src="https://www.aceee.org/sites/default/files/styles/social_sharing_image/public/hero-images/energy-efficiency-industrial.jpg?itok=wopNlR8u"
                 alt=""
               />
@@ -65,7 +67,7 @@ export default function Content1page1() {
         <div>
           <h3 style={contentStyle}>
             <div className="relative">
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-black opacity-50"/>
+            <div className="absolute top-0 left-0 w-full h-[480px] bg-black opacity-50"/>
 
               <img
                 className="h-[600px] w-full object-cover"
@@ -92,7 +94,7 @@ export default function Content1page1() {
         <div>
           <h3 style={contentStyle}>
             <div className="relative">
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-black opacity-50"/>
+            <div className="absolute top-0 left-0 w-full h-[480px] bg-black opacity-50"/>
 
               <img
                 className="h-[600px] w-full object-cover"
@@ -117,7 +119,7 @@ export default function Content1page1() {
         </div>
         <div>
           <h3 style={contentStyle}>
-          <div className="absolute top-0 left-0 w-full h-[600px] bg-black opacity-50"/>
+          <div className="absolute top-0 left-0 w-full h-[480px] bg-black opacity-50"/>
 
             <img
               className="h-full w-full object-cover"

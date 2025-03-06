@@ -1,0 +1,17 @@
+{
+  "HomePage": {
+    "title": "Hello world!"
+  },
+  "Navbar": {
+    "Products": "Products",
+    "News": "News",
+    "About Us": "About Us",
+    "Join Us": "Join Us"
+  },
+  "Content1": {
+    "Products": "Products"
+  },
+  "Content2": {
+    "Products": "Products"
+  }
+}
