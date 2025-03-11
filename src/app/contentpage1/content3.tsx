@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 
 

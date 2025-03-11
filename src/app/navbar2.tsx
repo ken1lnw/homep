@@ -14,19 +14,16 @@ import Image from "next/image";
 import type { MenuProps, GetProps } from "antd";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { GlobalOutlined } from "@ant-design/icons";
-
+import { GlobalOutlined, SearchOutlined } from "@ant-design/icons";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 
-
 const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
   console.log(info?.source, value);
 
 type MenuItem = Required<MenuProps>["items"][number];
-
 
 export default function Navbar2() {
   const t = useTranslations("Navbar");
@@ -36,23 +33,25 @@ export default function Navbar2() {
   } = theme.useToken();
 
   const router = useRouter();
-  const [currentLang, setCurrentLang] = useState<string>('en');
+  const [currentLang, setCurrentLang] = useState<string>("en");
 
   useEffect(() => {
     // Get the current language from cookies when the component mounts
-    const lang = document.cookie.replace(/(?:(?:^|.*;\s*)lang\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    const lang = document.cookie.replace(
+      /(?:(?:^|.*;\s*)lang\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
     if (lang) {
       setCurrentLang(lang);
     }
   }, []);
-  
+
   const toggleLanguage = () => {
-    const newLang = currentLang === 'en' ? 'th' : 'en';
+    const newLang = currentLang === "en" ? "th" : "en";
     document.cookie = `lang=${newLang}; path=/;`;
     setCurrentLang(newLang);
     router.refresh();
   };
-
 
   const navItems: MenuItem[] = [
     {
@@ -100,85 +99,139 @@ export default function Navbar2() {
       //   },
       // })),
     },
-  
+
+    {
+      label: t("Contact Us"),
+      key: "5",
+      onClick: () => router.push("/ContactUs"),
+
+      // children: ["d1", "d2", "d3", "d4", "d5"].map((item, i) => ({
+      //   key: `4-${i + 1}`,
+      //   label: item,
+      //   style: {
+      //     color: "black",
+      //   },
+      // })),
+    },
   ];
 
+  const [showSearch, setShowSearch] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          position: "sticky",
-          top: 0,
-          width: "100%",
-          zIndex: 1000,
-          backgroundColor: "rgba(0, 0, 0, 1)",
-          backdropFilter: "blur(10px)",
-          justifyContent: "space-between",
+      <ConfigProvider
+        theme={{
+          components: {
+            Layout: {
+              /* here is your component tokens */
+            },
+          },
         }}
-        className="relative"
       >
-        <div className="flex items-center">
-          <a href="/">
-            <Image
-              src="/brand-2023.png"
-              alt="Logo"
-              width={100}
-              height={50}
-              className="object-contain"
-            />
-          </a>
-          <div className="text-white ml-4">ISO 9001:2015 Certified</div>
-        </div>
+        <Header
+          style={{
+            display: "flex",
+            // alignItems: "center",
+            position: "sticky",
+            top: 0,
+            width: "100%",
+            zIndex: 1000,
+            backgroundColor: "rgba(0, 0, 0, 1)",
+            backdropFilter: "blur(10px)",
+            // justifyContent: "space-between",
+          }}
+          className="relative flex lg:justify-between"
+        >
+          <div className="flex items-center">
+            <a href="/">
+              <Image
+                src="/brand-2023.png"
+                alt="Logo"
+                width={100}
+                height={50}
+                className="object-contain "
+              />
+            </a>
+            <div className="text-white ml-4 hidden xl:flex">
+              ISO 9001:2015 Certified
+            </div>
+          </div>
 
-        <div className="flex items-center space-x-4">
-          <ConfigProvider
-            theme={{
-              components: {
-                Menu: {
-                  itemBg: "transparent",
-                  itemHoverColor: "#55b4ff",
-                  itemColor: "#ffffff",
-                  horizontalItemSelectedColor: "#55b4ff",
-                  itemSelectedBg: "#55b4ff", // สีพื้นหลังของตัวเลือกที่ถูกเลือก
-                  itemSelectedColor: "#55b4ff", // สีของตัวเลือกที่ถูกเลือก
-                  // subMenuItemSelectedColor :'#000000'
+          <div className="flex items-center space-x-4">
+            <ConfigProvider
+              theme={{
+                components: {
+                  Menu: {
+                    itemBg: "transparent",
+                    itemHoverColor: "#55b4ff",
+                    itemColor: "#ffffff",
+                    horizontalItemSelectedColor: "#55b4ff",
+                    itemSelectedBg: "#55b4ff", // สีพื้นหลังของตัวเลือกที่ถูกเลือก
+                    itemSelectedColor: "#55b4ff", // สีของตัวเลือกที่ถูกเลือก
+                    // subMenuItemSelectedColor :'#000000'
+                  },
+                  Dropdown: {},
                 },
-                Dropdown: {},
-              },
-              token: {
-                colorText: "#000000",
-              },
-            }}
-          >
-            <Search
-              placeholder="input search text"
-              allowClear
-              onSearch={onSearch}
-              style={{ width: 200 }}
-            />
-            <Menu
-              mode="horizontal"
-              // defaultSelectedKeys={["1"]}
-              items={navItems}
-              disabledOverflow={true}
-              style={{
-                minWidth: 0,
-                position: "sticky",
-                background: "transparent",
+                token: {
+                  colorText: "#000000",
+                },
               }}
-            />
+            >
+              <Menu
+                mode="horizontal"
+                // defaultSelectedKeys={["1"]}
+                items={navItems}
+                disabledOverflow={true}
+                style={{
+                  minWidth: 0,
+                  position: "sticky",
+                  background: "transparent",
+                }}
+                className="hidden xl:flex"
+              />
 
+              <div className="hidden xl:flex text-white">
+                {/* <Search
+                  placeholder="VIN,OEM,PART NUMBER,KEYWORDS"
+                  allowClear
+                  onSearch={onSearch}
+                  style={{ width: 200 }}
+                /> */}
 
-            <button className="text-white hover:text-gray-500"   onClick={toggleLanguage}>
-            <GlobalOutlined />
-            <span className="ml-2">{currentLang === 'en' ? 'EN' : 'TH'}</span>
-            </button>
-          </ConfigProvider>
-        </div>
-      </Header>
+                <SearchOutlined className="text-white" onClick={() => setShowSearch((prev) => !prev)}
+                />
+              </div>
+
+              <button
+                className="text-white hover:text-gray-500 "
+                onClick={toggleLanguage}
+              >
+                <GlobalOutlined />
+                <span className="ml-2">
+                  {currentLang === "en" ? "EN" : "TH"}
+                </span>
+              </button>
+            </ConfigProvider>
+          </div>
+        </Header>
+      </ConfigProvider>
+
+      {/* Search Bar (แสดงเฉพาะเมื่อโหลดเสร็จสมบูรณ์) */}
+      {isMounted && showSearch && (
+      <div className="w-full p-5">
+        <Search
+          placeholder="VIN,OEM,PART NUMBER,KEYWORD"
+          allowClear
+          enterButton="Search"
+          size="large"
+          onSearch={onSearch}
+        />
+      </div>
+    )}
     </>
   );
 }

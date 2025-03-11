@@ -8,6 +8,7 @@ import Navbar2 from "./navbar2";
 import Footer from "./footer";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+// import "@/style/swiper-button-home1.css"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

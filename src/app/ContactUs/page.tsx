@@ -1,9 +1,7 @@
-import AboutUsContent1 from "@/components/AboutUs/AboutUsContent1";
-import AboutUsContent2 from "@/components/AboutUs/AboutUsContent2";
-import AboutUsContent3 from "@/components/AboutUs/AboutUsContent3";
-import AboutUsContent4 from "@/components/AboutUs/AboutUsContent4";
+import ContactUsContent1 from "@/components/ContactUs/ContactUsContent1";
 
-export default function AboutUs() {
+
+export default function ContactUs() {
   return (
     <div>
       <div className="relative">
@@ -17,24 +15,16 @@ export default function AboutUs() {
 
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-10">
           <h1 className="text-7xl font-bold">
-            About Us
+            Contact Us
           </h1>
           <p className="text-xl font-bold">
-            Innovating Automotive Lighting for a Brighter Future
+          Learn more about how the TYC Smart Manufacturing Platform can help you make better things, no matter what you make.
           </p>
         </div>
       </div>
 
-      <AboutUsContent1 />
-      
-      <AboutUsContent2 />
-
-      <AboutUsContent4 />
-
-      
-      <AboutUsContent3 />
-      
-    
+   
+    <ContactUsContent1/>
 
 
       

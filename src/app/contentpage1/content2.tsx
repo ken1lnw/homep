@@ -8,30 +8,38 @@ import { motion } from "framer-motion";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 
-
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // Import Swiper core type for typing the swiper instance
 import { Swiper as SwiperType } from "swiper";
 
-// Motion animation variant
-const fadeUpVariant = {
-  initial: { opacity: 0, y: 100 },
+// **Motion animation variant** (Parent)
+const parentVariant = {
   animate: {
-    opacity: 1,
-    y: 0,
     transition: {
-      duration: 1,
+      staggerChildren: 0.3, // เวลาหน่วงการแสดงผลของแต่ละสไลด์
     },
   },
 };
 
+// **Motion animation variant** (Children)
+const fadeUpVariant = {
+  initial: { opacity: 0, y: 50 },
+  animate: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      delay: i * 0.2, // ทำให้แต่ละอันหน่วงเวลากันไป
+    },
+  }),
+};
+
 const Content2page1 = () => {
-    const t = useTranslations("Content2");
-  
+  const t = useTranslations("Content2");
+
   // Type the state as SwiperType | null
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
@@ -45,101 +53,52 @@ const Content2page1 = () => {
     if (swiperInstance) swiperInstance.slidePrev();
   };
 
+  // สร้าง Array สำหรับข้อมูลสินค้า
+  const products = [
+    { src: "https://www.genera.com/_images/Headlight.png", name: "AUTOMOTIVE LAMP" },
+    { src: "https://genera.com/_images/Alternator.png", name: "HAVC" },
+    { src: "https://genera.com/_images/Mirror.png", name: "STARTING & CHARGING" },
+    { src: "https://genera.com/_images/Window_Regulator.png", name: "MIRRORS" },
+    { src: "https://genera.com/_images/Fuel_Pump.png", name: "WINDOW REGULATORS" },
+    { src: "https://genera.com/_images/TOC.png", name: "FUEL PUMPS" },
+    { src: "https://genera.com/_images/CAC.png", name: "TRANSMISSION OIL COOLERS" },
+  ];
+
   return (
     <>
-
-<h1 className="flex justify-center my-5 text-4xl font-bold">{t("Products")} </h1>
+      <h1 className="flex justify-center my-5 text-4xl font-bold">{t("Products")}</h1>
 
       <div className="mx-50 my-14 relative">
-
-
-        <Swiper
-          modules={[Navigation, Pagination]}
-          slidesPerView={5} // Show 5 slides at a time
-          // spaceBetween={20} // Space between slides
-          onSwiper={setSwiperInstance} // Store the swiper instance when initialized
-        >
-          {/* Your slides here */}
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://www.genera.com/_images/Headlight.png" alt="" />
-                <div className="text-black mt-2">AUTOMOTIVE LAMP</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://genera.com/_images/Alternator.png" alt="" />
-                <div className="text-black mt-2">HAVC</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-
-
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://genera.com/_images/Mirror.png" alt="" />
-                <div className="text-black mt-2">STARTING & CHARGING</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://genera.com/_images/Window_Regulator.png" alt="" />
-                <div className="text-black mt-2">MIRRORS</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://genera.com/_images/Fuel_Pump.png" alt="" />
-                <div className="text-black mt-2">WINDOW REGULATORS</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://genera.com/_images/TOC.png" alt="" />
-                <div className="text-black mt-2">FUEL PUMPS</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <motion.div variants={fadeUpVariant} initial="initial" animate="animate">
-              <div className="flex flex-col items-center">
-                <img className="w-44" src="https://genera.com/_images/CAC.png" alt="" />
-                <div className="text-black mt-2">TRANSMISSION OIL COOLERS</div>
-              </div>
-            </motion.div>
-          </SwiperSlide>
-          {/* Other SwiperSlides */}
-        </Swiper>
+        <motion.div variants={parentVariant} initial="initial" animate="animate">
+          <Swiper
+            modules={[Navigation, Pagination]}
+            slidesPerView={5} // Show 5 slides at a time
+            onSwiper={setSwiperInstance} // Store the swiper instance when initialized
+          >
+            {products.map((product, index) => (
+              <SwiperSlide key={index}>
+                <motion.div
+                  variants={fadeUpVariant}
+                  initial="initial"
+                  animate="animate"
+                  custom={index} // ใช้ index เป็นตัวกำหนด delay
+                >
+                  <div className="flex flex-col items-center">
+                    <img className="w-44" src={product.src} alt={product.name} />
+                    <div className="text-black mt-2">{product.name}</div>
+                  </div>
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </motion.div>
 
         {/* Custom navigation arrows */}
         <div className="absolute top-1/2 left-0 right-0 flex justify-between transform -translate-y-1/2 z-10">
-          <button
-            onClick={handlePrev}
-            className="text-4xl text-black p-2"
-            style={{ zIndex: 10 }}
-          >
+          <button onClick={handlePrev} className="text-4xl text-black p-2">
             <LeftOutlined />
           </button>
-          <button
-            onClick={handleNext}
-            className="text-4xl text-black p-2"
-            style={{ zIndex: 10 }}
-          >
+          <button onClick={handleNext} className="text-4xl text-black p-2">
             <RightOutlined />
           </button>
         </div>
