@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Metadata } from "next";
-import { Geist, Geist_Mono , Merriweather_Sans} from "next/font/google";
+import { Geist, Geist_Mono, Merriweather_Sans } from "next/font/google";
 import "./globals.css";
 // import Image from "next/image";
 import Navbar from "./navbar";
@@ -8,7 +8,11 @@ import Navbar2 from "./navbar2";
 import Footer from "./footer";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { CustomQueryClientProvider } from "@/hook/QueryClientProvider";
+import { App } from "antd";
 // import "@/style/swiper-button-home1.css"
+import { Toaster } from "@/components/ui/sonner"
+import ReooilProvider from "@/hook/RecoilRoot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +27,7 @@ const geistMono = Geist_Mono({
 const MerriweatherSans = Merriweather_Sans({
   // variable: "--font-salabo-13px",
   subsets: ["latin"],
-  weight: "400"
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -43,18 +47,21 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale}>
- 
       <body
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={MerriweatherSans.className}
       >
-        <NextIntlClientProvider messages={messages}>
-          {/* <Navbar/> */}
-          <Navbar2 />
-
-          {children}
-          <Footer />
-        </NextIntlClientProvider>
+        <CustomQueryClientProvider>
+          <ReooilProvider>
+          <NextIntlClientProvider messages={messages}>
+            
+              <Navbar2 />
+              {children}
+              <Footer />
+              <Toaster richColors position="top-center" />
+          </NextIntlClientProvider>
+          </ReooilProvider>
+        </CustomQueryClientProvider>
       </body>
     </html>
   );
