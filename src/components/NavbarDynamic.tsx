@@ -220,6 +220,7 @@ export default function NavbarDynamic() {
                 <Badge count={cartCount}>
                   <ShoppingCartOutlined
                     style={{ fontSize: "24px", color: "white" }}
+                    onClick={() => router.push("/Cart")}
                   />
                 </Badge>
               </div>
