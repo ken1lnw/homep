@@ -3,9 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Merriweather_Sans } from "next/font/google";
 import "./globals.css";
 // import Image from "next/image";
-import Navbar from "./navbar";
-import Navbar2 from "./navbar2";
-import Footer from "./footer";
+import '@ant-design/v5-patch-for-react-19';
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { CustomQueryClientProvider } from "@/hook/QueryClientProvider";
@@ -54,10 +52,7 @@ export default async function RootLayout({
         <CustomQueryClientProvider>
           <ReooilProvider>
           <NextIntlClientProvider messages={messages}>
-            
-              <Navbar2 />
               {children}
-              <Footer />
               <Toaster richColors position="top-center" />
           </NextIntlClientProvider>
           </ReooilProvider>

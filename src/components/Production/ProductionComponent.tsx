@@ -526,9 +526,9 @@ export default function Prodcuts() {
                     >
                       Delete
                     </button> */}
-                    <DeleteModal
+                    {/* <DeleteModal
                       onDelete={() => deleteProduct(xx.id.toString())}
-                    />
+                    /> */}
                   
 
 
