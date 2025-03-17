@@ -1,6 +1,6 @@
+'use client'
 import * as React from "react"
-
-
+import { useRouter, usePathname } from "next/navigation" // ใช้ usePathname แทน useRouter
 import {
   Sidebar,
   SidebarContent,
@@ -24,82 +24,36 @@ const data = {
       items: [
         {
           title: "Products Manage",
-          url: "#",
-          isActive: true,
+          url: "/Admin/ManageProducts", // แทนที่ด้วย URL ที่ต้องการ
         },
         {
           title: "News Manage",
-          url: "#",
+          url: "/Admin/ManageNews", // แทนที่ด้วย URL ที่ต้องการ
+        },
+        {
+          title: "Login",
+          url: "/Admin/Login", // แทนที่ด้วย URL ที่ต้องการ
         },
       ],
     },
-    {
-      title: "Building Your Application",
-      url: "#",
-      items: [
-        {
-          title: "Routing",
-          url: "#",
-        },
-        {
-          title: "Data Fetching",
-          url: "#",
-          
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
-        },
-      ],
-    },
-   
+    
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter() // ใช้ useRouter
+  const pathname = usePathname() // ใช้ usePathname เพื่อดึง URL ปัจจุบัน
+
+  // ฟังก์ชันสำหรับจัดการการคลิกเพื่อทำการ router.push
+  const handleMenuClick = (url: string) => {
+    router.push(url) // ใช้ router.push เพื่อทำการเปลี่ยนเส้นทาง
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="flex justify-center items-center text-4xl font-bold">Dashboard</div>
-       
       </SidebarHeader>
-
 
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
@@ -110,8 +64,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.url} // ใช้ pathname จาก usePathname
+                      onClick={() => handleMenuClick(item.url)} // เรียกใช้ handleMenuClick เมื่อคลิก
+                    >
+                      <a>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

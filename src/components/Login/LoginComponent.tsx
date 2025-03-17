@@ -21,7 +21,7 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 
 export default function LoginComponent() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 h-screen w-screen">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <div className=" flex justify-center my-5">
         <Image src="/brand-2023.png" alt="" width={150} height={250} />

@@ -78,6 +78,8 @@ export default function NavbarDynamic() {
     {
       label: t("News"),
       key: "2",
+      onClick: () => router.push("/News"),
+
       // children: ["b1", "b2", "b3", "b4", "b5"].map((item, i) => ({
       //   key: `2-${i + 1}`,
       //   label: item,
@@ -98,17 +100,17 @@ export default function NavbarDynamic() {
       //   },
       // })),
     },
-    {
-      label: t("Join Us"),
-      key: "4",
-      // children: ["d1", "d2", "d3", "d4", "d5"].map((item, i) => ({
-      //   key: `4-${i + 1}`,
-      //   label: item,
-      //   style: {
-      //     color: "black",
-      //   },
-      // })),
-    },
+    // {
+    //   label: t("Join Us"),
+    //   key: "4",
+    //   // children: ["d1", "d2", "d3", "d4", "d5"].map((item, i) => ({
+    //   //   key: `4-${i + 1}`,
+    //   //   label: item,
+    //   //   style: {
+    //   //     color: "black",
+    //   //   },
+    //   // })),
+    // },
 
     {
       label: t("Contact Us"),

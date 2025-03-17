@@ -6,6 +6,7 @@ export interface ProductionType {
     brand: string,
     model: string,
     item_image: {
+        id:string,
         path: string
     }[]
 }

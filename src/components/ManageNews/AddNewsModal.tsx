@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,63 +11,60 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea"
 import { PlusSquareFilled } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
+import { NewsType } from "./NewsType";
 
-export function AddProductModal() {
+export function AddNewsModal() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false); // Control dialog visibility
 
   // State for form fields
-  const [itemNumber, setItemNumber] = useState("");
-  const [itemDescription, setItemDescription] = useState("");
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
+  const [newsTitle, setNewsTitle] = useState("");
+  const [newsDescription, setNewsDescription] = useState("");
   const [itemFile, setItemFile] = useState<File[]>([]);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (newProduct: any) => {
+    mutationFn: async (newNews: any) => {
       // ตรวจสอบข้อมูลให้ครบถ้วนก่อนการเพิ่ม
       if (
-        !newProduct.item_number ||
-        !newProduct.item_description ||
-        !newProduct.brand ||
-        !newProduct.model
+        !newNews.news_title ||
+        !newNews.news_description 
+  
       ) {
         toast.error("Please fill in all the required fields.");
         throw new Error("Missing required fields");
       }
 
-      // ตรวจสอบว่า item_number นี้มีอยู่ในฐานข้อมูลหรือไม่
+      // ตรวจสอบว่า news_title นี้มีอยู่ในฐานข้อมูลหรือไม่
       const { data: existingItem, error: fetchError } = await supabase
-        .from("item_product")
-        .select("item_number")
-        .eq("item_number", newProduct.item_number);
+        .from("news_article")
+        .select("news_title")
+        .eq("news_title", newNews.news_title);
 
       if (fetchError) {
-        toast.error("Error checking item number!");
+        toast.error("Error checking news title!");
         throw fetchError;
       }
 
-      // หากพบ item_number ที่ซ้ำกัน ให้เรียก onError
+      // หากพบ news_title ที่ซ้ำกัน ให้เรียก onError
       if (existingItem && existingItem.length > 0) {
         const error = new Error(
-          `Item number ${newProduct.item_number} already exists!`
+          `News Title ${newNews.news_title} already exists!`
         );
         throw error; // เกิดข้อผิดพลาดและโยนไปที่ onError
       }
 
       // ถ้าไม่มีการซ้ำ ให้ดำเนินการแทรกข้อมูลใหม่
       const { data, error } = await supabase
-        .from("item_product")
+        .from("news_article")
         .insert({
-          item_number: newProduct.item_number,
-          item_description: newProduct.item_description,
-          brand: newProduct.brand,
-          model: newProduct.model,
+          news_title: newNews.news_title,
+          news_description: newNews.news_description
         })
         .select("id")
         .single();
@@ -77,18 +74,18 @@ export function AddProductModal() {
       console.log("data", data);
 
       // ถ้ามีไฟล์ให้ทำการอัพโหลด
-      if (newProduct.file && newProduct.file.length > 0) {
-        const paths = await uploadFiles(newProduct.file);
+      if (newNews.file && newNews.file.length > 0) {
+        const paths = await uploadFiles(newNews.file);
 
         if (!paths) return; // หากการอัพโหลดล้มเหลว ให้หยุดการทำงาน
 
         const imagePaths = paths.map((path) => ({
-          item_id: data.id,
+          news_id: data.id,
           path,
         }));
 
         const { error: ImageError } = await supabase
-          .from("item_image")
+          .from("news_image")
           .insert(imagePaths);
 
         if (ImageError) throw ImageError;
@@ -97,12 +94,12 @@ export function AddProductModal() {
       return data;
     },
     onSuccess: async () => {
-      toast.success("Product added successfully!");
+      toast.success("News added successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["item_product"],
+        queryKey: ["news_article"],
       });
-      setIsOpen(false); 
-      resetState(); 
+      setIsOpen(false);
+      resetState();
     },
     onError: async (error) => {
       toast.error(error.message);
@@ -119,7 +116,7 @@ export function AddProductModal() {
       const filePath = `${fileName}`;
 
       const { data, error } = await supabase.storage
-        .from("product_image")
+        .from("news_image")
         .upload(filePath, file, {
           contentType: "image/jpeg",
           upsert: true,
@@ -132,7 +129,7 @@ export function AddProductModal() {
       }
 
       const publicURL = supabase.storage
-        .from("product_image")
+        .from("news_image")
         .getPublicUrl(filePath).data.publicUrl;
 
       if (!publicURL) {
@@ -151,41 +148,37 @@ export function AddProductModal() {
   }
 
   const resetState = () => {
-    setItemNumber("");  // Reset the item number
-    setItemDescription("");  // Reset the item description
-    setBrand("");  // Reset the brand
-    setModel("");  // Reset the model
-    setItemFile([]);  // Reset the file input (clear selected files)
+    setNewsTitle(""); // Reset the item number
+    setNewsDescription(""); // Reset the item description
+    setItemFile([]); // Reset the file input (clear selected files)
   };
-  
 
   return (
     <Dialog
-    open={isOpen}
-    onOpenChange={(open) => {
-      if (!open) {
-        resetState(); // Reset state when the modal is closed
-      }
-      setIsOpen(open);
-    }}
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          resetState(); // Reset state when the modal is closed
+        }
+        setIsOpen(open);
+      }}
     >
       <DialogTrigger asChild>
         <Button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-          <PlusSquareFilled /> Add Product
+          <PlusSquareFilled /> Add News
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
-            Add Product
+            Add News
           </DialogTitle>
           <DialogDescription>
-            Add Products to Product Page here. Click Add Product when you're
-            done.
+            Add News to News Page here. Click Add News when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+          {/* <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="itemno" className="text-right">
               Item No.
             </Label>
@@ -195,21 +188,22 @@ export function AddProductModal() {
               onChange={(e) => setItemNumber(e.target.value)}
               className="col-span-3"
             />
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="itemdescription" className="">
-              Item Description
+            <Label htmlFor="newstitle" className="col-span-4">
+              News Title
             </Label>
             <Input
-              id="itemdescription"
-              value={itemDescription}
-              onChange={(e) => setItemDescription(e.target.value)}
-              className="col-span-3"
+              id="newstitle"
+              placeholder="News Title"
+              value={newsTitle}
+              onChange={(e) => setNewsTitle(e.target.value)}
+              className="col-span-4"
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+          {/* <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="brand" className="text-right">
               Brand
             </Label>
@@ -219,23 +213,31 @@ export function AddProductModal() {
               onChange={(e) => setBrand(e.target.value)}
               className="col-span-3"
             />
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="model" className="text-right">
-              Model
+            <Label htmlFor="newsdes" className="text-left col-span-4">
+              News Description
             </Label>
-            <Input
+            {/* <Input
               id="model"
               value={model}
               onChange={(e) => setModel(e.target.value)}
               className="col-span-3"
+            /> */}
+
+            <Textarea 
+            id='newsdes'
+            placeholder="Type your news description here." 
+            className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
+            onChange={(e) => setNewsDescription(e.target.value)}
+            rows={2}
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="uploadimage" className="text-right">
-              Upload Images
+              Attach Images
             </Label>
             <Input
               id="uploadimage"
@@ -253,31 +255,28 @@ export function AddProductModal() {
             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
             onClick={async () => {
               // ตรวจสอบว่า item_number, item_description, brand, model ถูกกรอกหรือไม่
-              if (!itemNumber || !itemDescription || !brand || !model) {
+              if (!newsTitle || !newsDescription ) {
                 toast.error("Please fill in all the required fields.");
                 return; // ไม่ทำการเรียก mutate ถ้าข้อมูลไม่ครบ
               }
 
               if (itemFile && itemFile.length > 0) {
                 mutate({
-                  item_number: itemNumber,
-                  item_description: itemDescription,
-                  brand: brand,
-                  model: model,
+                  news_title: newsTitle,
+                  news_description: newsDescription,
                   file: itemFile, // ส่งไฟล์ที่เลือก
                 });
               } else {
                 mutate({
-                  item_number: itemNumber,
-                  item_description: itemDescription,
-                  brand: brand,
-                  model: model,
+                  news_title: newsTitle,
+                  news_description: newsDescription,
                 });
               }
             }}
             disabled={isPending} // Disable button when mutation is in progress
           >
-            {isPending ? "Adding Product..." : "Add Product"} {/* Loading text */}
+            {isPending ? "Adding News..." : "Add News"}{" "}
+            {/* Loading text */}
           </Button>
         </DialogFooter>
       </DialogContent>
