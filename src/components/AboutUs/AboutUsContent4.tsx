@@ -36,7 +36,7 @@ export default function AboutUsContent4() {
 
   return (
     <>
-      <div className="w-full h-[200px] flex  text-black">
+      <div className="w-full h-[200px] flex text-black my-10">
         <div className="w-1/2 flex flex-col justify-center items-start gap-4 pl-32 ">
           <h1 className="text-6xl font-semibold text-blue-500">Certificate</h1>
           <p className="">

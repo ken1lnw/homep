@@ -1,7 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { BulbOutlined, FieldTimeOutlined, TeamOutlined, VerifiedOutlined } from "@ant-design/icons";
+import {
+  BulbOutlined,
+  FieldTimeOutlined,
+  TeamOutlined,
+  VerifiedOutlined,
+} from "@ant-design/icons";
+import { MdVerified } from "react-icons/md";
+import { GiProcessor } from "react-icons/gi";
+import { FiGlobe } from "react-icons/fi";
+import { TbAutomaticGearbox } from "react-icons/tb";
+
 import React, { useState } from "react";
 
 // Motion animation variant
@@ -10,34 +20,43 @@ const Content4page1 = () => {
   return (
     <>
 
-<h1 className="bg-gray-200 text-5xl font-bold pt-5 px-32">Benefits</h1>
+<div className="bg-gray-200 py-10 md:px-10 lg:px-20 xl:px-40">
+      <h1 className=" text-5xl font-bold text-center lg:text-left">Benefits</h1>
+      <div className=" w-full">
+        <div className="grid md:grid-cols-4 mt-10 gap-5">
+          <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
+            <GiProcessor className="text-8xl mb-5" />
+            <h1 className="text-2xl font-bold">Technology</h1>
+            <p>Using science to enhance product and process innovation.</p>
+          </div>
 
-      <div className="bg-gray-200 w-full h-[300px] flex justify-center items-center px-32">
+          <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
+            <MdVerified className="text-8xl mb-5" />
 
-        <div className="flex flex-col w-1/4 gap-2">
-          <BulbOutlined className="text-7xl" />
-          <h1 className="text-2xl font-bold">INNOVATION</h1>   
-          <p>Embrace change as the norm and not the exception; propel transformation by fostering creativity and aiming for leadership within our industry sectors.</p> 
-        </div>
+            <h1 className="text-2xl font-bold">Quality</h1>
+            <p>Surpassing customer expectations and industry standards.</p>
+          </div>
 
-        <div className="flex flex-col w-1/4 gap-2">
-          <TeamOutlined className="text-7xl" />
-          <h1 className="text-2xl font-bold">TEAMWORK</h1>   
-          <p>Cultivate a culture of trust through open dialogue and collaboration with TYC Genera employees, partners, and clients.</p> 
-        </div>
+          <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
+            <TbAutomaticGearbox className="text-8xl mb-5" />
+ 
+            <h1 className="text-2xl font-bold">Process</h1>
+            <p>Creating a product, from design to delivery.</p>
+          </div>
 
-        <div className="flex flex-col w-1/4 gap-2">
-          <VerifiedOutlined className="text-7xl" />
-          <h1 className="text-2xl font-bold">INTEGRITY</h1>   
-          <p>INTEGRITY Integrity is the quality of being honest and having strong moral principles. It involves consistently doing the right thing, even when no one is watching.</p> 
-        </div>
+          <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
+            <FiGlobe className="text-8xl mb-5" />
 
-        <div className="flex flex-col w-1/4 gap-2">
-          <FieldTimeOutlined className="text-7xl" />
-          <h1 className="text-2xl font-bold">SPEED</h1>   
-          <p>SPEED Speed is the capacity to act or move quickly and efficiently. It involves rapid response times, swift execution, and the ability to adapt to changing circumstances with agility.</p> 
+            <h1 className="text-2xl font-bold">Sustainability</h1>
+            <p>
+              Meeting current and future demands of global customer without
+              environmental compromise.
+            </p>
+          </div>
         </div>
       </div>
+      </div>
+      
     </>
   );
 };

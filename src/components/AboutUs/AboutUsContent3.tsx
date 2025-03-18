@@ -38,7 +38,7 @@ export default function AboutUsContent3() {
 
   return (
     <>
-      <div className="w-full h-[400px] flex  text-black my-20 px-5 bg-gray-200">
+      <div className="w-full h-[400px] flex  text-black  px-5 bg-gray-200">
         <div className="h-[400px] w-2/3 flex py-5 items-center">
           <Swiper
             modules={[Navigation, Pagination]}

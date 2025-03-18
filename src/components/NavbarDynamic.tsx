@@ -8,7 +8,7 @@ import {
   Layout,
   Menu,
   theme,
-  Input,
+  // Input,
   Space,
 } from "antd";
 import Image from "next/image";
@@ -20,13 +20,16 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
+import { motion } from "framer-motion";
 
-type SearchProps = GetProps<typeof Input.Search>;
-const { Search } = Input;
+import { Input } from "@/components/ui/input";
+
+// type SearchProps = GetProps<typeof Input.Search>;
+// const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 
-const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
-  console.log(info?.source, value);
+// const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
+//   console.log(info?.source, value);
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -39,9 +42,8 @@ export default function NavbarDynamic() {
 
   const router = useRouter();
   const [currentLang, setCurrentLang] = useState<string>("en");
-  const cartCount = JSON.parse(localStorage.getItem("cart") || "[]").length
+  const cartCount = JSON.parse(localStorage.getItem("cart") || "[]").length;
 
- 
   useEffect(() => {
     // Get the current language from cookies when the component mounts
     const lang = document.cookie.replace(
@@ -51,9 +53,7 @@ export default function NavbarDynamic() {
     if (lang) {
       setCurrentLang(lang);
     }
-
   }, []);
-
 
   const toggleLanguage = () => {
     const newLang = currentLang === "en" ? "th" : "en";
@@ -64,74 +64,39 @@ export default function NavbarDynamic() {
 
   const navItems: MenuItem[] = [
     {
-      label: t("Products"),
+      label: t("Home"),
       key: "1",
+      onClick: () => router.push("/"),
+    },
+
+    {
+      label: t("Products"),
+      key: "2",
       onClick: () => router.push("/Products"),
-      // children: ["a1", "a2", "a3", "a4", "a5"].map((item, i) => ({
-      //   key: `1-${i + 1}`,
-      //   label: item,
-      //   style: {
-      //     color: "black",
-      //   },
-      // })),
     },
     {
       label: t("News"),
-      key: "2",
+      key: "3",
       onClick: () => router.push("/News"),
-
-      // children: ["b1", "b2", "b3", "b4", "b5"].map((item, i) => ({
-      //   key: `2-${i + 1}`,
-      //   label: item,
-      //   style: {
-      //     color: "black",
-      //   },
-      // })),
     },
     {
       label: t("About Us"),
-      key: "3",
+      key: "4",
       onClick: () => router.push("/AboutUs"),
-      // children: ["c1", "c2", "c3", "c4", "c5"].map((item, i) => ({
-      //   key: `3-${i + 1}`,
-      //   label: item,
-      //   style: {
-      //     color: "black",
-      //   },
-      // })),
     },
-    // {
-    //   label: t("Join Us"),
-    //   key: "4",
-    //   // children: ["d1", "d2", "d3", "d4", "d5"].map((item, i) => ({
-    //   //   key: `4-${i + 1}`,
-    //   //   label: item,
-    //   //   style: {
-    //   //     color: "black",
-    //   //   },
-    //   // })),
-    // },
 
     {
       label: t("Contact Us"),
       key: "5",
       onClick: () => router.push("/ContactUs"),
-
-      // children: ["d1", "d2", "d3", "d4", "d5"].map((item, i) => ({
-      //   key: `4-${i + 1}`,
-      //   label: item,
-      //   style: {
-      //     color: "black",
-      //   },
-      // })),
     },
   ];
 
-  const [showSearch, setShowSearch] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // const [showSearch, setShowSearch] = useState(false);
+  // const [isMounted, setIsMounted] = useState(false);
+  // useEffect(() => {
+  //   setIsMounted(true);
+  // }, []);
 
   return (
     <>
@@ -156,7 +121,7 @@ export default function NavbarDynamic() {
             backdropFilter: "blur(10px)",
             // justifyContent: "space-between",
           }}
-          className="relative flex lg:justify-between"
+          className="relative flex justify-between"
         >
           <div className="flex items-center">
             <a href="/">
@@ -168,9 +133,9 @@ export default function NavbarDynamic() {
                 className="object-contain "
               />
             </a>
-            <div className="text-white ml-4 hidden xl:flex">
+            {/* <div className="text-white ml-4 hidden xl:flex">
               ISO 9001:2015 Certified
-            </div>
+            </div> */}
           </div>
 
           <div className="flex items-center space-x-4">
@@ -203,10 +168,10 @@ export default function NavbarDynamic() {
                   position: "sticky",
                   background: "transparent",
                 }}
-                className="hidden xl:flex"
+                className="hidden lg:flex"
               />
 
-              <div className="hidden xl:flex text-white gap-4">
+              <div className="hidden lg:flex text-white gap-4">
                 {/* <Search
                   placeholder="VIN,OEM,PART NUMBER,KEYWORDS"
                   allowClear
@@ -214,18 +179,30 @@ export default function NavbarDynamic() {
                   style={{ width: 200 }}
                 /> */}
 
-                <SearchOutlined
+                {/* <SearchOutlined
                   className="text-white"
                   onClick={() => setShowSearch((prev) => !prev)}
-                />
+                /> */}
 
+                <div className="hidden lg:flex relative w-full">
+                  <Input
+                    type="text"
+                    placeholder="OEM,PART NUMBER"
+                    className="pl-3 pr-10 py-2 rounded-md border border-gray-300 text-white"
+                  />
+                  <SearchOutlined className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                </div>
+              </div>
+
+              <button onClick={() => router.push("/Cart")} className="hidden lg:flex items-center">
                 <Badge count={cartCount}>
                   <ShoppingCartOutlined
-                    style={{ fontSize: "24px", color: "white" }}
-                    onClick={() => router.push("/Cart")}
+                    style={{ fontSize: "20px", color: "white" }}
+                    
                   />
                 </Badge>
-              </div>
+              </button>
+
 
               <button
                 className="text-white hover:text-gray-500 "
@@ -236,14 +213,22 @@ export default function NavbarDynamic() {
                   {currentLang === "en" ? "EN" : "TH"}
                 </span>
               </button>
+
+
+
+              
             </ConfigProvider>
           </div>
         </Header>
       </ConfigProvider>
 
       {/* Search Bar (แสดงเฉพาะเมื่อโหลดเสร็จสมบูรณ์) */}
-      {isMounted && showSearch && (
-        <div className="w-full p-5">
+      {/* {isMounted && showSearch && (
+  <motion.div 
+  initial={{ opacity: 0, x: 0 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  // transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
+  className="w-full p-5 sticky top-[64px] z-[1000] bg-black/70 shadow-md">
           <Search
             placeholder="VIN,OEM,PART NUMBER,KEYWORD"
             allowClear
@@ -251,8 +236,8 @@ export default function NavbarDynamic() {
             size="large"
             onSearch={onSearch}
           />
-        </div>
-      )}
+        </motion.div>
+      )} */}
     </>
   );
 }

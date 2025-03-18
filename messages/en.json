@@ -3,6 +3,7 @@
     "title": "Hello world!"
   },
   "Navbar": {
+    "Home": "Home",
     "Products": "Products",
     "News": "News",
     "About Us": "About Us",

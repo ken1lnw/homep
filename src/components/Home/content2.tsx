@@ -68,11 +68,25 @@ const Content2page1 = () => {
     <>
       <h1 className="flex justify-center my-5 text-4xl font-bold">{t("Products")}</h1>
 
-      <div className="mx-50 my-14 relative">
+      <div className="md:mx-5 xl:mx-50 my-14 relative">
         <motion.div variants={parentVariant} initial="initial" animate="animate">
           <Swiper
             modules={[Navigation, Pagination]}
             slidesPerView={5} // Show 5 slides at a time
+            breakpoints={{
+              // When the screen width is less than 768px (md and below), show 1 slide
+              320: {
+                slidesPerView: 1,
+              },
+              // For larger screens (above 768px), show 5 slides
+              768: {
+                slidesPerView: 4,
+              },
+
+              1024: {
+                slidesPerView: 5,
+              },
+            }}
             onSwiper={setSwiperInstance} // Store the swiper instance when initialized
           >
             {products.map((product, index) => (
@@ -85,7 +99,7 @@ const Content2page1 = () => {
                 >
                   <div className="flex flex-col items-center">
                     <img className="w-44" src={product.src} alt={product.name} />
-                    <div className="text-black mt-2">{product.name}</div>
+                    <div className="text-black mt-2 text-center">{product.name}</div>
                   </div>
                 </motion.div>
               </SwiperSlide>

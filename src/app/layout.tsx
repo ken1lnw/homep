@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Merriweather_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Merriweather_Sans , Slabo_13px  } from "next/font/google";
 import "./globals.css";
 // import Image from "next/image";
 import '@ant-design/v5-patch-for-react-19';
@@ -12,15 +12,15 @@ import { App } from "antd";
 import { Toaster } from "@/components/ui/sonner"
 import ReooilProvider from "@/hook/RecoilRoot";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 
 const MerriweatherSans = Merriweather_Sans({
   // variable: "--font-salabo-13px",
@@ -28,8 +28,14 @@ const MerriweatherSans = Merriweather_Sans({
   weight: "400",
 });
 
+const SlaboSans = Slabo_13px ({
+  variable: "--font-slabo-13px",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
-  title: "TYC Example",
+  title: "TYC HomePage",
   description: "TYC",
 };
 
@@ -47,7 +53,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        className={MerriweatherSans.className}
+        className={SlaboSans.className}
       >
         <CustomQueryClientProvider>
           <ReooilProvider>

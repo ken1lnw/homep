@@ -4,7 +4,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-
 const Content3page1 = () => {
   return (
     <>
@@ -19,22 +18,30 @@ const Content3page1 = () => {
         />
 
         {/* Text content positioned in the center */}
-        <div className="absolute w-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-6 text-white">
+        <div className="absolute inset-0 flex items-center xl:w-1/2 xl:top-1/2 xl:left-1/2 xl:transform  xl:-translate-x-1/2  xl:-translate-y-1/2 px-6 text-white">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0, ease: "easeOut" }}
           >
-            <h1 className="text-4xl font-bold ">
+            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold ">
+              {/* We are committed to taking on new worlds, <br />
+              
+              new technologies and new dreams. */}
               We are committed to taking on new worlds, <br />
               new technologies and new dreams.
             </h1>
-            <p className="break-words my-6">
-              Bringing safety and a smile to people is what has driven us all
+            <p className="text-md md:text-lg lg:text-xl break-words my-6">
+              {/* Bringing safety and a smile to people is what has driven us all
               these years, and is what continues to motivate us daily. Hence, at
               TYC, we put a lot of focus and devotion on each one of our
               products in the hope that TYC will one day shine on every corner
-              of the world.
+              of the world. */}
+
+Bringing safety and a smile to people is what has driven us all these years, and is what continues to motivate us daily.
+Hence, at TYC, we put a lot of focus and devotion on each one of our products in the hope that TYC will one day shine on every corner of the world.
+
+
             </p>
           </motion.div>
         </div>

@@ -2,6 +2,8 @@ import AboutUsContent1 from "@/components/AboutUs/AboutUsContent1";
 import AboutUsContent2 from "@/components/AboutUs/AboutUsContent2";
 import AboutUsContent3 from "@/components/AboutUs/AboutUsContent3";
 import AboutUsContent4 from "@/components/AboutUs/AboutUsContent4";
+import AboutUsContent5 from "@/components/AboutUs/AboutUsContent5";
+import AboutUsContent6 from "@/components/AboutUs/AboutUsContent6";
 
 export default function AboutUs() {
   return (
@@ -20,7 +22,7 @@ export default function AboutUs() {
             About Us
           </h1>
           <p className="text-xl font-bold">
-            Innovating Automotive Lighting for a Brighter Future
+            Expect more , Expect TYC.
           </p>
         </div>
       </div>
@@ -29,10 +31,15 @@ export default function AboutUs() {
       
       <AboutUsContent2 />
 
+      <AboutUsContent5/>
+
+      <AboutUsContent3 />
       <AboutUsContent4 />
+      <AboutUsContent6/>
 
       
-      <AboutUsContent3 />
+      
+      
       
     
 
