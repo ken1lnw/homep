@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import {
-  Button,
+  // Button,
   Cascader,
   DatePicker,
   Form,
@@ -12,14 +12,15 @@ import {
   Select,
   TreeSelect,
 } from "antd";
+import { Button } from "../ui/button";
 
 export default function CartFormComponent() {
   const [form] = Form.useForm();
 
   return (
     <>
-      <div className="container mx-auto mb-10">
-        <h1 className="text-4xl mt-12 mb-5">Contact Information</h1>
+      <div className="container mx-auto mb-10 px-2 lg:px-0">
+        <h1 className="text-4xl font-bold mt-12 mb-5">Contact Information</h1>
 
         <Form form={form} layout="vertical" style={{fontSize:"18px"}}>
           <div className="grid grid-cols-3 gap-6 items-center">
@@ -29,7 +30,7 @@ export default function CartFormComponent() {
             </label>
             <Form.Item
               name="company"
-              className="col-span-2"
+              className="col-span-3 lg:col-span-2"
               rules={[
                 { required: true, message: "Please enter your company name" },
               ]}
@@ -43,7 +44,7 @@ export default function CartFormComponent() {
             </label>
             <Form.Item
               name="name"
-              className="col-span-2"
+              className="col-span-3 lg:col-span-2"
               rules={[{ required: true, message: "Please enter your name" }]}
             >
               <Input />
@@ -55,7 +56,7 @@ export default function CartFormComponent() {
             </label>
             <Form.Item
               name="country"
-              className="col-span-2"
+              className="col-span-3 lg:col-span-2"
               rules={[
                 { required: true, message: "Please select your country" },
               ]}
@@ -71,7 +72,7 @@ export default function CartFormComponent() {
             <label className="col-span-1 text-gray-700 font-medium">
               Mobile
             </label>
-            <Form.Item name="mobile" className="col-span-2">
+            <Form.Item name="mobile" className="col-span-3 lg:col-span-2">
               <Input />
             </Form.Item>
 
@@ -81,7 +82,7 @@ export default function CartFormComponent() {
             </label>
             <Form.Item
               name="phone"
-              className="col-span-2"
+              className="col-span-3 lg:col-span-2"
               rules={[
                 { required: true, message: "Please enter your phone number" },
               ]}
@@ -91,7 +92,7 @@ export default function CartFormComponent() {
 
             {/* Fax */}
             <label className="col-span-1 text-gray-700 font-medium">Fax</label>
-            <Form.Item name="fax" className="col-span-2">
+            <Form.Item name="fax" className="col-span-3 lg:col-span-2">
               <Input />
             </Form.Item>
 
@@ -101,7 +102,7 @@ export default function CartFormComponent() {
             </label>
             <Form.Item
               name="address"
-              className="col-span-2"
+              className="col-span-3 lg:col-span-2"
               rules={[{ required: true, message: "Please enter your address" }]}
             >
               <Input />
@@ -113,7 +114,7 @@ export default function CartFormComponent() {
             </label>
             <Form.Item
               name="email"
-              className="col-span-2"
+              className="col-span-3 lg:col-span-2"
               rules={[
                 {
                   required: true,
@@ -129,15 +130,17 @@ export default function CartFormComponent() {
             <label className="col-span-1 text-gray-700 font-medium">
               Inquiry
             </label>
-            <Form.Item name="inquiry" className="col-span-2">
+            <Form.Item name="inquiry" className="col-span-3 lg:col-span-2">
               <Input.TextArea rows={4} />
             </Form.Item>
 
             {/* Submit Button */}
             <div className="col-span-3 flex justify-center">
-              <Button type="primary" htmlType="submit">
+              {/* <Button type="primary" htmlType="submit">
                 Submit
-              </Button>
+              </Button> */}
+
+              <Button className="bg-blue-500 hover:bg-pink-500 w-56 h-14 text-2xl">Submit</Button>
             </div>
           </div>
         </Form>

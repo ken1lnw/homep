@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
-  Button,
+  // Button,
   Card,
   ConfigProvider,
   Descriptions,
@@ -24,14 +24,15 @@ import { ProductionType, ProductionImageType } from "./ProductionType";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
-const ProductTypeOptions = [
-  { label: "ALL PRODUCTS", value: "allproducts" },
-  { label: "CAR LIGHT", value: "carlight" },
-];
+// const ProductTypeOptions = [
+//   { label: "ALL PRODUCTS", value: "allproducts" },
+//   { label: "CAR LIGHT", value: "carlight" },
+// ];
 
 export default function Prodcuts() {
-  const [productType, setProductType] = useState<string | undefined>(undefined); // Make sure this is undefined initially
+  const [productType, setProductType] = useState<string>(""); // Make sure this is undefined initially
   const [carMaker, setCarMaker] = useState<string>("");
   const [carModel, setCarModel] = useState<string>("");
   const [tycNo, setTycNo] = useState<string>("");
@@ -40,7 +41,7 @@ export default function Prodcuts() {
   const [yearTo, setYearTo] = useState<string>("");
   const [itemSearch, setItemSearch] = useState<string>("");
   const queryClient = useQueryClient();
-  const router = useRouter()
+  const router = useRouter();
   const [itemNumber, setItemNumber] = useState<string>("");
   const [itemDescription, setItemDescription] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
@@ -49,7 +50,7 @@ export default function Prodcuts() {
 
   // Function to handle the clearing of all form fields
   const handleClear = () => {
-    setProductType(undefined);
+    setProductType("");
     setCarMaker("");
     setCarModel("");
     setTycNo("");
@@ -59,14 +60,14 @@ export default function Prodcuts() {
   };
 
   const products = [
-    {
-      carmaker: "AF",
-      carmodel: "1-47 2001-2004	",
-      product: "HEAD LAMP K TYPE",
-      tycno: "20-A121/22-05,20-A121/22-C5",
-      oemno: "RH: 46556565,LH: 46556564",
-      image: "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg",
-    },
+    // {
+    //   OEM No.: "AF",
+    //   Material No: "1-47 2001-2004	",
+    //   Vechicle Brand: "HEAD LAMP K TYPE",
+    //   Vechicle Model: "20-A121/22-05,20-A121/22-C5",
+    //   Side: "RH: 46556565,LH: 46556564",
+    //   image: "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg",
+    // },
 
     {
       carmaker: "AF",
@@ -102,7 +103,7 @@ export default function Prodcuts() {
           .from("item_product")
           .select("*,item_image(*)")
           .or(
-            `item_number.ilike.%${itemSearch}%,item_description.ilike.%${itemSearch}%,brand.ilike.%${itemSearch}%,model.ilike.%${itemSearch}%`
+            `oem_no.ilike.%${itemSearch}%,material_no.ilike.%${itemSearch}%,vehicle_brand.ilike.%${itemSearch}%,vehicle_model.ilike.%${itemSearch}%`
           );
         if (error) throw error;
         return data as ProductionType[];
@@ -110,85 +111,85 @@ export default function Prodcuts() {
     },
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (newProduct: any) => {
-      // ตรวจสอบข้อมูลให้ครบถ้วนก่อนการเพิ่ม
-      if (
-        !newProduct.item_number ||
-        !newProduct.item_description ||
-        !newProduct.brand ||
-        !newProduct.model
-      ) {
-        toast.error("Please fill in all the required fields.");
-        throw new Error("Missing required fields");
-      }
+  // const { mutate, isPending } = useMutation({
+  //   mutationFn: async (newProduct: any) => {
+  //     // ตรวจสอบข้อมูลให้ครบถ้วนก่อนการเพิ่ม
+  //     if (
+  //       !newProduct.item_number ||
+  //       !newProduct.item_description ||
+  //       !newProduct.brand ||
+  //       !newProduct.model
+  //     ) {
+  //       toast.error("Please fill in all the required fields.");
+  //       throw new Error("Missing required fields");
+  //     }
 
-      // ตรวจสอบว่า item_number นี้มีอยู่ในฐานข้อมูลหรือไม่
-      const { data: existingItem, error: fetchError } = await supabase
-        .from("item_product")
-        .select("item_number")
-        .eq("item_number", newProduct.item_number);
+  //     // ตรวจสอบว่า item_number นี้มีอยู่ในฐานข้อมูลหรือไม่
+  //     const { data: existingItem, error: fetchError } = await supabase
+  //       .from("item_product")
+  //       .select("item_number")
+  //       .eq("item_number", newProduct.item_number);
 
-      if (fetchError) {
-        toast.error("Error checking item number!");
-        throw fetchError;
-      }
+  //     if (fetchError) {
+  //       toast.error("Error checking item number!");
+  //       throw fetchError;
+  //     }
 
-      // หากพบ item_number ที่ซ้ำกัน ให้เรียก onError
-      if (existingItem && existingItem.length > 0) {
-        const error = new Error(
-          `Item number ${newProduct.item_number} already exists!`
-        );
-        throw error; // เกิดข้อผิดพลาดและโยนไปที่ onError
-      }
+  //     // หากพบ item_number ที่ซ้ำกัน ให้เรียก onError
+  //     if (existingItem && existingItem.length > 0) {
+  //       const error = new Error(
+  //         `Item number ${newProduct.item_number} already exists!`
+  //       );
+  //       throw error; // เกิดข้อผิดพลาดและโยนไปที่ onError
+  //     }
 
-      // ถ้าไม่มีการซ้ำ ให้ดำเนินการแทรกข้อมูลใหม่
-      const { data, error } = await supabase
-        .from("item_product")
-        .insert({
-          item_number: newProduct.item_number,
-          item_description: newProduct.item_description,
-          brand: newProduct.brand,
-          model: newProduct.model,
-        })
-        .select("id")
-        .single();
+  //     // ถ้าไม่มีการซ้ำ ให้ดำเนินการแทรกข้อมูลใหม่
+  //     const { data, error } = await supabase
+  //       .from("item_product")
+  //       .insert({
+  //         item_number: newProduct.item_number,
+  //         item_description: newProduct.item_description,
+  //         brand: newProduct.brand,
+  //         model: newProduct.model,
+  //       })
+  //       .select("id")
+  //       .single();
 
-      if (error) throw error;
+  //     if (error) throw error;
 
-      console.log("data", data);
+  //     console.log("data", data);
 
-      // ถ้ามีไฟล์ให้ทำการอัพโหลด
-      if (newProduct.file && newProduct.file.length > 0) {
-        const paths = await uploadFiles(newProduct.file);
+  //     // ถ้ามีไฟล์ให้ทำการอัพโหลด
+  //     if (newProduct.file && newProduct.file.length > 0) {
+  //       const paths = await uploadFiles(newProduct.file);
 
-        if (!paths) return; // หากการอัพโหลดล้มเหลว ให้หยุดการทำงาน
+  //       if (!paths) return; // หากการอัพโหลดล้มเหลว ให้หยุดการทำงาน
 
-        const imagePaths = paths.map((path) => ({
-          item_id: data.id,
-          path,
-        }));
+  //       const imagePaths = paths.map((path) => ({
+  //         item_id: data.id,
+  //         path,
+  //       }));
 
-        const { error: ImageError } = await supabase
-          .from("item_image")
-          .insert(imagePaths);
+  //       const { error: ImageError } = await supabase
+  //         .from("item_image")
+  //         .insert(imagePaths);
 
-        if (ImageError) throw ImageError;
-      }
+  //       if (ImageError) throw ImageError;
+  //     }
 
-      return data;
-    },
-    onSuccess: async () => {
-      toast.success("Success to Mutate");
-      await queryClient.invalidateQueries({
-        queryKey: ["item_product", itemSearch],
-      });
-    },
-    onError: async (error) => {
-      // แสดง error เมื่อเกิดข้อผิดพลาด
-      toast.error(error.message);
-    },
-  });
+  //     return data;
+  //   },
+  //   onSuccess: async () => {
+  //     toast.success("Success to Mutate");
+  //     await queryClient.invalidateQueries({
+  //       queryKey: ["item_product", itemSearch],
+  //     });
+  //   },
+  //   onError: async (error) => {
+  //     // แสดง error เมื่อเกิดข้อผิดพลาด
+  //     toast.error(error.message);
+  //   },
+  // });
 
   // Upload file using standard upload
   async function uploadFiles(files: File[]) {
@@ -266,7 +267,7 @@ export default function Prodcuts() {
     } else {
       toast.info("Product is already in the cart.");
     }
-    router.refresh()
+    router.refresh();
   };
 
   return (
@@ -294,7 +295,7 @@ export default function Prodcuts() {
             Search Product
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <ConfigProvider
               theme={{
                 components: {
@@ -313,48 +314,35 @@ export default function Prodcuts() {
                 },
               }}
             >
-              <Select
-                placeholder="Product Type"
+              <Input
+                placeholder="OEM No."
                 style={{ width: "100%" }}
-                options={ProductTypeOptions}
                 value={productType}
-                onChange={setProductType}
+                onChange={(e) => setProductType(e.target.value)}
               />
               <Input
-                placeholder="CAR MAKER"
+                placeholder="Material No"
                 style={{ width: "100%" }}
                 value={carMaker}
                 onChange={(e) => setCarMaker(e.target.value)}
               />
               <Input
-                placeholder="CAR MODEL"
+                placeholder="Vehicle Brand"
                 style={{ width: "100%" }}
                 value={carModel}
                 onChange={(e) => setCarModel(e.target.value)}
               />
               <Input
-                placeholder="TYC NO."
+                placeholder="Vehicle Model"
                 style={{ width: "100%" }}
                 value={tycNo}
                 onChange={(e) => setTycNo(e.target.value)}
               />
               <Input
-                placeholder="OEM NO."
+                placeholder="Side"
                 style={{ width: "100%" }}
                 value={oemNo}
                 onChange={(e) => setOemNo(e.target.value)}
-              />
-              <Input
-                placeholder="YEAR (FROM)"
-                style={{ width: "100%" }}
-                value={yearFrom}
-                onChange={(e) => setYearFrom(e.target.value)}
-              />
-              <Input
-                placeholder="YEAR (TO)"
-                style={{ width: "100%" }}
-                value={yearTo}
-                onChange={(e) => setYearTo(e.target.value)}
               />
             </ConfigProvider>
           </div>
@@ -370,6 +358,7 @@ export default function Prodcuts() {
             </button>
           </div>
         </div>
+
         <div className="flex  items-center my-4 p-4 rounded-lg shadow gap-4 w-full">
           {/* <Input.Search
               className="!w-1/2"
@@ -448,7 +437,7 @@ export default function Prodcuts() {
             }}
           />
 
-          <button
+          {/* <button
             onClick={async () => {
               // ตรวจสอบว่า item_number, item_description, brand, model ถูกกรอกหรือไม่
               if (!itemNumber || !itemDescription || !brand || !model) {
@@ -476,73 +465,40 @@ export default function Prodcuts() {
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
           >
             Add Product
-          </button>
+          </button> */}
         </div>
 
-        {isLoading && <div>Loading...</div>}
+        <div className="grid grid-cols-3 border p-4">
+          <div className="col-span-2 flex">
+            <img
+              src="https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+              alt=""
+              width={100}
+              height={100}
+              className=""
+            />
+            <Descriptions column={3}>
+              <Descriptions.Item label="OEM No.">81551-12390</Descriptions.Item>
+              <Descriptions.Item label="Material No.">
+                11-1049-00-6B
+              </Descriptions.Item>
+              <Descriptions.Item label="Vehicle Brand">TY </Descriptions.Item>
+              <Descriptions.Item label="Vechicle Model">
+                CROLA
+              </Descriptions.Item>
+              <Descriptions.Item label="Side">LH</Descriptions.Item>
+              <Descriptions.Item label="Product Brand">TYC</Descriptions.Item>
+            </Descriptions>
+          </div>
+<div className="col-span-1">
+<Button className="bg-blue-500">Add to Cart</Button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {data &&
-            data.map((xx) => (
-              <div
-                key={xx.id}
-                className="p-4 flex items-center gap-4  rounded-lg shadow-sm"
-              >
-                <div className="grid grid-cols-3">
-                  <div className="col-span-1">
-                    {xx.item_image.length > 0 && xx.item_image[0].path && (
-                      <Image
-                        src={xx.item_image[0].path}
-                        alt=""
-                        width={150}
-                        height={150}
-                      />
-                    )}
-                    {/* <Image
-                        src={xx.item_image[0].path}
-                        alt=""
-                        width={150}
-                        height={150}
-                      /> */}
-                  </div>
-                  <div className="col-span-2">
-                    <Descriptions column={2}>
-                      <Descriptions.Item label="Item no.">
-                        {xx.item_number}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Desc.">
-                        {xx.item_description}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Brand">
-                        {xx.brand}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Model">
-                        {xx.model}
-                      </Descriptions.Item>
-                    </Descriptions>
-                    {/* <button
-                      onClick={() => deleteProduct(xx.id.toString())}
-                      className="bg-red-500 border h-10"
-                    >
-                      Delete
-                    </button> */}
-                    {/* <DeleteModal
-                      onDelete={() => deleteProduct(xx.id.toString())}
-                    /> */}
-                  
-
-
-                    <button
-                      onClick={() => handleAddToCart(xx.id.toString())}
-                      className="bg-blue-500 text-white rounded mx-2 p-3"
-                    >
-                      add to cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+</div>
         </div>
+
+
+   
+
 
         {/* Product List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">

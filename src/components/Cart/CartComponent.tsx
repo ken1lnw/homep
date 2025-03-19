@@ -61,23 +61,23 @@ export default function CartComponent() {
             className="w-full h-[150px] object-cover"
           />
 
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-10 ">
-            <h1 className="text-7xl font-bold">Shopping Cart</h1>
+          <div className="absolute inset-0 flex flex-col items-center justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 text-center text-white z-10">
+            <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">Shopping Cart</h1>
             <p className="text-xl font-bold mt-2">Pick your choice</p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto mb-5">
-        <div className="flex justify-between items-center text-4xl mt-5">
-          <div className="flex gap-2">
+      <div className="container mx-auto mb-5 px-2 lg:px-0">
+        <div className="flex justify-between items-center text-2xl md:text-4xl mt-5">
+          <div className="flex gap-2 font-bold">
             <h1>Total Items :</h1>
             <h2 className="text-blue-500">{cartItems.length}</h2>
             <h2>items</h2>
           </div>
 
           <Button
-          variant="destructive"
+            variant="destructive"
             onClick={() => {
               setCartItems([]);
               localStorage.setItem("cart", "[]");

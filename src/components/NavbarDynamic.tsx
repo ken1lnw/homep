@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import type { MenuProps, GetProps } from "antd";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   GlobalOutlined,
   SearchOutlined,
@@ -23,6 +23,20 @@ import {
 import { motion } from "framer-motion";
 
 import { Input } from "@/components/ui/input";
+
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
+import { GiHamburgerMenu } from "react-icons/gi";
 
 // type SearchProps = GetProps<typeof Input.Search>;
 // const { Search } = Input;
@@ -35,6 +49,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 
 export default function NavbarDynamic() {
   const t = useTranslations("Navbar");
+  const pathname = usePathname();
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -194,15 +209,18 @@ export default function NavbarDynamic() {
                 </div>
               </div>
 
-              <button onClick={() => router.push("/Cart")} className="hidden lg:flex items-center">
-                <Badge count={cartCount}>
-                  <ShoppingCartOutlined
-                    style={{ fontSize: "20px", color: "white" }}
-                    
-                  />
-                </Badge>
+              <button
+                onClick={() => router.push("/Cart")}
+                className="hidden lg:flex "
+              >
+                <span>
+                  <Badge count={cartCount}>
+                    <ShoppingCartOutlined
+                      style={{ fontSize: "20px", color: "white" }}
+                    />
+                  </Badge>
+                </span>
               </button>
-
 
               <button
                 className="text-white hover:text-gray-500 "
@@ -214,9 +232,84 @@ export default function NavbarDynamic() {
                 </span>
               </button>
 
+              <div className="flex lg:hidden">
+                <Drawer direction="right">
+                  <DrawerTrigger asChild>
+                    <Button className="bg-transparent">
+                      <GiHamburgerMenu />
+                    </Button>
+                  </DrawerTrigger>
+                  <DrawerContent className="z-[1000]">
+                    <div className="mx-auto w-full max-w-sm">
+                      <DrawerHeader>
+                        <DrawerTitle>
+                          <div className="flex items-center justify-center">
+                            <a href="/">
+                              <Image
+                                src="/brand-2023.png"
+                                alt="Logo"
+                                width={100}
+                                height={50}
+                                className="object-contain "
+                              />
+                            </a>
+                          </div>
+                        </DrawerTitle>
+                        <div className="text-center">
+                          <DrawerDescription>
+                            Light. Intelligence. Safety.
+                          </DrawerDescription>
+                        </div>
+                      </DrawerHeader>
 
+                      <div className="">
+                        {[
+                          { label: "Home", href: "/" },
+                          { label: "Products", href: "/Products" },
+                          { label: "News", href: "/News" },
+                          { label: "About Us", href: "/AboutUs" },
+                          { label: "Contact Us", href: "/ContactUs" },
+                        ].map((item) => (
+                          <DrawerClose asChild key={item.href}>
+                            <Button
+                              onClick={() => router.push(item.href)}
+                              className={`w-full h-20 text-3xl rounded-none border-b-1 transition-all ${
+                                pathname === item.href
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-transparent text-black hover:bg-blue-500 hover:text-white"
+                              }`}
+                            >
+                              {item.label}
+                            </Button>
+                          </DrawerClose>
+                        ))}
 
-              
+                        <DrawerClose asChild>
+                          <Button
+                            onClick={() => router.push("/Cart")}
+                            className={`w-full h-20 text-3xl rounded-none border-b-1 transition-all ${
+                              pathname === "/Cart"
+                                ? "bg-blue-500 text-white"
+                                : "bg-transparent text-black hover:bg-blue-500 hover:text-white"
+                            }`}
+                          >
+                            Cart ({cartCount} Items)
+                          </Button>
+                        </DrawerClose>
+                      </div>
+                    </div>
+
+                    <DrawerFooter>
+                      {/* <Button>Submit</Button> */}
+                      <DrawerClose asChild>
+                        <Button className="w-full h-10 text-xl rounded-none shadow-none hover:bg-transparent bg-transparent text-black ">
+                          Close
+                        </Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+              </div>
             </ConfigProvider>
           </div>
         </Header>

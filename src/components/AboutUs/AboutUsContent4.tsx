@@ -36,8 +36,8 @@ export default function AboutUsContent4() {
 
   return (
     <>
-      <div className="w-full h-[200px] flex text-black my-10">
-        <div className="w-1/2 flex flex-col justify-center items-start gap-4 pl-32 ">
+      <div className="w-full  grid lg:grid-cols-2 xl:p-5 mb-10  ">
+        <div className="col-span-1 h-full my-2 flex flex-col p-4 gap-4 justify-center items-start px-5 md:my-0 md:h-[220px] lg:h-[250px] xl:h-[350px] lg:pl-32  ">
           <h1 className="text-6xl font-semibold text-blue-500">Certificate</h1>
           <p className="">
             TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1 and
@@ -45,56 +45,55 @@ export default function AboutUsContent4() {
           </p>
         </div>
 
-        <div className=" w-1/2 flex justify-center items-center  ">
-          {/* <img
-            src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1594263201.jpg"
-            alt=""
-            className=" object-cover rounded-sm shadow-xl"
-          />
+        <div className="col-span-1 justify-center lg:h-[250px] xl:h-[350px] flex lg:p-5 ">
 
-          <img
-            src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1432621805.png"
-            alt=""
-            className=" object-cover rounded-sm shadow-xl"
-          /> */}
-
+          <div className="grid grid-cols-2 md:grid-cols-4 items-center">
           <motion.img
-            initial={{ opacity: 0, y: -100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0, ease: "easeOut" }}
-            src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1683682773.png"
-            alt=""
-            className=" h-40 object-cover bg-white "
-          />
+              initial={{ opacity: 0, y: -100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0, ease: "easeOut" }}
+              src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1683682773.png"
+              alt=""
+              className=" h-40 object-cover bg-white  "
+            />
 
-          <motion.img
-          initial={{ opacity: 0, y: -100 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.12, ease: "easeOut" }}
-            src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1571625941.png"
-            alt=""
-            className=" h-40 object-cover bg-white "
-          />
+            <motion.img
+              initial={{ opacity: 0, y: -100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.12, ease: "easeOut" }}
+              src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1571625941.png"
+              alt=""
+              className=" h-40 object-cover bg-white "
+            />
 
-          <motion.img
-          initial={{ opacity: 0, y: -100 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.13, ease: "easeOut" }}
-            src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1436514436.png"
-            alt=""
-            className=" h-40 p-7 object-cover bg-white "
-          />
+            <motion.img
+              initial={{ opacity: 0, y: -100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.13, ease: "easeOut" }}
+              src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1436514436.png"
+              alt=""
+              className=" h-40 p-7 object-cover bg-white "
+            />
 
-          <motion.img
-             initial={{ opacity: 0, y: -100 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             transition={{ duration: 1, delay: 0.14, ease: "easeOut" }}
-            src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1431670502.png"
-            alt=""
-            className=" h-40 p-3 object-cover bg-white "
-          />
+            <motion.img
+              initial={{ opacity: 0, y: -100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.14, ease: "easeOut" }}
+              src="https://www.tyc.com.tw/assets/uploads/about/certification/icon1431670502.png"
+              alt=""
+              className=" h-40 p-3 object-cover bg-white "
+            />
+
+          </div>
+
+
+      
+
+
         </div>
       </div>
+
+
     </>
   );
 }

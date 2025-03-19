@@ -2,17 +2,20 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-import { Button, ConfigProvider, Input } from "antd";
-
+import {  ConfigProvider, Input } from "antd";
+import { Button } from "../ui/button";
 export default function ContactUsContent1() {
   const t = useTranslations("Content1");
   return (
     <>
-      <div className="w-full flex my-10 ">
-        <div className="w-1/2 flex flex-col items-center">
+      <div className="container mx-auto my-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 px-5  gap-10 lg:gap-0">
+          
+          <div className="col-span-1">
           <div>
             <div>
-              <h1 className="font-bold">T.I.T. INTERNATIONAL CO., LTD.</h1>
+              <h1 className="font-bold text-2xl">T.I.T. INTERNATIONAL CO., LTD.</h1>
+              <div className="text-xl">
               <p className="">
                 119 Moo 3, Bankhai-Nonglalok Rd. Nong Lalok, <br />
                 Ban Khai District, Rayong 21120, Thailand
@@ -22,6 +25,7 @@ export default function ContactUsContent1() {
                 <br />
               </span>
               <span>Fax : (+66) 38-892-419</span>
+              </div>
             </div>
 
             <div className="mt-5">
@@ -33,68 +37,65 @@ export default function ContactUsContent1() {
                 //   allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="border h-80 w-96"
+                className="border h-80 lg:w-96 w-full"
               />
             </div>
           </div>
-        </div>
 
-        <div className="w-1/2  gap-5 h-full flex justify-start">
-        <div className="grid grid-cols-2 gap-5 max-w-1/2 ">
-          <div>
-            <label htmlFor="name">
-              Name <span className="text-pink-500">*</span>
-            </label>
-            <Input id="name" />
           </div>
 
-          <div>
-            <label htmlFor="email">
-              Email Address <span className="text-pink-500">*</span>
-            </label>
-            <Input id="email" />
+
+          <div className="col-span-1">
+            <h1 className="text-xl font-bold mb-5">GENERAL INQUIRIES</h1>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:max-w-2/3 text-xl ">
+            <div>
+              <label htmlFor="name">
+                Name <span className="text-pink-500">*</span>
+              </label>
+              <Input id="name" />
+            </div>
+
+            <div>
+              <label htmlFor="email">
+                Email Address <span className="text-pink-500">*</span>
+              </label>
+              <Input id="email" />
+            </div>
+
+            <div>
+              <label htmlFor="phone">
+                Phone Number <span className="text-pink-500">*</span>
+              </label>
+              <Input id="phone" />
+            </div>
+
+            <div>
+              <label htmlFor="subject">
+                Subject <span className="text-pink-500">*</span>
+              </label>
+              <Input id="subject" />
+            </div>
+
+            <div className="lg:col-span-2">
+              <label htmlFor="message">
+                Message <span className="text-pink-500">*</span>
+              </label>
+              <Input.TextArea id="message" className="" />
+            </div>
+
+            <div className="lg:col-span-2">
+            
+              <Button className="bg-blue-500 hover:bg-pink-500 text-xl h-10">Submit</Button>
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="phone">
-              Phone Number <span className="text-pink-500">*</span>
-            </label>
-            <Input id="phone" />
           </div>
 
-          <div>
-            <label htmlFor="subject">
-              Subject <span className="text-pink-500">*</span>
-            </label>
-            <Input id="subject" />
-          </div>
-
-          <div className="col-span-2">
-            <label htmlFor="message">
-              Message <span className="text-pink-500">*</span>
-            </label>
-            <Input.TextArea id="message" className="" />
-          </div>
-
-          <div className="col-span-2">
-            <ConfigProvider
-              theme={{
-                components: {
-                  Button: {
-                    /* here is your component tokens */
-                    colorPrimary: "blue", // กำหนดสีปุ่มเป็นสีชมพู
-                    colorPrimaryHover: "#ff69b4",
-                    // colorTextLightSolid: "black", // เปลี่ยนสีตัวหนังสือ
-                  },
-                },
-              }}
-            >
-              <Button type="primary">Submit</Button>
-            </ConfigProvider>
-          </div>
-        </div>
         </div>
       </div>
+
+ 
     </>
   );
 }

@@ -21,7 +21,7 @@ const fadeUpVariant = {
   },
 };
 
-export default function AboutUsContent3() {
+export default function AboutUsContent3Mobile() {
   const t = useTranslations("Content1");
 
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
@@ -38,19 +38,21 @@ export default function AboutUsContent3() {
 
   return (
     <>
-      <div className="w-full h-[400px] flex  text-black  px-5 bg-gray-200">
-        <div className="h-[400px] w-2/3 flex py-5 items-center">
+      <div className="w-full grid grid-cols-1  bg-gray-200">
+        <div className="col-span-1 h-full my-2 flex flex-col p-4 gap-4 justify-center items-start px-5 md:my-0 md:h-[220px] lg:h-[250px] xl:h-[350px]  ">
+          <h1 className="text-6xl font-semibold text-pink-500">Awards</h1>
+          <p className="">
+            Our passion for, and devotion to, the innovative design of lighting
+            products has gained recognition and merits among our peers.
+          </p>
+        </div>
+
+        <div className="col-span-1 h-full p-5">
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={true}
             slidesPerView={5} // Show 5 slides at a time
             // spaceBetween={-40} // ✅ เพิ่มระยะห่างระหว่าง slides
-            onSwiper={setSwiperInstance} // Store the swiper instance when initialized
-            // style={{
-            //   color: "black"
-            // //   background : "black"
-            // }}
-            // allowSlideNext={false}
             breakpoints={{
               // When the screen width is less than 768px (md and below), show 1 slide
               320: {
@@ -62,14 +64,10 @@ export default function AboutUsContent3() {
               },
 
               1024: {
-                slidesPerView: 3,
-              },
-
-              1440: {
                 slidesPerView: 5,
               },
             }}
-            
+            onSwiper={setSwiperInstance} // Store the swiper instance when initialized
           >
             {/* Your slides here */}
             <SwiperSlide>
@@ -157,9 +155,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1431675779.png"
                   alt=""
@@ -173,9 +171,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.16, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.16, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387507.png"
                   alt=""
@@ -189,9 +187,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.17, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.17, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387573.png"
                   alt=""
@@ -205,9 +203,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.18, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.18, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387619.png"
                   alt=""
@@ -221,9 +219,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.19, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.19, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387697.png"
                   alt=""
@@ -237,9 +235,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.20, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387743.png"
                   alt=""
@@ -253,9 +251,9 @@ export default function AboutUsContent3() {
             <SwiperSlide>
               <div className="flex flex-col items-center relative group">
                 <motion.img
-                initial={{ opacity: 0, y: -100 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.21 , ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.21, ease: "easeOut" }}
                   className="w-44 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387797.png"
                   alt=""
@@ -269,15 +267,8 @@ export default function AboutUsContent3() {
             {/* Other SwiperSlides */}
           </Swiper>
         </div>
-
-        <div className="w-1/3 flex flex-col justify-center items-start p-4 gap-4 ">
-          <h1 className="text-6xl font-semibold text-pink-500">Awards</h1>
-          <p className="">
-            Our passion for, and devotion to, the innovative design of lighting
-            products has gained recognition and merits among our peers.
-          </p>
-        </div>
       </div>
+      
     </>
   );
 }
