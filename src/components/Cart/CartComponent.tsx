@@ -8,11 +8,21 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function CartComponent() {
   const router = useRouter();
-
   const [cartItems, setCartItems] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 10;
 
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -62,7 +72,9 @@ export default function CartComponent() {
           />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 text-center text-white z-10">
-            <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">Shopping Cart</h1>
+            <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">
+              Shopping Cart
+            </h1>
             <p className="text-xl font-bold mt-2">Pick your choice</p>
           </div>
         </div>
@@ -84,53 +96,77 @@ export default function CartComponent() {
               router.refresh();
             }}
           >
-            Clear All
+            <span>
+              <DeleteOutlined className="" /> Clear All
+            </span>
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 mt-6">
+        <div className="grid grid-cols-1 gap-4 mt-6">
           {isLoading && <div>Loading...</div>}
           {data &&
             data.map((xx) => (
               <div
                 key={xx.id}
-                className="p-4 flex items-center gap-4  rounded-lg shadow-sm"
+                className="flex flex-col  md:flex-row border rounded-lg shadow-sm  p-4 lg:p-0 lg:py-2 lg:px-10"
               >
-                <div className="grid grid-cols-4">
-                  <div className="col-span-1">
-                    {xx.item_image.length > 0 && xx.item_image[0].path && (
+                <div className="flex flex-col md:flex-row gap-5 items-center">
+                  {/* {xx.item_image.length > 0 && xx.item_image[0].path && (
                       <Image
-                        src={xx.item_image[0].path}
+                        src={
+                          xx.item_image[0].path ||
+                          "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        }
                         alt=""
                         width={150}
                         height={150}
                       />
-                    )}
-                  </div>
-                  <div className="col-span-2 flex justify-center items-center">
-                    <Descriptions column={4}>
-                      <Descriptions.Item label="Item no.">
-                        {xx.item_number}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Desc.">
-                        {xx.item_description}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Brand">
-                        {xx.brand}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Model">
-                        {xx.model}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </div>
-                  <div className="col-span-1 flex justify-center items-center">
-                    <Button
-                      variant="destructive"
-                      onClick={() => removeFromCart(xx.id)}
-                    >
-                      <DeleteOutlined />
-                    </Button>
-                  </div>
+                    )} */}
+
+                  <img
+                    src={
+                      xx.item_image?.length > 0 && xx.item_image[0]?.path
+                        ? xx.item_image[0].path
+                        : "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                    }
+                    alt=""
+                    width={150}
+                    height={150}
+                  />
+                  <Descriptions
+                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3 }}
+                  >
+                    <Descriptions.Item label="OEM No.">
+                      {xx.oem_no}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Material No.">
+                      {xx.material_no}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Vehicle Brand">
+                      {xx.vehicle_brand}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Vehicle Model">
+                      {xx.vehicle_model}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Side">
+                      {xx.left_right}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Product Brand">
+                      {xx.product_brand}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </div>
+                <div className="flex items-center my-4 md:my-0">
+                  <Button
+                    variant="destructive"
+                    onClick={() => removeFromCart(xx.id)}
+                    className="w-full md:w-auto"
+                  >
+                    <span>
+                      <DeleteOutlined className="mr-2" />
+                      Remove
+                    </span>
+                  </Button>
                 </div>
               </div>
             ))}

@@ -13,6 +13,16 @@ import {
   UploadProps,
 } from "antd";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+import {
   SearchOutlined,
   ShoppingCartOutlined,
   UploadOutlined,
@@ -32,6 +42,12 @@ import { Button } from "../ui/button";
 // ];
 
 export default function Prodcuts() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 10;
+  const [itemSearch, setItemSearch] = useState<string>("");
+
   const [productType, setProductType] = useState<string>(""); // Make sure this is undefined initially
   const [carMaker, setCarMaker] = useState<string>("");
   const [carModel, setCarModel] = useState<string>("");
@@ -39,75 +55,87 @@ export default function Prodcuts() {
   const [oemNo, setOemNo] = useState<string>("");
   const [yearFrom, setYearFrom] = useState<string>("");
   const [yearTo, setYearTo] = useState<string>("");
-  const [itemSearch, setItemSearch] = useState<string>("");
-  const queryClient = useQueryClient();
-  const router = useRouter();
   const [itemNumber, setItemNumber] = useState<string>("");
   const [itemDescription, setItemDescription] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
   const [model, setModel] = useState<string>("");
   const [itemFile, setItemFile] = useState<File[] | null>(null); // Change to an array of File
 
+  // const [oemNo, setOemNo] = useState<string>("");
+  const [searchOemNo, setSearchOemNo] = useState<string>("");
+  const [searchMaterialNo, setSearchMaterialNo] = useState<string>("");
+  const [searchVehicleBrand, setSearchVehicleBrand] = useState<string>("");
+  const [searchVehicleModel, setSearchVehicleModel] = useState<string>("");
+  const [searchSide, setSearchSide] = useState<string>("");
+  const [searchProductBrand, setSearchProductBrand] = useState<string>("");
+
+  const [searchSelectBrand, setSearchSelectProductBrand] = useState<string>("");
+  const [selectedVehicleBrand, setSelectedVehicleBrand] = useState<
+    string | null
+  >(null);
+
   // Function to handle the clearing of all form fields
   const handleClear = () => {
-    setProductType("");
-    setCarMaker("");
-    setCarModel("");
-    setTycNo("");
-    setOemNo("");
-    setYearFrom("");
-    setYearTo("");
+    setSearchOemNo("");
+    setSearchMaterialNo("");
+    setSearchVehicleBrand("");
+    setSearchVehicleModel(""); // ล้างค่า Vehicle Model
+    setSelectedVehicleBrand(null); // ล้างค่า Vehicle Brand เพื่อ disable Model
+    setSearchSide("");
+    setSearchProductBrand("");
   };
 
-  const products = [
-    // {
-    //   OEM No.: "AF",
-    //   Material No: "1-47 2001-2004	",
-    //   Vechicle Brand: "HEAD LAMP K TYPE",
-    //   Vechicle Model: "20-A121/22-05,20-A121/22-C5",
-    //   Side: "RH: 46556565,LH: 46556564",
-    //   image: "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg",
-    // },
-
-    {
-      carmaker: "AF",
-      carmodel: "1-45 / 1-46 1994-2001",
-      product: "HEAD LAMP K TYPE",
-      tycno: "20-5437-08,20-5438-08",
-      oemno: "60628721,60628720",
-      image: "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg",
-    },
-
-    {
-      carmaker: "AF",
-      carmodel: "	1-47 2001-2004",
-      product: "HEAD LAMP A TYPE BLACK GTA LOOK",
-      tycno: "20-A121-B5,20-A122-B5",
-      oemno: "60698931,60698927",
-      image: "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg",
-    },
-  ];
+  // Handle search when "Search" button is clicked
+  const handleSearch = () => {
+    setCurrentPage(1); // Reset to first page on new search
+  };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["item_product", itemSearch],
+    queryKey: [
+      "item_product",
+      searchOemNo,
+      searchMaterialNo,
+      searchVehicleBrand,
+      searchVehicleModel,
+      searchSide,
+      searchProductBrand,
+      currentPage,
+    ],
     queryFn: async () => {
-      if (itemSearch == "") {
-        const { data, error } = await supabase
-          .from("item_product")
-          .select("*,item_image(*)");
-        if (error) throw error;
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize - 1;
 
-        return data as ProductionType[];
-      } else {
-        const { data, error } = await supabase
-          .from("item_product")
-          .select("*,item_image(*)")
-          .or(
-            `oem_no.ilike.%${itemSearch}%,material_no.ilike.%${itemSearch}%,vehicle_brand.ilike.%${itemSearch}%,vehicle_model.ilike.%${itemSearch}%`
-          );
-        if (error) throw error;
-        return data as ProductionType[];
+      // Build dynamic filter conditions based on input values
+      let filters = [];
+      if (searchOemNo) filters.push(`oem_no.ilike.%${searchOemNo}%`);
+      if (searchMaterialNo)
+        filters.push(`material_no.ilike.%${searchMaterialNo}%`);
+      if (searchVehicleBrand) {
+        filters.push(`vehicle_brand.ilike.%${searchVehicleBrand}%`);
+        filters.push(`vehicle_brand_full.ilike.%${searchVehicleBrand}%`);
       }
+      if (searchVehicleModel) {
+        filters.push(`vehicle_model.ilike.%${searchVehicleModel}%`);
+        filters.push(`vehicle_model_full.ilike.%${searchVehicleModel}%`);
+      }
+      if (searchSide) filters.push(`left_right.ilike.%${searchSide}%`);
+      if (searchProductBrand)
+        filters.push(`product_brand.ilike.%${searchProductBrand}%`);
+
+      const query = supabase
+        .from("item_product")
+        .select("*,item_image(*)", { count: "exact" })
+        .range(start, end);
+
+      // Apply filters if any are present
+      if (filters.length > 0) {
+        query.or(filters.join(","));
+      }
+
+      const { data, error, count } = await query;
+      if (error) throw error;
+
+      return { data, total: count || 0 };
     },
   });
 
@@ -191,6 +219,60 @@ export default function Prodcuts() {
   //   },
   // });
 
+  const { data: vehicleBrands, isLoading: isLoadingVehicleBrands } = useQuery({
+    queryKey: ["vehicle_brands"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("item_product")
+        .select("vehicle_brand");
+
+      if (error) throw error;
+
+      // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงกลับเป็น Array ที่มี label กับ value
+      const uniqueVehicleBrands = Array.from(
+        new Set(data.map((item) => item.vehicle_brand))
+      )
+        .filter((brand) => brand && brand.trim() !== "") // ลบค่า null, undefined, และค่าว่าง
+        .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
+        .map((brand) => ({
+          label: brand,
+          value: brand,
+        }));
+
+      return uniqueVehicleBrands;
+    },
+    staleTime: 10 * 60 * 1000, // 10 นาที
+  });
+
+  const { data: vehicleModels, isLoading: isLoadingVehicleModels } = useQuery({
+    queryKey: ["vehicle_models", selectedVehicleBrand], // ดึงเฉพาะแบรนด์ที่เลือก
+    queryFn: async () => {
+      if (!selectedVehicleBrand) return []; // ถ้ายังไม่เลือก vehicle_brand ให้คืนค่าเป็น []
+
+      const { data, error } = await supabase
+        .from("item_product")
+        .select("vehicle_model")
+        .eq("vehicle_brand", selectedVehicleBrand); // ดึงเฉพาะ model ที่ตรงกับ brand ที่เลือก
+
+      if (error) throw error;
+
+      // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงเป็น array
+      const uniqueVehicleModels = Array.from(
+        new Set(data.map((item) => item.vehicle_model))
+      )
+        .filter((model) => model && model.trim() !== "") // ลบค่า null, undefined, และค่าว่าง
+        .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
+        .map((model) => ({
+          label: model,
+          value: model,
+        }));
+
+      return uniqueVehicleModels;
+    },
+    enabled: !!selectedVehicleBrand, // ทำงานก็ต่อเมื่อเลือก brand แล้ว
+    staleTime: 10 * 60 * 1000, // cache 10 นาที
+  });
+
   // Upload file using standard upload
   async function uploadFiles(files: File[]) {
     const filePaths: string[] = []; // เก็บ paths ของไฟล์ทั้งหมด
@@ -270,6 +352,20 @@ export default function Prodcuts() {
     router.refresh();
   };
 
+  const totalPages = Math.ceil((data?.total || 0) / pageSize);
+  const pageLimit = 5;
+
+  // Calculate the range of pages to display
+  const getPageRange = () => {
+    const startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
+    const endPage = Math.min(totalPages, startPage + pageLimit - 1);
+
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, index) => startPage + index
+    );
+  };
+
   return (
     <>
       <div>
@@ -314,266 +410,168 @@ export default function Prodcuts() {
                 },
               }}
             >
+              <Select
+                showSearch
+                placeholder="Vehicle Brand"
+                style={{ width: "100%" }}
+                options={vehicleBrands || []} // ใช้ข้อมูลที่ดึงมา หรือ [] ถ้ายังโหลดไม่เสร็จ
+                loading={isLoadingVehicleBrands} // แสดงสถานะโหลด
+                value={selectedVehicleBrand}
+                onChange={(value) => {
+                  setSelectedVehicleBrand(value); // บันทึกค่าที่เลือก
+                  setSearchVehicleBrand(value); // อัปเดต state ค้นหา
+                  setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
+                }}
+              />
+
+              <Select
+                showSearch
+                placeholder="Vehicle Model"
+                style={{ width: "100%" }}
+                disabled={!selectedVehicleBrand} // ปิดถ้าไม่ได้เลือก Vehicle Brand
+                options={vehicleModels || []} // ใช้ข้อมูล vehicle_model ที่โหลดมา
+                loading={isLoadingVehicleModels}
+                value={searchVehicleModel}
+                onChange={setSearchVehicleModel}
+              />
+
               <Input
                 placeholder="OEM No."
                 style={{ width: "100%" }}
-                value={productType}
-                onChange={(e) => setProductType(e.target.value)}
+                value={searchOemNo}
+                onChange={(e) => setSearchOemNo(e.target.value)}
               />
               <Input
                 placeholder="Material No"
                 style={{ width: "100%" }}
-                value={carMaker}
-                onChange={(e) => setCarMaker(e.target.value)}
+                value={searchMaterialNo}
+                onChange={(e) => setSearchMaterialNo(e.target.value)}
               />
               <Input
                 placeholder="Vehicle Brand"
                 style={{ width: "100%" }}
-                value={carModel}
-                onChange={(e) => setCarModel(e.target.value)}
+                value={searchVehicleBrand}
+                onChange={(e) => setSearchVehicleBrand(e.target.value)}
               />
               <Input
                 placeholder="Vehicle Model"
                 style={{ width: "100%" }}
-                value={tycNo}
-                onChange={(e) => setTycNo(e.target.value)}
+                value={searchVehicleModel}
+                onChange={(e) => setSearchVehicleModel(e.target.value)}
               />
               <Input
                 placeholder="Side"
                 style={{ width: "100%" }}
-                value={oemNo}
-                onChange={(e) => setOemNo(e.target.value)}
+                value={searchSide}
+                onChange={(e) => setSearchSide(e.target.value)}
               />
             </ConfigProvider>
           </div>
           <div className="flex justify-end mt-4 gap-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <Button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Search
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleClear}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Clear
-            </button>
+            </Button>
           </div>
         </div>
 
-        <div className="flex  items-center my-4 p-4 rounded-lg shadow gap-4 w-full">
-          {/* <Input.Search
-              className="!w-1/2"
-              onSearch={(e) => {
-                setItemSearch(e);
-              }}
-            /> */}
+        <div className="my-5">
+          <Pagination className="md:justify-end">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  isActive={currentPage !== 1}
+                  className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+                />
+              </PaginationItem>
 
-          <Input
-            placeholder="Search"
-            value={itemSearch}
-            onChange={(e) => setItemSearch(e.target.value)}
-          />
+              {getPageRange().map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={page === currentPage}
+                    className={`${
+                      page === currentPage
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    } hover:bg-blue-400 hover:text-white`}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
 
-          {/* <Button onClick={() => mutate(
-              {
-
-                item_number: "12345",
-                item_description: "New Head Lamp",
-                brand: "Toyota",
-                model: "Hilux",
-              }
-
-            )}>sss</Button> */}
-
-          {/* <button
-              onClick={() =>
-                mutate({
-                  item_number: "12345",
-                  item_description: "New Head Lamp",
-                  brand: "Toyota",
-                  model: "Hilux",
-                })
-              }
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            >
-              Add Product
-            </button> */}
-
-          <Input
-            placeholder="item_number"
-            value={itemNumber}
-            onChange={(e) => setItemNumber(e.target.value)}
-          />
-          <Input
-            placeholder="item_description"
-            value={itemDescription}
-            onChange={(e) => setItemDescription(e.target.value)}
-          />
-          <Input
-            placeholder="brand"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-          />
-          <Input
-            placeholder="model"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-          />
-
-          <label htmlFor="myfile">Select a file:</label>
-          <input
-            type="file"
-            id="myfile"
-            name="myfile"
-            multiple // Allow multiple files
-            accept="image/*" // Only allow image files
-            className="border-4 border-black"
-            onChange={(e) => {
-              if (e.target.files) {
-                const filesArray = Array.from(e.target.files); // Convert FileList to an array
-                setItemFile(filesArray); // Store multiple files in state
-              } else {
-                setItemFile(null); // Reset if no files are selected
-              }
-            }}
-          />
-
-          {/* <button
-            onClick={async () => {
-              // ตรวจสอบว่า item_number, item_description, brand, model ถูกกรอกหรือไม่
-              if (!itemNumber || !itemDescription || !brand || !model) {
-                toast.error("Please fill in all the required fields.");
-                return; // ไม่ทำการเรียก mutate ถ้าข้อมูลไม่ครบ
-              }
-
-              if (itemFile && itemFile.length > 0) {
-                mutate({
-                  item_number: itemNumber,
-                  item_description: itemDescription,
-                  brand: brand,
-                  model: model,
-                  file: itemFile, // ส่งไฟล์ที่เลือก
-                });
-              } else {
-                mutate({
-                  item_number: itemNumber,
-                  item_description: itemDescription,
-                  brand: brand,
-                  model: model,
-                });
-              }
-            }}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            Add Product
-          </button> */}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  isActive={currentPage !== totalPages}
+                  className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
 
-        <div className="grid grid-cols-3 border p-4">
-          <div className="col-span-2 flex">
-            <img
-              src="https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
-              alt=""
-              width={100}
-              height={100}
-              className=""
-            />
-            <Descriptions column={3}>
-              <Descriptions.Item label="OEM No.">81551-12390</Descriptions.Item>
-              <Descriptions.Item label="Material No.">
-                11-1049-00-6B
-              </Descriptions.Item>
-              <Descriptions.Item label="Vehicle Brand">TY </Descriptions.Item>
-              <Descriptions.Item label="Vechicle Model">
-                CROLA
-              </Descriptions.Item>
-              <Descriptions.Item label="Side">LH</Descriptions.Item>
-              <Descriptions.Item label="Product Brand">TYC</Descriptions.Item>
-            </Descriptions>
-          </div>
-<div className="col-span-1">
-<Button className="bg-blue-500">Add to Cart</Button>
-
-</div>
-        </div>
-
-
-   
-
-
-        {/* Product List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {products.map((product) => (
+        <div className="my-5">
+          {data?.data?.map((product) => (
             <div
-              key={product.tycno}
-              className="p-4 flex items-center gap-4  rounded-lg shadow-sm"
+              className="flex flex-col  md:flex-row border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
+              key={product.id}
             >
-              <img
-                src={product.image}
-                alt={product.product}
-                width={100}
-                height={100}
-                className="rounded"
-              />
-              <div className="flex-1">
-                {/* <h2 className="text-lg font-bold">{product.id}</h2>
-                  <p>{product.name}</p> */}
-                <p className="text-gray-500">
-                  Car MAKER:{" "}
-                  <span className="text-black font-bold">
-                    {product.carmaker}
-                  </span>
-                </p>
-                <p className="text-gray-500">
-                  Car Model:{" "}
-                  <span className="text-black font-bold">
-                    {product.carmodel}
-                  </span>
-                </p>
-                <p className="text-gray-500">
-                  Car Product:{" "}
-                  <span className="text-black font-bold">
-                    {product.product}
-                  </span>
-                </p>
-                <p className="text-gray-500">
-                  TYC No.:{" "}
-                  <span className="text-black font-bold">{product.tycno}</span>
-                </p>
-                <p className="text-gray-500">
-                  OEM No:{" "}
-                  <span className="text-black font-bold">{product.oemno}</span>
-                </p>
-
-                {/* <p className="text-gray-500">Brand: {product.brand}</p>
-                  <p className="text-gray-500">Model: {product.model}</p>
-                  <p className="text-gray-500">OEM No: {product.oem}</p> */}
+              <div className="flex flex-col md:flex-row gap-5 items-center">
+                <img
+                  src={
+                    product.item_image[0]?.path ||
+                    "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                  } // ใช้ path จาก item_image หรือใช้รูปภาพดีฟอลต์
+                  alt={product.material_no}
+                  width={150}
+                  height={100}
+                  className="lg:mr-20"
+                />
+                <Descriptions
+                  column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3 }}
+                >
+                  <Descriptions.Item label="OEM No.">
+                    {product.oem_no}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Material No.">
+                    {product.material_no}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Vehicle Brand">
+                    {product.vehicle_brand}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Vehicle Model">
+                    {product.vehicle_model}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Side">
+                    {product.left_right}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Product Brand">
+                    {product.product_brand}
+                  </Descriptions.Item>
+                </Descriptions>
               </div>
-              <button className="ml-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center min-w-[120px]">
-                <span className="mr-2 text-white">
-                  <ShoppingCartOutlined />
-                </span>{" "}
-                add to cart
-              </button>
+              <div className="flex items-center my-4 md:my-0">
+                <Button
+                  className="bg-blue-500 hover:bg-blue-400 w-full md:w-auto"
+                  onClick={() => handleAddToCart(product.id.toString())}
+                >
+                  Add to Cart
+                </Button>
+              </div>
             </div>
           ))}
-        </div>
-
-        {/* Pagination */}
-        <div className="mt-6 flex justify-center space-x-2">
-          <button className="px-3 py-1 border rounded bg-blue-500 hover:bg-blue-300 text-white">
-            Prev
-          </button>
-          {[1, 2, 3, 4, 5, 6].map((page) => (
-            <button
-              key={page}
-              className="px-3 py-1 border rounded hover:bg-gray-200"
-            >
-              {page}
-            </button>
-          ))}
-          <button className="px-3 py-1 border rounded bg-blue-500 hover:bg-blue-300 text-white">
-            Next
-          </button>
         </div>
       </div>
     </>
