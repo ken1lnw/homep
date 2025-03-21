@@ -87,7 +87,7 @@ export default function Articles() {
 
             {/* รายละเอียดข่าว */}
             <div className="p-4">
-              <h2 className="text-xl font-bold">{article.news_title}</h2>
+              <h2 className="text-2xl text-blue-500 font-bold truncate">{article.news_title}</h2>
               <p className="text-sm text-gray-500">
                 {new Date(article.created_at).toLocaleDateString()}
               </p>

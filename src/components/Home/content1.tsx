@@ -66,12 +66,11 @@ export default function Content1page1() {
 
             <div className="absolute inset-0 flex flex-col items-center justify-center ">
               <div className="text-white text-7xl md:text-8xl lg:text-9xl font-bold px-4 py-2 rounded-lg ">
-                Light
+                Light. Intelligence. Safety.
               </div>
               <div className="text-white text-2xl md:text-4xl font-bold px-4 py-2 rounded-lg text-center ">
                 <p>
-                  We are inspired
-                  <br /> as we light-up the world.
+                  We are inspired as we light-up the world.
                 </p>
               </div>
             </div>

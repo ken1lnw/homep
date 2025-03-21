@@ -15,7 +15,7 @@ export interface ProductionType {
     id: number,
     created_at: string,
     oem_no: string,
-    material_no: string,
+    tyc_no: string,
     full_specifications: string,
     vehicle_brand: string,
 

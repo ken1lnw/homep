@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 
 // Import Swiper core type for typing the swiper instance
 import { Swiper as SwiperType } from "swiper";
+import Image from "next/image";
 
 // **Motion animation variant** (Parent)
 const parentVariant = {
@@ -55,66 +56,99 @@ const Content2page1 = () => {
 
   // สร้าง Array สำหรับข้อมูลสินค้า
   const products = [
-    { src: "https://www.genera.com/_images/Headlight.png", name: "AUTOMOTIVE LAMP" },
+    {
+      src: "https://www.genera.com/_images/Headlight.png",
+      name: "AUTOMOTIVE LAMP",
+    },
     { src: "https://genera.com/_images/Alternator.png", name: "HAVC" },
-    { src: "https://genera.com/_images/Mirror.png", name: "STARTING & CHARGING" },
+    {
+      src: "https://genera.com/_images/Mirror.png",
+      name: "STARTING & CHARGING",
+    },
     { src: "https://genera.com/_images/Window_Regulator.png", name: "MIRRORS" },
-    { src: "https://genera.com/_images/Fuel_Pump.png", name: "WINDOW REGULATORS" },
+    {
+      src: "https://genera.com/_images/Fuel_Pump.png",
+      name: "WINDOW REGULATORS",
+    },
     { src: "https://genera.com/_images/TOC.png", name: "FUEL PUMPS" },
-    { src: "https://genera.com/_images/CAC.png", name: "TRANSMISSION OIL COOLERS" },
+    {
+      src: "https://genera.com/_images/CAC.png",
+      name: "TRANSMISSION OIL COOLERS",
+    },
   ];
 
   return (
     <>
-      <h1 className="flex justify-center my-5 text-4xl font-bold">{t("Products")}</h1>
+      <div className="relative">
+        {/* <img
+          src="/lrblue.png"
+          alt=""
+          className="absolute h-full w-full xl:object-cover object-fill"
+        /> */}
+        <div className="relative">
+          <h1 className="flex justify-center my-5 text-4xl font-bold">
+            {t("Products")}
+          </h1>
 
-      <div className="md:mx-5 xl:mx-50 my-14 relative">
-        <motion.div variants={parentVariant} initial="initial" animate="animate">
-          <Swiper
-            modules={[Navigation, Pagination]}
-            slidesPerView={5} // Show 5 slides at a time
-            breakpoints={{
-              // When the screen width is less than 768px (md and below), show 1 slide
-              320: {
-                slidesPerView: 1,
-              },
-              // For larger screens (above 768px), show 5 slides
-              768: {
-                slidesPerView: 4,
-              },
+          <div className="mx-5 md:mx-20 lg:mx-32 xl:mx-50 my-14 relative">
+            <motion.div
+              variants={parentVariant}
+              initial="initial"
+              animate="animate"
+            >
+              <Swiper
+                modules={[Navigation, Pagination]}
+                slidesPerView={5} // Show 5 slides at a time
+                breakpoints={{
+                  // When the screen width is less than 768px (md and below), show 1 slide
+                  320: {
+                    slidesPerView: 1,
+                  },
+                  // For larger screens (above 768px), show 5 slides
+                  768: {
+                    slidesPerView: 4,
+                  },
 
-              1024: {
-                slidesPerView: 5,
-              },
-            }}
-            onSwiper={setSwiperInstance} // Store the swiper instance when initialized
-          >
-            {products.map((product, index) => (
-              <SwiperSlide key={index}>
-                <motion.div
-                  variants={fadeUpVariant}
-                  initial="initial"
-                  animate="animate"
-                  custom={index} // ใช้ index เป็นตัวกำหนด delay
-                >
-                  <div className="flex flex-col items-center">
-                    <img className="w-44" src={product.src} alt={product.name} />
-                    <div className="text-black mt-2 text-center">{product.name}</div>
-                  </div>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </motion.div>
+                  1024: {
+                    slidesPerView: 5,
+                  },
+                }}
+                onSwiper={setSwiperInstance} // Store the swiper instance when initialized
+              >
+                {products.map((product, index) => (
+                  <SwiperSlide key={index}>
+                    <motion.div
+                      variants={fadeUpVariant}
+                      initial="initial"
+                      animate="animate"
+                      custom={index} // ใช้ index เป็นตัวกำหนด delay
+                    >
+                      <div className="flex flex-col items-center">
+                        <img
+                          className="w-44"
+                          src={product.src}
+                          alt={product.name}
+                        />
+                        <div className="text-black mt-2 text-center">
+                          {product.name}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </motion.div>
 
-        {/* Custom navigation arrows */}
-        <div className="absolute top-1/2 left-0 right-0 flex justify-between transform -translate-y-1/2 z-10">
-          <button onClick={handlePrev} className="text-4xl text-black p-2">
-            <LeftOutlined />
-          </button>
-          <button onClick={handleNext} className="text-4xl text-black p-2">
-            <RightOutlined />
-          </button>
+            {/* Custom navigation arrows */}
+            <div className="absolute top-1/2 left-0 right-0 flex justify-between transform -translate-y-1/2 z-10">
+              <button onClick={handlePrev} className="text-4xl text-black p-2">
+                <LeftOutlined />
+              </button>
+              <button onClick={handleNext} className="text-4xl text-black p-2">
+                <RightOutlined />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>

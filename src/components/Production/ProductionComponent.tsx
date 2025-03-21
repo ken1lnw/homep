@@ -45,10 +45,10 @@ export default function Prodcuts() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 10;
+  const pageSize = 5;
   const [itemSearch, setItemSearch] = useState<string>("");
 
-  const [productType, setProductType] = useState<string>(""); // Make sure this is undefined initially
+  // const [productType, setProductType] = useState<string>(""); // Make sure this is undefined initially
   const [carMaker, setCarMaker] = useState<string>("");
   const [carModel, setCarModel] = useState<string>("");
   const [tycNo, setTycNo] = useState<string>("");
@@ -63,26 +63,26 @@ export default function Prodcuts() {
 
   // const [oemNo, setOemNo] = useState<string>("");
   const [searchOemNo, setSearchOemNo] = useState<string>("");
-  const [searchMaterialNo, setSearchMaterialNo] = useState<string>("");
+  const [searchTycNo, setSearchTycNo] = useState<string>("");
   const [searchVehicleBrand, setSearchVehicleBrand] = useState<string>("");
   const [searchVehicleModel, setSearchVehicleModel] = useState<string>("");
   const [searchSide, setSearchSide] = useState<string>("");
   const [searchProductBrand, setSearchProductBrand] = useState<string>("");
-
-  const [searchSelectBrand, setSearchSelectProductBrand] = useState<string>("");
-  const [selectedVehicleBrand, setSelectedVehicleBrand] = useState<
-    string | null
-  >(null);
+  const [searchProductType, setSearchProductType] = useState<string>("");
+  const [searchYearFrom, setSearchYearFrom] = useState<string>("");
+  const [searchYearTo, setSearchYearTo] = useState<string>("");
 
   // Function to handle the clearing of all form fields
   const handleClear = () => {
     setSearchOemNo("");
-    setSearchMaterialNo("");
+    setSearchTycNo("");
     setSearchVehicleBrand("");
     setSearchVehicleModel(""); // ล้างค่า Vehicle Model
-    setSelectedVehicleBrand(null); // ล้างค่า Vehicle Brand เพื่อ disable Model
     setSearchSide("");
     setSearchProductBrand("");
+    setSearchProductType("");
+    setSearchYearFrom("");
+    setSearchYearTo("");
   };
 
   // Handle search when "Search" button is clicked
@@ -94,12 +94,15 @@ export default function Prodcuts() {
     queryKey: [
       "item_product",
       searchOemNo,
-      searchMaterialNo,
+      searchTycNo,
       searchVehicleBrand,
       searchVehicleModel,
       searchSide,
       searchProductBrand,
+      searchProductType,
       currentPage,
+      searchYearFrom,
+      searchYearTo,
     ],
     queryFn: async () => {
       const start = (currentPage - 1) * pageSize;
@@ -108,8 +111,7 @@ export default function Prodcuts() {
       // Build dynamic filter conditions based on input values
       let filters = [];
       if (searchOemNo) filters.push(`oem_no.ilike.%${searchOemNo}%`);
-      if (searchMaterialNo)
-        filters.push(`material_no.ilike.%${searchMaterialNo}%`);
+      if (searchTycNo) filters.push(`tyc_no.ilike.%${searchTycNo}%`);
       if (searchVehicleBrand) {
         filters.push(`vehicle_brand.ilike.%${searchVehicleBrand}%`);
         filters.push(`vehicle_brand_full.ilike.%${searchVehicleBrand}%`);
@@ -121,6 +123,36 @@ export default function Prodcuts() {
       if (searchSide) filters.push(`left_right.ilike.%${searchSide}%`);
       if (searchProductBrand)
         filters.push(`product_brand.ilike.%${searchProductBrand}%`);
+      
+      
+      if (searchYearFrom || searchYearTo) {
+        // สร้างฟังก์ชันเพื่อแยกปีจากรูปแบบที่เป็นช่วง เช่น "1978-1980" หรือ "1976-"
+        const parseYearRange = (yearRange: string) => {
+          const [startYear, endYear] = yearRange.split('-');
+          return {
+            startYear: parseInt(startYear, 10),
+            endYear: endYear ? parseInt(endYear, 10) : null, // ถ้าไม่มีปีสิ้นสุด จะให้เป็น null
+          };
+        };
+      
+        if (searchYearFrom && searchYearTo) {
+          // ถ้ามีทั้ง Year From และ Year To
+          filters.push(`vehicle_year.gte.${searchYearFrom}`);
+          filters.push(`vehicle_year.lte.${searchYearTo}`);
+        } else if (searchYearFrom) {
+          // ถ้ามี Year From เท่านั้น
+          filters.push(`vehicle_year.gte.${searchYearFrom}`);
+        } else if (searchYearTo) {
+          // ถ้ามี Year To เท่านั้น
+          filters.push(`vehicle_year.lte.${searchYearTo}`);
+        }
+      
+        // ฟังก์ชันเพื่อค้นหาจากช่วงปีใน vehicle_year
+        filters.push(
+          `vehicle_year.ilike.%${searchYearFrom}-${searchYearTo}%`
+        );
+      }
+      
 
       const query = supabase
         .from("item_product")
@@ -219,20 +251,45 @@ export default function Prodcuts() {
   //   },
   // });
 
+  const { data: productType, isLoading: isLoadingProductType } = useQuery({
+    queryKey: ["product_type"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("item_product")
+        .select("product_type");
+
+      if (error) throw error;
+
+      // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงกลับเป็น Array ที่มี label กับ value
+      const uniqueProductType = Array.from(
+        new Set(data.map((item) => item.product_type))
+      )
+        .filter((type) => type && type.trim() !== "" && type !== "#N/A") // ลบค่า null, undefined, และค่าว่าง
+        .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
+        .map((type) => ({
+          label: type,
+          value: type,
+        }));
+
+      return uniqueProductType;
+    },
+    staleTime: 10 * 60 * 1000, // 10 นาที
+  });
+
   const { data: vehicleBrands, isLoading: isLoadingVehicleBrands } = useQuery({
     queryKey: ["vehicle_brands"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("item_product")
-        .select("vehicle_brand");
+        .select("vehicle_brand_full");
 
       if (error) throw error;
 
       // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงกลับเป็น Array ที่มี label กับ value
       const uniqueVehicleBrands = Array.from(
-        new Set(data.map((item) => item.vehicle_brand))
+        new Set(data.map((item) => item.vehicle_brand_full))
       )
-        .filter((brand) => brand && brand.trim() !== "") // ลบค่า null, undefined, และค่าว่าง
+        .filter((brand) => brand && brand.trim() !== "" && brand !== "#N/A") // ลบค่า null, undefined, และค่าว่าง
         .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
         .map((brand) => ({
           label: brand,
@@ -245,22 +302,25 @@ export default function Prodcuts() {
   });
 
   const { data: vehicleModels, isLoading: isLoadingVehicleModels } = useQuery({
-    queryKey: ["vehicle_models", selectedVehicleBrand], // ดึงเฉพาะแบรนด์ที่เลือก
+    queryKey: ["vehicle_models", searchVehicleBrand], // ดึงเฉพาะแบรนด์ที่เลือก
     queryFn: async () => {
-      if (!selectedVehicleBrand) return []; // ถ้ายังไม่เลือก vehicle_brand ให้คืนค่าเป็น []
+      if (!searchVehicleBrand) return []; // ถ้ายังไม่เลือก vehicle_brand ให้คืนค่าเป็น []
 
       const { data, error } = await supabase
         .from("item_product")
-        .select("vehicle_model")
-        .eq("vehicle_brand", selectedVehicleBrand); // ดึงเฉพาะ model ที่ตรงกับ brand ที่เลือก
+        .select("vehicle_model_full")
+        .eq("vehicle_brand_full", searchVehicleBrand); // ดึงเฉพาะ model ที่ตรงกับ brand ที่เลือก
 
       if (error) throw error;
 
       // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงเป็น array
       const uniqueVehicleModels = Array.from(
-        new Set(data.map((item) => item.vehicle_model))
+        new Set(data.map((item) => item.vehicle_model_full))
       )
-        .filter((model) => model && model.trim() !== "") // ลบค่า null, undefined, และค่าว่าง
+        .filter(
+          (model) =>
+            model && model.trim() !== "" && model !== "0.00" && model !== "#N/A"
+        ) // ลบค่า null, undefined, และค่าว่าง
         .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
         .map((model) => ({
           label: model,
@@ -269,7 +329,7 @@ export default function Prodcuts() {
 
       return uniqueVehicleModels;
     },
-    enabled: !!selectedVehicleBrand, // ทำงานก็ต่อเมื่อเลือก brand แล้ว
+    enabled: !!searchVehicleBrand, // ทำงานก็ต่อเมื่อเลือก brand แล้ว
     staleTime: 10 * 60 * 1000, // cache 10 นาที
   });
 
@@ -412,13 +472,28 @@ export default function Prodcuts() {
             >
               <Select
                 showSearch
+                placeholder="Product Type"
+                style={{ width: "100%" }}
+                options={productType || []} // ใช้ข้อมูลที่ดึงมา หรือ [] ถ้ายังโหลดไม่เสร็จ
+                loading={isLoadingProductType} // แสดงสถานะโหลด
+                allowClear
+                value={searchProductType == '' ? null : searchProductType}
+                onChange={(value) => {
+                  setSearchProductType(value); // อัปเดต state ค้นหา
+                  setSearchVehicleBrand("");
+                  setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
+                }}
+              />
+
+              <Select
+                showSearch
                 placeholder="Vehicle Brand"
                 style={{ width: "100%" }}
                 options={vehicleBrands || []} // ใช้ข้อมูลที่ดึงมา หรือ [] ถ้ายังโหลดไม่เสร็จ
                 loading={isLoadingVehicleBrands} // แสดงสถานะโหลด
-                value={selectedVehicleBrand}
+                allowClear
+                value={searchVehicleBrand == '' ? null : searchVehicleBrand}
                 onChange={(value) => {
-                  setSelectedVehicleBrand(value); // บันทึกค่าที่เลือก
                   setSearchVehicleBrand(value); // อัปเดต state ค้นหา
                   setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
                 }}
@@ -428,10 +503,11 @@ export default function Prodcuts() {
                 showSearch
                 placeholder="Vehicle Model"
                 style={{ width: "100%" }}
-                disabled={!selectedVehicleBrand} // ปิดถ้าไม่ได้เลือก Vehicle Brand
+                disabled={!searchVehicleBrand} // ปิดถ้าไม่ได้เลือก Vehicle Brand
                 options={vehicleModels || []} // ใช้ข้อมูล vehicle_model ที่โหลดมา
+                allowClear
                 loading={isLoadingVehicleModels}
-                value={searchVehicleModel}
+                value={searchVehicleModel == '' ? null : searchVehicleModel}
                 onChange={setSearchVehicleModel}
               />
 
@@ -441,29 +517,26 @@ export default function Prodcuts() {
                 value={searchOemNo}
                 onChange={(e) => setSearchOemNo(e.target.value)}
               />
+
               <Input
-                placeholder="Material No"
+                placeholder="TYC No"
                 style={{ width: "100%" }}
-                value={searchMaterialNo}
-                onChange={(e) => setSearchMaterialNo(e.target.value)}
+                value={searchTycNo}
+                onChange={(e) => setSearchTycNo(e.target.value)}
               />
+
               <Input
-                placeholder="Vehicle Brand"
+                placeholder="Year From"
                 style={{ width: "100%" }}
-                value={searchVehicleBrand}
-                onChange={(e) => setSearchVehicleBrand(e.target.value)}
+                value={searchYearFrom}
+                onChange={(e) => setSearchYearFrom(e.target.value)}
               />
+
               <Input
-                placeholder="Vehicle Model"
+                placeholder="Year To"
                 style={{ width: "100%" }}
-                value={searchVehicleModel}
-                onChange={(e) => setSearchVehicleModel(e.target.value)}
-              />
-              <Input
-                placeholder="Side"
-                style={{ width: "100%" }}
-                value={searchSide}
-                onChange={(e) => setSearchSide(e.target.value)}
+                value={searchYearTo}
+                onChange={(e) => setSearchYearTo(e.target.value)}
               />
             </ConfigProvider>
           </div>
@@ -534,7 +607,7 @@ export default function Prodcuts() {
                     product.item_image[0]?.path ||
                     "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
                   } // ใช้ path จาก item_image หรือใช้รูปภาพดีฟอลต์
-                  alt={product.material_no}
+                  alt={product.tyc_no}
                   width={150}
                   height={100}
                   className="lg:mr-20"
@@ -545,8 +618,8 @@ export default function Prodcuts() {
                   <Descriptions.Item label="OEM No.">
                     {product.oem_no}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Material No.">
-                    {product.material_no}
+                  <Descriptions.Item label="TYC No.">
+                    {product.tyc_no}
                   </Descriptions.Item>
                   <Descriptions.Item label="Vehicle Brand">
                     {product.vehicle_brand}
@@ -559,6 +632,14 @@ export default function Prodcuts() {
                   </Descriptions.Item>
                   <Descriptions.Item label="Product Brand">
                     {product.product_brand}
+                  </Descriptions.Item>
+
+                  <Descriptions.Item label="Vehicle Year">
+                    {product.vehicle_year}
+                  </Descriptions.Item>
+
+                  <Descriptions.Item label="Product Type">
+                    {product.product_type}
                   </Descriptions.Item>
                 </Descriptions>
               </div>

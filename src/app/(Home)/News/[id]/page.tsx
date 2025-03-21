@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/hook/supabase";
 import { NewsType } from "@/components/ManageNews/NewsType";
 import { use } from "react";
+import { LeftOutlined } from "@ant-design/icons";
 
 export default function NewsDetail({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
@@ -33,12 +34,27 @@ export default function NewsDetail({ params }: { params: Promise<{ id: string }>
 
     return (
         <div className="container mx-auto my-10">
-             <h1 className="text-3xl font-bold">{article?.news_title}</h1>
-            <p className="text-sm text-gray-500">
+        <h1 className="text-4xl font-bold text-blue-500">{article?.news_title}</h1>
+        <div className="bg-blue-300 h-0.5 my-2"></div>
+        <p className="text-md text-gray-500">
             {article?.created_at ? new Date(article.created_at).toLocaleDateString() : "No date available"}
-            </p>
-            <img src={article?.news_image?.[0]?.path} alt={article?.news_title} className="w-[500px] h-[250px] mt-4" />
-            <p className="mt-4 text-gray-700">{article?.news_description}</p>
+        </p>
+
+<div className="my-2 text-blue-500 text-2xl">
+<LeftOutlined className="" onClick={() => router.back()}/>
+</div>
+        
+        <div className="flex justify-center">
+        <img src={article?.news_image?.[0]?.path} alt={article?.news_title} className="w-[600px] h-[300px] mt-4" />
+
         </div>
+        
+        {/* ใช้ dangerouslySetInnerHTML เพื่อแสดงเนื้อหาที่จัดรูปแบบจากฐานข้อมูล */}
+        <div 
+            className="mt-8 text-gray-700"
+            style={{ whiteSpace: 'pre-wrap' }}  // CSS เพื่อแสดงการเว้นวรรคในข้อความ
+            dangerouslySetInnerHTML={{ __html: article?.news_description || "" }} 
+        />
+    </div>
     );
 }

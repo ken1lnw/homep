@@ -7,7 +7,9 @@ import { motion } from "framer-motion";
 const Content3page1 = () => {
   return (
     <>
-      <div className="relative">
+      <div className="relative w-full h-[500px]">
+      {/* <div className="relative"> */}
+
         {/* Black overlay div with 50% opacity */}
         <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-50"></div>
 
@@ -16,6 +18,8 @@ const Content3page1 = () => {
           alt=""
           className=" w-full h-[500px] object-cover"
         />
+
+        {/* <img src="/lefttop.png" alt="" className="w-full h-full" /> */}
 
         {/* Text content positioned in the center */}
         <div className="absolute inset-0 flex items-center xl:w-1/2 xl:top-1/2 xl:left-1/2 xl:transform  xl:-translate-x-1/2  xl:-translate-y-1/2 px-6 text-white">
