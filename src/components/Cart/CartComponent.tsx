@@ -22,14 +22,15 @@ export default function CartComponent() {
   const router = useRouter();
   const [cartItems, setCartItems] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 10;
+  const itemsPerPage = 5; // จำนวนรายการต่อหน้า
 
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
     setCartItems(cartData);
   }, []);
 
-  const { data, error, isLoading, refetch } = useQuery({
+ 
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["item_product", cartItems],
     queryFn: async () => {
       if (cartItems.length === 0) return [];
@@ -58,6 +59,32 @@ export default function CartComponent() {
     refetch(); // อัปเดตข้อมูลใหม่
     router.refresh();
   };
+
+
+
+   // คำนวณจำนวนหน้าทั้งหมด
+   const totalPages = Math.ceil(cartItems.length / itemsPerPage);
+
+   // ดึงข้อมูลเฉพาะหน้าที่เลือก
+   const currentItems = data?.slice(
+     (currentPage - 1) * itemsPerPage,
+     currentPage * itemsPerPage
+   );
+ 
+   // ฟังก์ชันสร้างช่วงหมายเลขหน้า (แสดงไม่เกิน 5 หน้า)
+   const getPageRange = () => {
+     const maxPagesToShow = 5;
+     let start = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+     let end = Math.min(totalPages, start + maxPagesToShow - 1);
+ 
+     if (end - start + 1 < maxPagesToShow) {
+       start = Math.max(1, end - maxPagesToShow + 1);
+     }
+ 
+     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+   };
+
+   
 
   return (
     <>
@@ -102,27 +129,58 @@ export default function CartComponent() {
           </Button>
         </div>
 
+        {totalPages > 1 && (
+  <div className="my-5">
+    <Pagination className="md:justify-end">
+      <PaginationContent>
+        {/* ปุ่มก่อนหน้า */}
+        <PaginationItem>
+          <PaginationPrevious
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+          />
+        </PaginationItem>
+
+        {/* หมายเลขหน้า */}
+        {getPageRange().map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink
+              onClick={() => setCurrentPage(page)}
+              isActive={page === currentPage}
+              className={`${
+                page === currentPage
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-black"
+              } hover:bg-blue-400 hover:text-white`}
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
+
+        {/* ปุ่มถัดไป */}
+        <PaginationItem>
+          <PaginationNext
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  </div>
+)}
+
         <div className="grid grid-cols-1 gap-4 mt-6">
           {isLoading && <div>Loading...</div>}
-          {data &&
-            data.map((xx) => (
+          {currentItems &&
+            currentItems.map((xx) => (
               <div
                 key={xx.id}
-                className="flex flex-col  md:flex-row border rounded-lg shadow-sm  p-4 lg:p-0 lg:py-2 lg:px-10"
+                className="flex flex-col md:flex-row border rounded-lg shadow-sm p-4 lg:p-0 lg:py-2 lg:px-10"
               >
                 <div className="flex flex-col md:flex-row gap-5 items-center">
-                  {/* {xx.item_image.length > 0 && xx.item_image[0].path && (
-                      <Image
-                        src={
-                          xx.item_image[0].path ||
-                          "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
-                        }
-                        alt=""
-                        width={150}
-                        height={150}
-                      />
-                    )} */}
-
                   <img
                     src={
                       xx.item_image?.length > 0 && xx.item_image[0]?.path
