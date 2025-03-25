@@ -1,3 +1,4 @@
+import AboutUsAwards from "@/components/AboutUs/AboutUsAwards";
 import AboutUsContent1 from "@/components/AboutUs/AboutUsContent1";
 import AboutUsContent2 from "@/components/AboutUs/AboutUsContent2";
 import AboutUsContent3 from "@/components/AboutUs/AboutUsContent3";
@@ -11,10 +12,10 @@ export default function AboutUs() {
   return (
     <div>
       <div className="relative">
-        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-50" />
+        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-30" />
 
         <img
-          src="https://baiyiled.nl/wp-content/uploads/2018/12/TYC-building.jpg"
+          src="/banneraboutusright.png"
           alt="TYC Building"
           className="w-full h-[200px] lg:h-[300px] object-cover"
         />
@@ -35,17 +36,19 @@ export default function AboutUs() {
 
       <AboutUsContent5 />
 
-      <HistoryComponent/>
+      {/* <HistoryComponent/> */}
 
       
-      <div className="hidden lg:flex">
+      {/* <div className="hidden lg:flex">
         <AboutUsContent3 />
       </div>
 
 
       <div className="lg:hidden">
         <AboutUsContent3Mobile />
-      </div>
+      </div> */}
+
+      <AboutUsAwards/>
 
 
       <AboutUsContent4 />

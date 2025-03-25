@@ -36,7 +36,7 @@ export default function AboutUsContent4() {
 
   return (
     <>
-      <div className="w-full  grid lg:grid-cols-2 xl:p-5 mb-10  ">
+      {/* <div className="w-full  grid lg:grid-cols-2 xl:p-5 mb-10  ">
         <div className="col-span-1 h-full my-2 flex flex-col p-4 gap-4 justify-center items-start px-5 md:my-0 md:h-[220px] lg:h-[250px]  lg:pl-32  ">
           <h1 className="text-6xl font-semibold text-blue-500">Certificate</h1>
           <p className="">
@@ -91,9 +91,30 @@ export default function AboutUsContent4() {
 
 
         </div>
+      </div> */}
+
+      <div className="flex flex-col lg:grid lg:grid-cols-2 w-full py-5 ">
+        <div className="items-center flex xl:justify-end">
+          <div className=" h-full my-5  flex flex-col p-4 gap-4 justify-center items-start px-5 xl:my-0 ">
+            <h1 className="text-6xl font-semibold text-blue-500">
+              Certificate
+            </h1>
+            <p className="">
+              TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1
+              and AEO certified.
+            </p>
+          </div>
+        </div>
+        <div className="flex  justify-center items-center xl:justify-start">
+          <img
+            src="/certificate/iso4in1.png"
+            alt=""
+            className="object-contain h-[200px] md:h-[250px] xl:h-[250px]"
+          />
+        </div>
       </div>
 
-
+      
     </>
   );
 }
