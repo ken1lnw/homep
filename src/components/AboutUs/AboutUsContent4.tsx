@@ -37,7 +37,7 @@ export default function AboutUsContent4() {
   return (
     <>
       <div className="w-full  grid lg:grid-cols-2 xl:p-5 mb-10  ">
-        <div className="col-span-1 h-full my-2 flex flex-col p-4 gap-4 justify-center items-start px-5 md:my-0 md:h-[220px] lg:h-[250px] xl:h-[350px] lg:pl-32  ">
+        <div className="col-span-1 h-full my-2 flex flex-col p-4 gap-4 justify-center items-start px-5 md:my-0 md:h-[220px] lg:h-[250px]  lg:pl-32  ">
           <h1 className="text-6xl font-semibold text-blue-500">Certificate</h1>
           <p className="">
             TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1 and
@@ -45,7 +45,7 @@ export default function AboutUsContent4() {
           </p>
         </div>
 
-        <div className="col-span-1 justify-center lg:h-[250px] xl:h-[350px] flex lg:p-5 ">
+        <div className="col-span-1 justify-center lg:h-[250px]  flex lg:p-5 ">
 
           <div className="grid grid-cols-2 md:grid-cols-4 items-center">
           <motion.img

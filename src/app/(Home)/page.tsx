@@ -8,7 +8,6 @@ import Content5page1 from "@/components/Home/content5";
 import Content6page1 from "@/components/Home/content6";
 import { useTranslations } from "next-intl";
 
-
 export default function Home() {
   // const t = useTranslations("HomePage");
 
@@ -16,7 +15,12 @@ export default function Home() {
     <div className="flex flex-col">
       {/* <h1>{t("title")}</h1> */}
 
-      <Content1page1 />
+   
+        <img src="/Banner1.png" alt="" className="hidden md:block" />
+
+        <img src="/BannerMobile.png" alt="" className="md:hidden" />
+
+      {/* <Content1page1 /> */}
       <Content2page1 />
       <Content3page1 />
       <Content4page1 />

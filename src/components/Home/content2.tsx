@@ -86,7 +86,7 @@ const Content2page1 = () => {
           className="absolute h-full w-full xl:object-cover object-fill"
         /> */}
         <div className="relative">
-          <h1 className="flex justify-center my-5 text-4xl font-bold">
+          <h1 className="flex justify-center my-5 text-5xl font-bold text-[#0172E5]">
             {t("Products")}
           </h1>
 

@@ -5,6 +5,7 @@ import AboutUsContent3Mobile from "@/components/AboutUs/AboutUsContent3Mobile";
 import AboutUsContent4 from "@/components/AboutUs/AboutUsContent4";
 import AboutUsContent5 from "@/components/AboutUs/AboutUsContent5";
 import AboutUsContent6 from "@/components/AboutUs/AboutUsContent6";
+import HistoryComponent from "@/components/History/HistoryComponent";
 
 export default function AboutUs() {
   return (
@@ -34,6 +35,9 @@ export default function AboutUs() {
 
       <AboutUsContent5 />
 
+      <HistoryComponent/>
+
+      
       <div className="hidden lg:flex">
         <AboutUsContent3 />
       </div>
@@ -43,8 +47,9 @@ export default function AboutUs() {
         <AboutUsContent3Mobile />
       </div>
 
+
       <AboutUsContent4 />
-      <AboutUsContent6/>
+      {/* <AboutUsContent6/>  */}
     </div>
   );
 }

@@ -38,12 +38,12 @@ export default function AboutUsContent3() {
 
   return (
     <>
-      <div className="w-full h-[400px] flex  text-black  px-5 bg-gray-200">
-        <div className="h-[400px] w-2/3 flex py-5 items-center">
+      <div className="w-full h-[300px] flex  text-black  px-5 bg-gray-200">
+        <div className="h-[300px] w-2/3 flex py-5 items-center">
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={true}
-            slidesPerView={5} // Show 5 slides at a time
+            slidesPerView={6} // Show 5 slides at a time
             // spaceBetween={-40} // ✅ เพิ่มระยะห่างระหว่าง slides
             onSwiper={setSwiperInstance} // Store the swiper instance when initialized
             // style={{
@@ -78,7 +78,7 @@ export default function AboutUsContent3() {
                   initial={{ opacity: 0, y: -100 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1594263201.jpg"
                   alt="Supplier Quality Excellence Award 2019"
                 />
@@ -94,7 +94,7 @@ export default function AboutUsContent3() {
                   initial={{ opacity: 0, y: -100 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.11, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1432621805.png
  "
                   alt=""
@@ -112,7 +112,7 @@ export default function AboutUsContent3() {
                   initial={{ opacity: 0, y: -100 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.12, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433386321.png "
                   alt=""
                 />
@@ -128,7 +128,7 @@ export default function AboutUsContent3() {
                   initial={{ opacity: 0, y: -100 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.13, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433386457.png"
                   alt=""
                 />
@@ -144,7 +144,7 @@ export default function AboutUsContent3() {
                   initial={{ opacity: 0, y: -100 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.14, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387340.png"
                   alt=""
                 />
@@ -160,7 +160,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1431675779.png"
                   alt=""
                 />
@@ -176,7 +176,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.16, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387507.png"
                   alt=""
                 />
@@ -192,7 +192,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.17, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387573.png"
                   alt=""
                 />
@@ -208,7 +208,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.18, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387619.png"
                   alt=""
                 />
@@ -224,7 +224,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.19, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387697.png"
                   alt=""
                 />
@@ -240,7 +240,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.20, ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387743.png"
                   alt=""
                 />
@@ -256,7 +256,7 @@ export default function AboutUsContent3() {
                 initial={{ opacity: 0, y: -100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.21 , ease: "easeOut" }}
-                  className="w-44 h-full"
+                  className="w-32 h-full"
                   src="	https://www.tyc.com.tw/assets/uploads/about/awards/glory1433387797.png"
                   alt=""
                 />

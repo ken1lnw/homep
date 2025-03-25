@@ -432,8 +432,8 @@ export default function HistoryComponent() {
 
       <Timeline
         mode="alternate"
-        items={
-          raw.map((xx,index) => {
+        items={raw.reverse().map((xx, index) => {
+
             return {
               children: xx.children,
               dot: xx.dot,

@@ -74,7 +74,7 @@ const NotoFont = Noto_Sans_Thai_Looped ({
 const TYCFont = Montserrat ({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
-  weight: "400",
+  weight: "500",
 });
 export const metadata: Metadata = {
   title: "TYC HomePage",

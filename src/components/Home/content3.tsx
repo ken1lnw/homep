@@ -8,13 +8,19 @@ const Content3page1 = () => {
   return (
     <>
       <div className="relative w-full h-[500px]">
-      {/* <div className="relative"> */}
+        {/* <div className="relative"> */}
 
         {/* Black overlay div with 50% opacity */}
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-50"></div>
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-80"></div>
+
+        {/* <img
+          src="https://images.unsplash.com/photo-1615752592676-f6bd84f9419d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt=""
+          className=" w-full h-[500px] object-cover"
+        /> */}
 
         <img
-          src="https://images.unsplash.com/photo-1615752592676-f6bd84f9419d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="/insidefact1.png"
           alt=""
           className=" w-full h-[500px] object-cover"
         />
@@ -41,11 +47,11 @@ const Content3page1 = () => {
               TYC, we put a lot of focus and devotion on each one of our
               products in the hope that TYC will one day shine on every corner
               of the world. */}
-
-Bringing safety and a smile to people is what has driven us all these years, and is what continues to motivate us daily.
-Hence, at TYC, we put a lot of focus and devotion on each one of our products in the hope that TYC will one day shine on every corner of the world.
-
-
+              Bringing safety and a smile to people is what has driven us all
+              these years, and is what continues to motivate us daily. Hence, at
+              TYC, we put a lot of focus and devotion on each one of our
+              products in the hope that TYC will one day shine on every corner
+              of the world.
             </p>
           </motion.div>
         </div>

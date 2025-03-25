@@ -123,18 +123,17 @@ export default function Prodcuts() {
       if (searchSide) filters.push(`left_right.ilike.%${searchSide}%`);
       if (searchProductBrand)
         filters.push(`product_brand.ilike.%${searchProductBrand}%`);
-      
-      
+
       if (searchYearFrom || searchYearTo) {
         // สร้างฟังก์ชันเพื่อแยกปีจากรูปแบบที่เป็นช่วง เช่น "1978-1980" หรือ "1976-"
         const parseYearRange = (yearRange: string) => {
-          const [startYear, endYear] = yearRange.split('-');
+          const [startYear, endYear] = yearRange.split("-");
           return {
             startYear: parseInt(startYear, 10),
             endYear: endYear ? parseInt(endYear, 10) : null, // ถ้าไม่มีปีสิ้นสุด จะให้เป็น null
           };
         };
-      
+
         if (searchYearFrom && searchYearTo) {
           // ถ้ามีทั้ง Year From และ Year To
           filters.push(`vehicle_year.gte.${searchYearFrom}`);
@@ -146,13 +145,10 @@ export default function Prodcuts() {
           // ถ้ามี Year To เท่านั้น
           filters.push(`vehicle_year.lte.${searchYearTo}`);
         }
-      
+
         // ฟังก์ชันเพื่อค้นหาจากช่วงปีใน vehicle_year
-        filters.push(
-          `vehicle_year.ilike.%${searchYearFrom}-${searchYearTo}%`
-        );
+        filters.push(`vehicle_year.ilike.%${searchYearFrom}-${searchYearTo}%`);
       }
-      
 
       const query = supabase
         .from("item_product")
@@ -454,6 +450,12 @@ export default function Prodcuts() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <ConfigProvider
               theme={{
+                token: {
+                  colorBorder: "black",
+                  fontSize: 16,
+                  fontFamily: "Montserrat",
+                },
+
                 components: {
                   Select: {
                     /* here is your component tokens */
@@ -464,10 +466,6 @@ export default function Prodcuts() {
                     controlHeight: 40,
                   },
                 },
-                token: {
-                  colorBorder: "black",
-                  fontSize: 16,
-                },
               }}
             >
               <Select
@@ -477,7 +475,7 @@ export default function Prodcuts() {
                 options={productType || []} // ใช้ข้อมูลที่ดึงมา หรือ [] ถ้ายังโหลดไม่เสร็จ
                 loading={isLoadingProductType} // แสดงสถานะโหลด
                 allowClear
-                value={searchProductType == '' ? null : searchProductType}
+                value={searchProductType == "" ? null : searchProductType}
                 onChange={(value) => {
                   setSearchProductType(value); // อัปเดต state ค้นหา
                   setSearchVehicleBrand("");
@@ -492,7 +490,7 @@ export default function Prodcuts() {
                 options={vehicleBrands || []} // ใช้ข้อมูลที่ดึงมา หรือ [] ถ้ายังโหลดไม่เสร็จ
                 loading={isLoadingVehicleBrands} // แสดงสถานะโหลด
                 allowClear
-                value={searchVehicleBrand == '' ? null : searchVehicleBrand}
+                value={searchVehicleBrand == "" ? null : searchVehicleBrand}
                 onChange={(value) => {
                   setSearchVehicleBrand(value); // อัปเดต state ค้นหา
                   setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
@@ -507,7 +505,7 @@ export default function Prodcuts() {
                 options={vehicleModels || []} // ใช้ข้อมูล vehicle_model ที่โหลดมา
                 allowClear
                 loading={isLoadingVehicleModels}
-                value={searchVehicleModel == '' ? null : searchVehicleModel}
+                value={searchVehicleModel == "" ? null : searchVehicleModel}
                 onChange={setSearchVehicleModel}
               />
 
@@ -562,7 +560,7 @@ export default function Prodcuts() {
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
                   isActive={currentPage !== 1}
-                  className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+                  className="bg-gray-500 text-white hover:bg-gray-400 hover:text-white"
                 />
               </PaginationItem>
 
@@ -588,7 +586,7 @@ export default function Prodcuts() {
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
                   isActive={currentPage !== totalPages}
-                  className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+                  className="bg-gray-500 text-white hover:bg-gray-400 hover:text-white"
                 />
               </PaginationItem>
             </PaginationContent>
@@ -598,10 +596,10 @@ export default function Prodcuts() {
         <div className="my-5">
           {data?.data?.map((product) => (
             <div
-              className="flex flex-col  md:flex-row border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
+              className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
               key={product.id}
             >
-              <div className="flex flex-col md:flex-row gap-5 items-center">
+              <div className="flex flex-col md:flex-row gap-5 items-center w-full">
                 <img
                   src={
                     product.item_image[0]?.path ||
@@ -610,42 +608,64 @@ export default function Prodcuts() {
                   alt={product.tyc_no}
                   width={150}
                   height={100}
-                  className="lg:mr-20"
+                  className="lg:mr-20 rounded-2xl"
                 />
-                <Descriptions
-                  column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3 }}
+
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      fontSize: 16,
+                      fontFamily: "Montserrat",
+                    },
+                    components: {
+                      Descriptions: {
+                        // labelColor: "black",
+                        // labelBg: "#000000"
+                      },
+                    },
+                  }}
                 >
-                  <Descriptions.Item label="OEM No.">
-                    {product.oem_no}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="TYC No.">
-                    {product.tyc_no}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Vehicle Brand">
-                    {product.vehicle_brand}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Vehicle Model">
-                    {product.vehicle_model}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Side">
-                    {product.left_right}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Product Brand">
-                    {product.product_brand}
-                  </Descriptions.Item>
+                  <Descriptions
+                    column={{ xs: 1, sm: 1, md: 1, lg: 3, xl: 3, xxl: 3 }}
+                    bordered 
+                    // size="small"
+                  >
+                    <Descriptions.Item label="OEM No."  className="">
+                      {product.oem_no}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="TYC No.">
+                      {product.tyc_no}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Vehicle Brand">
+                      {product.vehicle_brand}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Vehicle Model">
+                      {product.vehicle_model}
+                    </Descriptions.Item>
+                    
+                      {/* <Descriptions.Item label="Side">
+                        {product.left_right}
+                      </Descriptions.Item> */}
 
-                  <Descriptions.Item label="Vehicle Year">
-                    {product.vehicle_year}
-                  </Descriptions.Item>
+                    <Descriptions.Item label="Product Brand">
+                      {product.product_brand}
+                    </Descriptions.Item>
 
-                  <Descriptions.Item label="Product Type">
-                    {product.product_type}
-                  </Descriptions.Item>
-                </Descriptions>
+                    <Descriptions.Item label="Vehicle Year">
+                      {product.vehicle_year}
+                    </Descriptions.Item>
+
+                    {/* <Descriptions.Item label="Product Type">
+                      {product.product_type}
+                    </Descriptions.Item> */}
+
+
+                  </Descriptions>
+                </ConfigProvider>
               </div>
               <div className="flex items-center my-4 md:my-0">
                 <Button
-                  className="bg-blue-500 hover:bg-blue-400 w-full md:w-auto"
+                  className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto"
                   onClick={() => handleAddToCart(product.id.toString())}
                 >
                   Add to Cart

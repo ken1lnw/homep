@@ -21,34 +21,34 @@ const Content4page1 = () => {
     <>
 
 <div className="bg-gray-200 py-10 md:px-10 lg:px-20 xl:px-40">
-      <h1 className=" text-5xl font-bold text-center lg:text-left">Benefits</h1>
+      <h1 className=" text-5xl text-[#0172E5] font-extrabold text-center lg:text-left">Benefits</h1>
       <div className=" w-full">
         <div className="grid md:grid-cols-4 mt-10 gap-5">
           <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
-            <GiProcessor className="text-8xl mb-5" />
+            <GiProcessor className="text-8xl mb-5 text-[#0172E5]" />
             <h1 className="text-2xl font-bold">Technology</h1>
-            <p>Using science to enhance product and process innovation.</p>
+            <p className="text-gray-600">Using science to enhance product and process innovation.</p>
           </div>
 
           <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
-            <MdVerified className="text-8xl mb-5" />
+            <MdVerified className="text-8xl mb-5 text-[#0172E5]" />
 
             <h1 className="text-2xl font-bold">Quality</h1>
-            <p>Surpassing customer expectations and industry standards.</p>
+            <p className="text-gray-600">Surpassing customer expectations and industry standards.</p>
           </div>
 
           <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
-            <TbAutomaticGearbox className="text-8xl mb-5" />
+            <TbAutomaticGearbox className="text-8xl mb-5 text-[#0172E5]" />
  
             <h1 className="text-2xl font-bold">Process</h1>
-            <p>Creating a product, from design to delivery.</p>
+            <p className="text-gray-600">Creating a product, from design to delivery.</p>
           </div>
 
           <div className="flex flex-col items-center lg:block text-center lg:text-left space-y-1">
-            <FiGlobe className="text-8xl mb-5" />
+            <FiGlobe className="text-8xl mb-5 text-[#0172E5]" />
 
             <h1 className="text-2xl font-bold">Sustainability</h1>
-            <p>
+            <p className="text-gray-600">
               Meeting current and future demands of global customer without
               environmental compromise.
             </p>
