@@ -4,7 +4,9 @@ import { useTheme } from "next-themes"
 import { Toaster as Sonner, ToasterProps } from "sonner"
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
+  // const { theme = "system" } = useTheme()
+  const { theme = "light" } = useTheme()
+
 
   return (
     <Sonner
@@ -17,9 +19,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
           description: "group-[.toast]:text-muted-foreground",
           actionButton:
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground font-medium",
-          cancelButton:
+          cancelButton: 
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground font-medium",
         },
+        closeButton: true, // เพิ่มปุ่มปิด
+
       }}
       {...props}
     />

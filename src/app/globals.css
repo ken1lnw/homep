@@ -170,3 +170,84 @@ body {
   }
 }
 
+.mySwiper2.swiper {
+  width: auto;
+  height: auto;
+  margin: 0 0 10px 0;
+   /* border: 3px solid #E81F76;   ตัวอย่างการเพิ่ม border */
+  /* border-radius: 8px;  ปรับขอบให้มน */
+  border: 0.5px solid black;  /* ตัวอย่างการเพิ่ม border */
+  border-radius: 8px; /* ปรับขอบให้มน */
+
+}
+
+/* สำหรับหน้าจอที่มีขนาด 1440px ขึ้นไป */
+@media (min-width: 1440px) {
+  .mySwiper2.swiper {
+    width: auto;
+    height: 500px; /* กำหนดความสูงเป็น 500px สำหรับหน้าจอที่กว้างกว่า 1440px */
+    margin: 0 0 10px 0;
+   /* border: 3px solid #E81F76;   ตัวอย่างการเพิ่ม border */
+  /* border-radius: 8px;  ปรับขอบให้มน */
+  border: 0.5px solid black;  /* ตัวอย่างการเพิ่ม border */
+  border-radius: 8px; /* ปรับขอบให้มน */
+  }
+}
+
+
+.mySwiper2 .swiper .swiper-slide {
+  height: auto;
+}
+
+.mySwiper2 .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+/* หากต้องการปรับขนาดของ thumbnail แบบที่ไม่ให้สูงมากหรือต่ำมาก */
+.mySwiper .swiper-slide {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  overflow: hidden;
+  opacity: 0.1;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+  border: 0.5px solid black;  /* ตัวอย่างการเพิ่ม border */
+  border-radius: 5px; /* ปรับขอบให้มน */
+}
+
+.mySwiper .swiper-slide img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+
+.mySwiper3 .swiper-slide {
+  display: flex;
+       justify-content: center;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  overflow: hidden;
+ 
+}
+
+
+
+.mySwiper3 .swiper-slide img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+   border: 1px solid black;
+  border-radius: 5px;
+}
+
+

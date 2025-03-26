@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/hook/supabase";
 import { ProductionType } from "../Production/ProductionType";
-import { Descriptions } from "antd";
+import { ConfigProvider, Descriptions } from "antd";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { toast } from "sonner";
 
 export default function CartComponent() {
   const router = useRouter();
@@ -29,7 +30,6 @@ export default function CartComponent() {
     setCartItems(cartData);
   }, []);
 
- 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["item_product", cartItems],
     queryFn: async () => {
@@ -57,34 +57,32 @@ export default function CartComponent() {
     setCartItems(updatedCart.map(Number)); // อัปเดต state โดยแปลงกลับเป็น number
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     refetch(); // อัปเดตข้อมูลใหม่
+    toast.success("Removed Product From Cart");
     router.refresh();
+    
   };
 
+  // คำนวณจำนวนหน้าทั้งหมด
+  const totalPages = Math.ceil(cartItems.length / itemsPerPage);
 
+  // ดึงข้อมูลเฉพาะหน้าที่เลือก
+  const currentItems = data?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-   // คำนวณจำนวนหน้าทั้งหมด
-   const totalPages = Math.ceil(cartItems.length / itemsPerPage);
+  // ฟังก์ชันสร้างช่วงหมายเลขหน้า (แสดงไม่เกิน 5 หน้า)
+  const getPageRange = () => {
+    const maxPagesToShow = 5;
+    let start = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let end = Math.min(totalPages, start + maxPagesToShow - 1);
 
-   // ดึงข้อมูลเฉพาะหน้าที่เลือก
-   const currentItems = data?.slice(
-     (currentPage - 1) * itemsPerPage,
-     currentPage * itemsPerPage
-   );
- 
-   // ฟังก์ชันสร้างช่วงหมายเลขหน้า (แสดงไม่เกิน 5 หน้า)
-   const getPageRange = () => {
-     const maxPagesToShow = 5;
-     let start = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-     let end = Math.min(totalPages, start + maxPagesToShow - 1);
- 
-     if (end - start + 1 < maxPagesToShow) {
-       start = Math.max(1, end - maxPagesToShow + 1);
-     }
- 
-     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-   };
+    if (end - start + 1 < maxPagesToShow) {
+      start = Math.max(1, end - maxPagesToShow + 1);
+    }
 
-   
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
 
   return (
     <>
@@ -120,8 +118,10 @@ export default function CartComponent() {
             onClick={() => {
               setCartItems([]);
               localStorage.setItem("cart", "[]");
+              toast.success("Removed All Products From Cart");
               router.refresh();
             }}
+            className="hover:bg-red-500"
           >
             <span>
               <DeleteOutlined className="" /> Clear All
@@ -130,47 +130,49 @@ export default function CartComponent() {
         </div>
 
         {totalPages > 1 && (
-  <div className="my-5">
-    <Pagination className="md:justify-end">
-      <PaginationContent>
-        {/* ปุ่มก่อนหน้า */}
-        <PaginationItem>
-          <PaginationPrevious
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
-          />
-        </PaginationItem>
+          <div className="my-5 cursor-pointer">
+            <Pagination className="md:justify-end">
+              <PaginationContent>
+                {/* ปุ่มก่อนหน้า */}
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    className="bg-white text-black hover:bg-transparent hover:text-black/50"
+                  />
+                </PaginationItem>
 
-        {/* หมายเลขหน้า */}
-        {getPageRange().map((page) => (
-          <PaginationItem key={page}>
-            <PaginationLink
-              onClick={() => setCurrentPage(page)}
-              isActive={page === currentPage}
-              className={`${
-                page === currentPage
-                  ? "bg-blue-500 text-white"
-                  : "bg-white text-black"
-              } hover:bg-blue-400 hover:text-white`}
-            >
-              {page}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+                {/* หมายเลขหน้า */}
+                {getPageRange().map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(page)}
+                      isActive={page === currentPage}
+                      className={`${
+                        page === currentPage
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-black"
+                      } hover:bg-blue-400 hover:text-white`}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
 
-        {/* ปุ่มถัดไป */}
-        <PaginationItem>
-          <PaginationNext
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            className="bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
-  </div>
-)}
+                {/* ปุ่มถัดไป */}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    className="bg-white text-black hover:bg-transparent hover:text-black/50"
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-4 mt-6">
           {isLoading && <div>Loading...</div>}
@@ -178,52 +180,85 @@ export default function CartComponent() {
             currentItems.map((xx) => (
               <div
                 key={xx.id}
-                className="flex flex-col md:flex-row border rounded-lg shadow-sm p-4 lg:p-0 lg:py-2 lg:px-10"
+                className="flex flex-col  md:flex-row  border rounded-lg shadow-sm  p-4 lg:p-0 lg:py-2 lg:px-10"
               >
-                <div className="flex flex-col md:flex-row gap-5 items-center">
-                  <img
-                    src={
-                      xx.item_image?.length > 0 && xx.item_image[0]?.path
-                        ? xx.item_image[0].path
-                        : "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
-                    }
-                    alt=""
-                    width={150}
-                    height={150}
-                  />
-                  <Descriptions
-                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3, xxl: 3 }}
+                <div className="flex flex-col md:flex-row gap-5 items-center w-full">
+                  <div
+                    className="relative group cursor-pointer"
+                    onClick={() => router.push(`/Products/${xx.id}`)}
                   >
-                    <Descriptions.Item label="OEM No.">
-                      {xx.oem_no}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Material No.">
-                      {xx.material_no}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Vehicle Brand">
-                      {xx.vehicle_brand}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Vehicle Model">
-                      {xx.vehicle_model}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Side">
-                      {xx.left_right}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Product Brand">
-                      {xx.product_brand}
-                    </Descriptions.Item>
-                  </Descriptions>
+                    <img
+                      src={
+                        xx.item_image?.length > 0 && xx.item_image[0]?.path
+                          ? xx.item_image[0].path
+                          : "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                      }
+                      alt=""
+                      width={150}
+                      height={150}
+                      className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <ConfigProvider
+                      theme={{
+                        token: {
+                          fontSize: 16,
+                          fontFamily: "Montserrat",
+                        },
+                        components: {
+                          Descriptions: {
+                            // labelColor: "black",
+                            // labelBg: "#000000"
+                          },
+                        },
+                      }}
+                    >
+                      <Descriptions
+                        column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2, xxl: 3 }}
+                        bordered
+                      >
+                        <Descriptions.Item label="OEM No." className="">
+                          {xx.oem_no}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="TYC No.">
+                          {xx.tyc_no}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Vehicle Brand">
+                          {xx.vehicle_brand}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Vehicle Model">
+                          {xx.vehicle_model}
+                        </Descriptions.Item>
+
+                        <Descriptions.Item label="Product Brand">
+                          {xx.product_brand}
+                        </Descriptions.Item>
+
+                        <Descriptions.Item label="Vehicle Year">
+                          {xx.vehicle_year}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </ConfigProvider>
+                  </div>
                 </div>
-                <div className="flex items-center my-4 md:my-0">
+                <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 ml-5">
                   <Button
                     variant="destructive"
                     onClick={() => removeFromCart(xx.id)}
-                    className="w-full md:w-auto"
+                    className="w-full md:w-auto hover:bg-red-500"
                   >
                     <span>
                       <DeleteOutlined className="mr-2" />
                       Remove
                     </span>
+                  </Button>
+
+                  <Button
+                    className="bg-gray-500 hover:bg-gray-400 w-full"
+                    onClick={() => router.push(`/Products/${xx.id}`)}
+                  >
+                    Detail
                   </Button>
                 </div>
               </div>

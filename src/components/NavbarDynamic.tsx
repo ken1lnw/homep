@@ -123,7 +123,7 @@ export default function NavbarDynamic() {
                     animate={{ opacity: hidden ? 0 : 1, y: hidden ? -100 : 0 }}
                     transition={{ duration: 0.1, }}
                     className=
-                        "fixed top-0 left-0 w-full space-x-0 bg-white border-b h-[56px]  z-50 transition-all"
+                        "top-0 left-0 w-full space-x-0 bg-white border-b h-[56px]  z-50 transition-all"
                    
                 >
                      
@@ -198,7 +198,7 @@ export default function NavbarDynamic() {
               className="hidden lg:flex font-medium"
             />
 
-            <div className="hidden lg:flex text-white gap-4">
+            <div className="hidden lg:flex !text-black gap-4">
               <div className="relative w-full">
                 <Select
                   showSearch
@@ -209,7 +209,7 @@ export default function NavbarDynamic() {
                     setSearchQuery(value);
                   }}
                   onChange={(value) => setSelectedValue(value)}
-                  style={{ width: 200 }}
+                  style={{ width: 200, color:'black' }} // Set the color of the text inside the select box
                   loading={isFetching}
                   filterOption={false}
                 >
@@ -221,6 +221,7 @@ export default function NavbarDynamic() {
                 </Select>
               </div>
             </div>
+
 
             <button
                 onClick={() => router.push("/Cart")}

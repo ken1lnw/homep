@@ -105,6 +105,11 @@ export default function Prodcuts() {
       searchYearTo,
     ],
     queryFn: async () => {
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+
+
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize - 1;
 
@@ -167,85 +172,6 @@ export default function Prodcuts() {
     },
   });
 
-  // const { mutate, isPending } = useMutation({
-  //   mutationFn: async (newProduct: any) => {
-  //     // ตรวจสอบข้อมูลให้ครบถ้วนก่อนการเพิ่ม
-  //     if (
-  //       !newProduct.item_number ||
-  //       !newProduct.item_description ||
-  //       !newProduct.brand ||
-  //       !newProduct.model
-  //     ) {
-  //       toast.error("Please fill in all the required fields.");
-  //       throw new Error("Missing required fields");
-  //     }
-
-  //     // ตรวจสอบว่า item_number นี้มีอยู่ในฐานข้อมูลหรือไม่
-  //     const { data: existingItem, error: fetchError } = await supabase
-  //       .from("item_product")
-  //       .select("item_number")
-  //       .eq("item_number", newProduct.item_number);
-
-  //     if (fetchError) {
-  //       toast.error("Error checking item number!");
-  //       throw fetchError;
-  //     }
-
-  //     // หากพบ item_number ที่ซ้ำกัน ให้เรียก onError
-  //     if (existingItem && existingItem.length > 0) {
-  //       const error = new Error(
-  //         `Item number ${newProduct.item_number} already exists!`
-  //       );
-  //       throw error; // เกิดข้อผิดพลาดและโยนไปที่ onError
-  //     }
-
-  //     // ถ้าไม่มีการซ้ำ ให้ดำเนินการแทรกข้อมูลใหม่
-  //     const { data, error } = await supabase
-  //       .from("item_product")
-  //       .insert({
-  //         item_number: newProduct.item_number,
-  //         item_description: newProduct.item_description,
-  //         brand: newProduct.brand,
-  //         model: newProduct.model,
-  //       })
-  //       .select("id")
-  //       .single();
-
-  //     if (error) throw error;
-
-  //     console.log("data", data);
-
-  //     // ถ้ามีไฟล์ให้ทำการอัพโหลด
-  //     if (newProduct.file && newProduct.file.length > 0) {
-  //       const paths = await uploadFiles(newProduct.file);
-
-  //       if (!paths) return; // หากการอัพโหลดล้มเหลว ให้หยุดการทำงาน
-
-  //       const imagePaths = paths.map((path) => ({
-  //         item_id: data.id,
-  //         path,
-  //       }));
-
-  //       const { error: ImageError } = await supabase
-  //         .from("item_image")
-  //         .insert(imagePaths);
-
-  //       if (ImageError) throw ImageError;
-  //     }
-
-  //     return data;
-  //   },
-  //   onSuccess: async () => {
-  //     toast.success("Success to Mutate");
-  //     await queryClient.invalidateQueries({
-  //       queryKey: ["item_product", itemSearch],
-  //     });
-  //   },
-  //   onError: async (error) => {
-  //     // แสดง error เมื่อเกิดข้อผิดพลาด
-  //     toast.error(error.message);
-  //   },
-  // });
 
   const { data: productType, isLoading: isLoadingProductType } = useQuery({
     queryKey: ["product_type"],
@@ -539,9 +465,13 @@ export default function Prodcuts() {
             </ConfigProvider>
           </div>
           <div className="flex justify-end mt-4 gap-4">
-            <Button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+
+
+            {/* <Button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Search
-            </Button>
+            </Button> */}
+
+
             <Button
               onClick={handleClear}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -560,8 +490,8 @@ export default function Prodcuts() {
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
                   isActive={currentPage !== 1}
-                  className="bg-gray-500 text-white hover:bg-gray-400 hover:text-white"
-                />
+                  className="bg-white text-black hover:bg-transparent hover:text-black/50"
+                  />
               </PaginationItem>
 
               {getPageRange().map((page) => (
@@ -586,89 +516,112 @@ export default function Prodcuts() {
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
                   isActive={currentPage !== totalPages}
-                  className="bg-gray-500 text-white hover:bg-gray-400 hover:text-white"
-                />
+                  className="bg-white text-black hover:bg-transparent hover:text-black/50"
+                  />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
         </div>
 
         <div className="my-5">
-          {data?.data?.map((product) => (
+        {data?.data?.map((product) => (
             <div
               className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
               key={product.id}
             >
               <div className="flex flex-col md:flex-row gap-5 items-center w-full">
-                <img
-                  src={
-                    product.item_image[0]?.path ||
-                    "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
-                  } // ใช้ path จาก item_image หรือใช้รูปภาพดีฟอลต์
-                  alt={product.tyc_no}
-                  width={150}
-                  height={100}
-                  className="lg:mr-20 rounded-2xl"
-                />
-
-                <ConfigProvider
-                  theme={{
-                    token: {
-                      fontSize: 16,
-                      fontFamily: "Montserrat",
-                    },
-                    components: {
-                      Descriptions: {
-                        // labelColor: "black",
-                        // labelBg: "#000000"
-                      },
-                    },
-                  }}
+                <div
+                  className="relative group cursor-pointer"
+                  onClick={() => router.push(`/Products/${product.id}`)}
                 >
-                  <Descriptions
-                    column={{ xs: 1, sm: 1, md: 1, lg: 3, xl: 3, xxl: 3 }}
-                    bordered 
-                    // size="small"
+                  <img
+                    src={
+                      product.item_image[0]?.path ||
+                      "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                    }
+                    alt={product.tyc_no}
+                    width={150}
+                    height={100}
+                    className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <ConfigProvider
+                    theme={{
+                      token: {
+                        fontSize: 16,
+                        fontFamily: "Montserrat",
+                      },
+                      components: {
+                        Descriptions: {
+                          // labelColor: "black",
+                          // labelBg: "#000000"
+                        },
+                      },
+                    }}
                   >
-                    <Descriptions.Item label="OEM No."  className="">
-                      {product.oem_no}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="TYC No.">
-                      {product.tyc_no}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Vehicle Brand">
-                      {product.vehicle_brand}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Vehicle Model">
-                      {product.vehicle_model}
-                    </Descriptions.Item>
-                    
+                    <Descriptions
+                      column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2, xxl: 3 }}
+                      bordered
+                      // size="small"
+                    >
+                      <Descriptions.Item label="OEM No." className="">
+                        {product.oem_no}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="TYC No.">
+                        {product.tyc_no}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Vehicle Brand">
+                        {product.vehicle_brand}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Vehicle Model">
+                        {product.vehicle_model}
+                      </Descriptions.Item>
+
                       {/* <Descriptions.Item label="Side">
                         {product.left_right}
                       </Descriptions.Item> */}
 
-                    <Descriptions.Item label="Product Brand">
-                      {product.product_brand}
-                    </Descriptions.Item>
+                      <Descriptions.Item label="Product Brand">
+                        {product.product_brand}
+                      </Descriptions.Item>
 
-                    <Descriptions.Item label="Vehicle Year">
-                      {product.vehicle_year}
-                    </Descriptions.Item>
+                      <Descriptions.Item label="Vehicle Year">
+                        {product.vehicle_year}
+                      </Descriptions.Item>
 
-                    {/* <Descriptions.Item label="Product Type">
+                      {/* <Descriptions.Item label="Product Type">
                       {product.product_type}
                     </Descriptions.Item> */}
-
-
-                  </Descriptions>
-                </ConfigProvider>
+                    </Descriptions>
+                  </ConfigProvider>
+                </div>
               </div>
-              <div className="flex items-center my-4 md:my-0">
+
+              {/* <div className="flex items-center my-4 md:my-0 ml-5">
                 <Button
                   className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto"
                   onClick={() => handleAddToCart(product.id.toString())}
                 >
                   Add to Cart
+                </Button>
+                
+              </div> */}
+
+              <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 ml-5">
+                <Button
+                  className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto  transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                  onClick={() => handleAddToCart(product.id.toString())}
+                >
+                  Add to Cart
+                </Button>
+
+                <Button
+                  className="bg-gray-500 hover:bg-gray-400 w-full"
+                  onClick={() => router.push(`/Products/${product.id}`)}
+                >
+                  Detail
                 </Button>
               </div>
             </div>

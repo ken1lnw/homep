@@ -5,9 +5,11 @@ import '@ant-design/v5-patch-for-react-19';
 const Layout = ({children} : {children:ReactNode}) => {
     return <>
      
-                  <Navbar2 />
-                  {children}
-                  <Footer />
+                  <div className="flex flex-col min-h-screen">
+      <Navbar2 />
+      <main className="flex-grow">{children}</main>
+      <Footer />
+    </div>
     </>
 }
  
