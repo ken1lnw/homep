@@ -22,6 +22,8 @@ import {
 import { GlobalOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Button } from "./ui/button";
 import { Geist, Geist_Mono, Merriweather_Sans , Slabo_13px  } from "next/font/google";
+import { motion } from "framer-motion";
+
 
 
 const { Header } = Layout;
@@ -30,11 +32,34 @@ export default function NavbarDynamic() {
   const t = useTranslations("Navbar");
   const pathname = usePathname();
   const router = useRouter();
-  
+  const [hidden, setHidden] = React.useState(false);
+  const [lastScrollY, setLastScrollY] = useState(Number);
+
   const [searchQuery, setSearchQuery] = useState(""); // For server query trigger
   const [selectedValue, setSelectedValue] = useState<string | undefined>(); // For user selection (if needed)
   const [currentLang, setCurrentLang] = useState<string>("en");
   const cartCount = JSON.parse(localStorage.getItem("cart") || "[]").length;
+
+
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 30) {
+            setHidden(true); // เลื่อนลง → ซ่อน Navbar
+        } else {
+            setHidden(false); // เลื่อนขึ้น → แสดง Navbar
+        }
+        setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+        window.removeEventListener("scroll", handleScroll);
+    };
+}, [lastScrollY]);
+
 
   // Update language from cookie
   useEffect(() => {
@@ -90,6 +115,20 @@ export default function NavbarDynamic() {
   }));
 
   return (
+
+    <>
+    
+    <motion.div
+                    initial={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: hidden ? 0 : 1, y: hidden ? -100 : 0 }}
+                    transition={{ duration: 0.1, }}
+                    className=
+                        "fixed top-0 left-0 w-full space-x-0 bg-white border-b h-[56px]  z-50 transition-all"
+                   
+                >
+                     
+             
+   
     <ConfigProvider
       theme={{
         token: {
@@ -100,7 +139,7 @@ export default function NavbarDynamic() {
       <Header
         style={{
           display: "flex",
-          position: "sticky",
+          // position: "sticky",
           top: 0,
           width: "100%",
           zIndex: 1000,
@@ -284,5 +323,9 @@ export default function NavbarDynamic() {
         </div>
       </Header>
     </ConfigProvider>
+
+    </motion.div>
+
+     </>
   );
 }

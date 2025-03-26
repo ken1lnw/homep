@@ -64,11 +64,11 @@ export default function AboutUsContent1() {
 
       <div className="relative w-full h-[350px]">
         <img
-          src="/aboutimg/about1.png"
+          src="/aboutimg/about1w.png"
           alt=""
           className="w-full h-full object-none xl:object-cover "
         />
-        <div className="absolute inset-0 flex text-black container mx-auto items-center">
+        <div className="absolute inset-0 flex text-black  items-center">
           <div className="px-5 bg-white/50 md:bg-transparent h-full flex flex-col justify-center">
             <motion.div
               initial={{ opacity: 0, x: -200 }}

@@ -87,7 +87,7 @@ export default function AboutUsContent2() {
 
       <div className="relative w-full h-[350px] flex">
         <img
-          src="/aboutimg/about2gray.png"
+          src="/aboutimg/about2w.png"
           alt=""
           className="w-full h-full object-none xl:object-cover "
         />

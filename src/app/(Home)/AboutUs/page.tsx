@@ -12,10 +12,10 @@ export default function AboutUs() {
   return (
     <div>
       <div className="relative">
-        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-30" />
+        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-40" />
 
         <img
-          src="/banneraboutusright.png"
+          src="/tycbuild.png"
           alt="TYC Building"
           className="w-full h-[200px] lg:h-[300px] object-cover"
         />
@@ -36,7 +36,7 @@ export default function AboutUs() {
 
       <AboutUsContent5 />
 
-      {/* <HistoryComponent/> */}
+      <HistoryComponent/>
 
       
       {/* <div className="hidden lg:flex">

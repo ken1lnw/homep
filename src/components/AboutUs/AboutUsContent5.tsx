@@ -22,16 +22,20 @@ export default function AboutUsContent5() {
         <div className="col-span-1 h-full my-5 flex flex-col p-4 gap-4 justify-center items-start px-5 xl:my-0 md:h-[220px] lg:h-[250px] xl:h-[350px]  ">
           <motion.h1
             initial={{ opacity: 0, x: -200 }}
-            animate={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+            viewport={{ once: true }}
+
             className="text-5xl lg:text-4xl xl:text-6xl font-semibold text-blue-500"
           >
             QUALITY ASSURANCE
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, x: -200 }}
-            animate={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+            viewport={{ once: true }}
+
             className=""
           >
             Our top priorities are quality automotive products, exceptional
