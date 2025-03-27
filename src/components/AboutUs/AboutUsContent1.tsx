@@ -83,12 +83,22 @@ export default function AboutUsContent1() {
               initial={{ opacity: 0, x: -200 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-              className="text-sm md:text-md md:w-1/2 my-2"  
-              >
-              TYC, built on decades of experience and technological
+              className="text-sm md:text-md md:w-1/2 my-2"
+            >
+              {/* TYC, built on decades of experience and technological
               advancements, strives to bring safety and happiness to people
               worldwide. With a strong focus and dedication to each product, we
-              hope to become a beacon of light in every corner of the world.
+              hope to become a beacon of light in every corner of the world. */}
+              Built on decades of experience and technological advancements, we
+              have become a beacon of light in the night. Bringing safety and a
+              smile to people is what has driven us all these years, and is what
+              continues to motivate us daily. Hence, at TYC, we put a lot of
+              focus and devotion on each one of our products in the dream that
+              TYC will shine on every corner of the world. 
+              <br/><br/>
+              By exceeding all
+              expectations, we are blazing forward as the company that knows,
+              understands and delivers light.
             </motion.p>
           </div>
         </div>

@@ -99,8 +99,12 @@ export default function AboutUsContent2() {
               transition={{ duration: 1, delay: 0, ease: "easeOut" }}
             >
               {/* <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-blue-500"> */}
-              <h1 className="text-5xl lg:text-4xl xl:text-6xl font-semibold text-pink-500 ">
-                OEM
+              <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold text-pink-500 ">
+                {/* OEM */}
+
+                PREMIUM AUTOMOTIVE LIGHTING PRODUCTS
+
+
               </h1>
             </motion.div>
             <motion.p

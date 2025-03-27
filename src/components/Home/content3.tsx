@@ -11,7 +11,7 @@ const Content3page1 = () => {
         {/* <div className="relative"> */}
 
         {/* Black overlay div with 50% opacity */}
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-80"></div>
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-60"></div>
 
         {/* <img
           src="https://images.unsplash.com/photo-1615752592676-f6bd84f9419d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

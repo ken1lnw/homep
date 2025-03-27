@@ -14,7 +14,7 @@ const Content6page1 = () => {
     <>
       <div className="relative">
         {/* Black overlay div with 50% opacity */}
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-85"></div>
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-black opacity-60"></div>
         
         <img
           src="https://www.tyc.com.tw/assets/uploads/homepage/banner/banner1436519559.jpg"
