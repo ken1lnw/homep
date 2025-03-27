@@ -20,6 +20,7 @@ import { ConfigProvider, Descriptions } from "antd";
 import { Swiper as SwiperType } from "swiper";
 import { Button } from "@/components/ui/button";
 import { LeftOutlined } from "@ant-design/icons";
+import { LoadingSpinner } from "./spinload";
 
 import {
   Breadcrumb,
@@ -32,6 +33,11 @@ import {
 } from "@/components/ui/breadcrumb";
 import { toast } from "sonner";
 
+import {
+  fetchProductId,
+  fetchRecentProducts,
+} from "@/app/(Home)/Products/[id]/productidfetch";
+
 export default function ProdcutsDetail({
   params,
 }: {
@@ -42,6 +48,29 @@ export default function ProdcutsDetail({
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
+  // const {
+  //   data: product,
+  //   isLoading,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["item_product", id],
+  //   queryFn: async () => {
+  //     const { data, error } = await supabase
+  //       .from("item_product")
+  //       .select("*,item_image(*)")
+  //       .eq("id", id)
+  //       .single();
+
+  //     if (error) throw error;
+  //     return data as ProductionType;
+  //   },
+  //   staleTime: 1000 * 60 * 5, // Cache ไว้ 5 นาที
+  //   enabled: !!id, // ใช้ query ก็ต่อเมื่อมี id
+  // });
+
+  //   if (isLoading) return <p>Loading...</p>;
+  //   if (error) return <p>Error loading Product</p>;
+
   const {
     data: product,
     isLoading,
@@ -49,41 +78,34 @@ export default function ProdcutsDetail({
   } = useQuery({
     queryKey: ["item_product", id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("item_product")
-        .select("*,item_image(*)")
-        .eq("id", id)
-        .single();
-
-      if (error) throw error;
-      return data as ProductionType;
+      const fetchedData = await fetchProductId(parseInt(id));
+      return fetchedData;
     },
-    staleTime: 1000 * 60 * 5, // Cache ไว้ 5 นาที
-    enabled: !!id, // ใช้ query ก็ต่อเมื่อมี id
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 
-//   if (isLoading) return <p>Loading...</p>;
-//   if (error) return <p>Error loading Product</p>;
+  // const { data: recentProducts } = useQuery({
+  //   queryKey: ["recent_item_products"],
+  //   queryFn: async () => {
+  //     const { data, error, count } = await supabase
+  //       .from("item_product")
+  //       .select("*,item_image(*)")
+  //       .order("id", { ascending: true })
+  //       .limit(5);
+  //     if (error) throw error;
 
-
-
+  //     return { recentproducts: data as ProductionType[] };
+  //   },
+  // });
 
   const { data: recentProducts } = useQuery({
     queryKey: ["recent_item_products"],
     queryFn: async () => {
-      const { data, error, count } = await supabase
-        .from("item_product")
-        .select("*,item_image(*)")
-        .order("id", { ascending: true })
-        .limit(5);
-      if (error) throw error;
-  
-      return { recentproducts: data as ProductionType[] };
+      const fetch5 = await fetchRecentProducts();
+      return fetch5;
     },
   });
-
-
-
 
   const handleAddToCart = (productId: string) => {
     // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
@@ -104,6 +126,12 @@ export default function ProdcutsDetail({
 
   return (
     <>
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center z-50">
+          <LoadingSpinner />
+        </div>
+      )}
+
       <div className="container mx-auto my-10">
         {/* <div className="mb-5">
           <Breadcrumb>
@@ -268,7 +296,6 @@ export default function ProdcutsDetail({
                           <Descriptions.Item label="Product Type">
                             {product.product_type}
                           </Descriptions.Item>
-
                         </Descriptions>
                       </ConfigProvider>
                     </div>
@@ -278,7 +305,7 @@ export default function ProdcutsDetail({
 
               <Button
                 className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto h-16 text-2xl  "
-                  onClick={() => handleAddToCart(id.toString())}
+                onClick={() => handleAddToCart(id.toString())}
               >
                 Add to Cart
               </Button>
@@ -286,102 +313,79 @@ export default function ProdcutsDetail({
           </div>
         </div>
 
-
-
-
-
-
-
-        <h1 className="text-4xl font-bold text-blue-500 mt-20">Recent Products</h1>
+        <h1 className="text-4xl font-bold text-blue-500 mt-20">
+          Recent Products
+        </h1>
         <div className="bg-blue-300 h-0.5 my-2 mb-10"></div>
 
+        <div className="md:mx-2">
+          <Swiper
+            slidesPerView={5}
+            spaceBetween={100}
+            navigation={true}
+            modules={[Navigation]}
+            className="mySwiper3"
+            breakpoints={{
+              // When the screen width is less than 768px (md and below), show 1 slide
+              320: {
+                slidesPerView: 1,
+                spaceBetween: 0,
+              },
+              // For larger screens (above 768px), show 5 slides
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
 
+              1024: {
+                slidesPerView: 4,
+              },
 
-<div className="md:mx-2">
-        <Swiper
-        slidesPerView={5}
-        spaceBetween={100}
-        navigation={true} 
-        modules={[Navigation]}
-        className="mySwiper3"
+              1440: {
+                slidesPerView: 5,
+              },
+            }}
+          >
+            {recentProducts && recentProducts.length > 0 ? (
+              recentProducts.map((product) => (
+                <SwiperSlide>
+                  <div
+                    className="flex flex-col items-center relative group"
+                    key={product.id}
+                  >
+                    <img
+                      className=""
+                      src={
+                        product.item_image[0]?.path ||
+                        "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                      } // ใช้ URL ของภาพที่ได้จาก API
+                      alt={product.oem_no || product.tyc_no || "Product Image"} // ใช้ชื่อสินค้าหรือข้อมูลที่เหมาะสม
+                    />
+                    <div
+                      className="absolute top-0  h-full w-full flex flex-col items-center justify-center bg-black/80  
+                    text-[#0172E5] font-semibold p-1 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer rounded"
+                      onClick={() => router.push(`/Products/${product.id}`)}
+                    >
+                      <div className="text-left">
+                        <div>
+                          OEM.NO :
+                          {product.oem_no || `TYC.NO : ${product.tyc_no}`}{" "}
+                        </div>
 
-        breakpoints={{
-            // When the screen width is less than 768px (md and below), show 1 slide
-            320: {
-                slidesPerView:1,
-                spaceBetween:0,
+                        <div>Vehicle Brand :{product.vehicle_brand}</div>
 
-            },
-            // For larger screens (above 768px), show 5 slides
-            768: {
-                slidesPerView:3,
-                spaceBetween:20,
-            },
-
-            1024: {
-                slidesPerView:4,
-            },
-
-            1440: {
-                slidesPerView:5,
-            },
-
-          
-          }}
-
-
-      >
-        <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996641.jpg"
-                  alt=""
-                  className=" transform transition-all duration-300 ease-in-out group-hover:scale-110"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996666.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996683.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996641.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996666.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996683.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-      </Swiper>
-
-
+                        <div>Vehicle Model :{product.vehicle_model}</div>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <p>No recent products available</p> // กรณีที่ไม่มีสินค้ามาแสดง
+            )}
+          </Swiper>
+        </div>
       </div>
-
-
-        
-
-
-      </div>
-      
     </>
   );
 }

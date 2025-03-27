@@ -18,6 +18,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { toast } from "sonner";
+import { fetchCartItems } from "@/app/(Home)/Cart/cartdata";
 
 export default function CartComponent() {
   const router = useRouter();
@@ -30,18 +31,30 @@ export default function CartComponent() {
     setCartItems(cartData);
   }, []);
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["item_product", cartItems],
-    queryFn: async () => {
-      if (cartItems.length === 0) return [];
-      const { data, error } = await supabase
-        .from("item_product")
-        .select("*, item_image(*)")
-        .in("id", cartItems);
-      if (error) throw error;
-      return data as ProductionType[];
-    },
-  });
+
+  // const { data, isLoading, refetch } = useQuery({
+  //   queryKey: ["item_product", cartItems],
+  //   queryFn: async () => {
+  //     if (cartItems.length === 0) return [];
+  //     const { data, error } = await supabase
+  //       .from("item_product")
+  //       .select("*, item_image(*)")
+  //       .in("id", cartItems);
+  //     if (error) throw error;
+  //     return data as ProductionType[];
+  //   },
+  // });
+
+const { data, isLoading, refetch,error } = useQuery({
+  queryKey: ["item_product", cartItems],
+  queryFn: async () => {
+    if (cartItems.length === 0) return [];
+      const fetchedData = await fetchCartItems(cartItems); // เก็บค่าผลลัพธ์จากฟังก์ชัน fetchCartItems
+      return fetchedData; // คืนค่าข้อมูลที่ดึงมา
+  },
+});
+
+// console.log(error;)
 
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart") || "[]");

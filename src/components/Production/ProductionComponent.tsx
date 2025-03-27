@@ -35,6 +35,8 @@ import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
+import { fetchAllProduct } from "@/app/(Home)/Products/productdatafetch";
 
 // const ProductTypeOptions = [
 //   { label: "ALL PRODUCTS", value: "allproducts" },
@@ -90,10 +92,8 @@ export default function Prodcuts() {
     setCurrentPage(1); // Reset to first page on new search
   };
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: [
-      "item_product",
-      searchOemNo,
+  const { data: alldata, isLoading: isLoadingAllProduct } = useQuery({
+    queryKey: ["product_type",  searchOemNo,
       searchTycNo,
       searchVehicleBrand,
       searchVehicleModel,
@@ -102,76 +102,59 @@ export default function Prodcuts() {
       searchProductType,
       currentPage,
       searchYearFrom,
-      searchYearTo,
-    ],
+      searchYearTo,],
     queryFn: async () => {
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-
-
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize - 1;
 
-      // Build dynamic filter conditions based on input values
-      let filters = [];
-      if (searchOemNo) filters.push(`oem_no.ilike.%${searchOemNo}%`);
-      if (searchTycNo) filters.push(`tyc_no.ilike.%${searchTycNo}%`);
-      if (searchVehicleBrand) {
-        filters.push(`vehicle_brand.ilike.%${searchVehicleBrand}%`);
-        filters.push(`vehicle_brand_full.ilike.%${searchVehicleBrand}%`);
-      }
-      if (searchVehicleModel) {
-        filters.push(`vehicle_model.ilike.%${searchVehicleModel}%`);
-        filters.push(`vehicle_model_full.ilike.%${searchVehicleModel}%`);
-      }
-      if (searchSide) filters.push(`left_right.ilike.%${searchSide}%`);
-      if (searchProductBrand)
-        filters.push(`product_brand.ilike.%${searchProductBrand}%`);
 
-      if (searchYearFrom || searchYearTo) {
-        // สร้างฟังก์ชันเพื่อแยกปีจากรูปแบบที่เป็นช่วง เช่น "1978-1980" หรือ "1976-"
-        const parseYearRange = (yearRange: string) => {
-          const [startYear, endYear] = yearRange.split("-");
-          return {
-            startYear: parseInt(startYear, 10),
-            endYear: endYear ? parseInt(endYear, 10) : null, // ถ้าไม่มีปีสิ้นสุด จะให้เป็น null
-          };
-        };
+       // Build dynamic filter conditions based on input values
+       let filters = [];
+       if (searchOemNo) filters.push(`oem_no.ilike.%${searchOemNo}%`);
+       if (searchTycNo) filters.push(`tyc_no.ilike.%${searchTycNo}%`);
+       if (searchVehicleBrand) {
+         filters.push(`vehicle_brand.ilike.%${searchVehicleBrand}%`);
+         filters.push(`vehicle_brand_full.ilike.%${searchVehicleBrand}%`);
+       }
+       if (searchVehicleModel) {
+         filters.push(`vehicle_model.ilike.%${searchVehicleModel}%`);
+         filters.push(`vehicle_model_full.ilike.%${searchVehicleModel}%`);
+       }
+       if (searchSide) filters.push(`left_right.ilike.%${searchSide}%`);
+       if (searchProductBrand)
+         filters.push(`product_brand.ilike.%${searchProductBrand}%`);
+ 
+       if (searchYearFrom || searchYearTo) {
+         // สร้างฟังก์ชันเพื่อแยกปีจากรูปแบบที่เป็นช่วง เช่น "1978-1980" หรือ "1976-"
+         const parseYearRange = (yearRange: string) => {
+           const [startYear, endYear] = yearRange.split("-");
+           return {
+             startYear: parseInt(startYear, 10),
+             endYear: endYear ? parseInt(endYear, 10) : null, // ถ้าไม่มีปีสิ้นสุด จะให้เป็น null
+           };
+         };
+ 
+         if (searchYearFrom && searchYearTo) {
+           // ถ้ามีทั้ง Year From และ Year To
+           filters.push(`vehicle_year.gte.${searchYearFrom}`);
+           filters.push(`vehicle_year.lte.${searchYearTo}`);
+         } else if (searchYearFrom) {
+           // ถ้ามี Year From เท่านั้น
+           filters.push(`vehicle_year.gte.${searchYearFrom}`);
+         } else if (searchYearTo) {
+           // ถ้ามี Year To เท่านั้น
+           filters.push(`vehicle_year.lte.${searchYearTo}`);
+         }
+ 
+         // ฟังก์ชันเพื่อค้นหาจากช่วงปีใน vehicle_year
+         filters.push(`vehicle_year.ilike.%${searchYearFrom}-${searchYearTo}%`);
+       }
 
-        if (searchYearFrom && searchYearTo) {
-          // ถ้ามีทั้ง Year From และ Year To
-          filters.push(`vehicle_year.gte.${searchYearFrom}`);
-          filters.push(`vehicle_year.lte.${searchYearTo}`);
-        } else if (searchYearFrom) {
-          // ถ้ามี Year From เท่านั้น
-          filters.push(`vehicle_year.gte.${searchYearFrom}`);
-        } else if (searchYearTo) {
-          // ถ้ามี Year To เท่านั้น
-          filters.push(`vehicle_year.lte.${searchYearTo}`);
-        }
-
-        // ฟังก์ชันเพื่อค้นหาจากช่วงปีใน vehicle_year
-        filters.push(`vehicle_year.ilike.%${searchYearFrom}-${searchYearTo}%`);
-      }
-
-      const query = supabase
-        .from("item_product")
-        .select("*,item_image(*)", { count: "exact" })
-        .range(start, end);
-
-      // Apply filters if any are present
-      if (filters.length > 0) {
-        query.or(filters.join(","));
-      }
-
-      const { data, error, count } = await query;
-      if (error) throw error;
-
-      return { data, total: count || 0 };
+      const { data, total } = await fetchAllProduct(start, end,filters) ; // ส่ง start และ end ไปยัง server
+      return { data, total }; // ส่งคืนทั้ง data และ total
     },
+    staleTime: 10 * 60 * 1000, // 10 นาที
   });
-
 
   const { data: productType, isLoading: isLoadingProductType } = useQuery({
     queryKey: ["product_type"],
@@ -255,68 +238,6 @@ export default function Prodcuts() {
     staleTime: 10 * 60 * 1000, // cache 10 นาที
   });
 
-  // Upload file using standard upload
-  async function uploadFiles(files: File[]) {
-    const filePaths: string[] = []; // เก็บ paths ของไฟล์ทั้งหมด
-
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`; // ตั้งชื่อไฟล์ที่ไม่ซ้ำ
-      const filePath = `${fileName}`;
-
-      const { data, error } = await supabase.storage
-        .from("product_image")
-        .upload(filePath, file, {
-          contentType: "image/jpeg",
-          upsert: true,
-        });
-
-      if (error) {
-        toast.error("Upload failed!");
-        console.error("Upload error:", error);
-        return null;
-      }
-
-      const publicURL = supabase.storage
-        .from("product_image")
-        .getPublicUrl(filePath).data.publicUrl;
-
-      if (!publicURL) {
-        toast.error("Failed to get public URL!");
-        console.error("URL error:", publicURL);
-        return null;
-      }
-
-      filePaths.push(publicURL); // เก็บ public URL ของแต่ละไฟล์
-
-      toast.success("Upload successful!");
-      console.log("File uploaded:", data);
-    }
-
-    return filePaths; // คืนค่า array ของ paths
-  }
-
-  async function deleteProduct(productId: string) {
-    // Now, delete the item_product entry
-    const { error: deleteProductError } = await supabase
-      .from("item_product")
-      .delete()
-      .eq("id", productId);
-
-    if (deleteProductError) {
-      console.error("Error deleting product:", deleteProductError);
-      toast.error("Failed to delete product.");
-      return;
-    }
-
-    toast.success("Product and associated images deleted successfully!");
-
-    // Invalidate and refetch the queries to refresh the data
-    await queryClient.invalidateQueries({
-      queryKey: ["item_product", itemSearch],
-    });
-  }
-
   const handleAddToCart = (productId: string) => {
     // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -334,7 +255,7 @@ export default function Prodcuts() {
     router.refresh();
   };
 
-  const totalPages = Math.ceil((data?.total || 0) / pageSize);
+  const totalPages = Math.ceil((alldata?.total || 0) / pageSize);
   const pageLimit = 5;
 
   // Calculate the range of pages to display
@@ -404,8 +325,8 @@ export default function Prodcuts() {
                 value={searchProductType == "" ? null : searchProductType}
                 onChange={(value) => {
                   setSearchProductType(value); // อัปเดต state ค้นหา
-                  setSearchVehicleBrand("");
-                  setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
+                  // setSearchVehicleBrand("");
+                  // setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
                 }}
               />
 
@@ -419,7 +340,7 @@ export default function Prodcuts() {
                 value={searchVehicleBrand == "" ? null : searchVehicleBrand}
                 onChange={(value) => {
                   setSearchVehicleBrand(value); // อัปเดต state ค้นหา
-                  setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
+                  // setSearchVehicleModel(""); // ล้างค่า Vehicle Model ทุกครั้งที่เลือก Brand ใหม่
                 }}
               />
 
@@ -431,7 +352,7 @@ export default function Prodcuts() {
                 options={vehicleModels || []} // ใช้ข้อมูล vehicle_model ที่โหลดมา
                 allowClear
                 loading={isLoadingVehicleModels}
-                value={searchVehicleModel == "" ? null : searchVehicleModel}
+                value={searchVehicleModel == "" ? "null" : searchVehicleModel}
                 onChange={setSearchVehicleModel}
               />
 
@@ -465,12 +386,9 @@ export default function Prodcuts() {
             </ConfigProvider>
           </div>
           <div className="flex justify-end mt-4 gap-4">
-
-
             {/* <Button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Search
             </Button> */}
-
 
             <Button
               onClick={handleClear}
@@ -482,22 +400,22 @@ export default function Prodcuts() {
         </div>
 
         <div className="my-5">
-          <Pagination className="md:justify-end">
+          <Pagination className="md:justify-end cursor-default">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
+                  } // ลด currentPage เมื่อกด Previous
                   isActive={currentPage !== 1}
                   className="bg-white text-black hover:bg-transparent hover:text-black/50"
-                  />
+                />
               </PaginationItem>
 
               {getPageRange().map((page) => (
                 <PaginationItem key={page}>
                   <PaginationLink
-                    onClick={() => setCurrentPage(page)}
+                    onClick={() => setCurrentPage(page)} // เปลี่ยน currentPage เมื่อกดที่หน้า
                     isActive={page === currentPage}
                     className={`${
                       page === currentPage
@@ -514,88 +432,93 @@ export default function Prodcuts() {
                 <PaginationNext
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
+                  } // เพิ่ม currentPage เมื่อกด Next
                   isActive={currentPage !== totalPages}
                   className="bg-white text-black hover:bg-transparent hover:text-black/50"
-                  />
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
         </div>
 
         <div className="my-5">
-        {data?.data?.map((product) => (
+          {isLoadingAllProduct && (
+            <div className=" w-full h-full bg-white  flex justify-center items-center">
+              <LoadingSpinner />
+            </div>
+          )}
+
+          {alldata?.data.map((allproducts: ProductionType) => (
             <div
               className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
-              key={product.id}
+              key={allproducts.id}
             >
               <div className="flex flex-col md:flex-row gap-5 items-center w-full">
                 <div
                   className="relative group cursor-pointer"
-                  onClick={() => router.push(`/Products/${product.id}`)}
+                  onClick={() => router.push(`/Products/${allproducts.id}`)}
                 >
                   <img
                     src={
-                      product.item_image[0]?.path ||
+                      allproducts.item_image[0]?.path ||
                       "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
                     }
-                    alt={product.tyc_no}
+                    alt={allproducts.tyc_no}
                     width={150}
                     height={100}
                     className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110"
                   />
                 </div>
+                <div className="flex-1 h-full">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
+                    <div className="grid grid-cols-2">
+                      <div className="bg-gray-100 flex items-center p-4 rounded-tl-md border border-gray-300">
+                        OEM No.
+                      </div>
+                      <div className="flex items-center p-4 border-r  rounded-tr lg:rounded-tr-none border-t border-b border-gray-300">
+                        {allproducts.oem_no}
+                      </div>
 
-                <div className="flex-1">
-                  <ConfigProvider
-                    theme={{
-                      token: {
-                        fontSize: 16,
-                        fontFamily: "Montserrat",
-                      },
-                      components: {
-                        Descriptions: {
-                          // labelColor: "black",
-                          // labelBg: "#000000"
-                        },
-                      },
-                    }}
-                  >
-                    <Descriptions
-                      column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2, xxl: 3 }}
-                      bordered
-                      // size="small"
-                    >
-                      <Descriptions.Item label="OEM No." className="">
-                        {product.oem_no}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="TYC No.">
-                        {product.tyc_no}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Vehicle Brand">
-                        {product.vehicle_brand}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Vehicle Model">
-                        {product.vehicle_model}
-                      </Descriptions.Item>
+                      <div className="bg-gray-100 flex items-center p-4 lg:rounded-bl-md rounded-none border-l  border-b border-r border-gray-300">
+                        TYC No.
+                      </div>
+                      <div className="flex items-center p-4  border-gray-300 border-r border-b ">
+                        {allproducts.tyc_no}
+                      </div>
+                    </div>
 
-                      {/* <Descriptions.Item label="Side">
-                        {product.left_right}
-                      </Descriptions.Item> */}
+                    <div className="grid grid-cols-2">
+                      <div className="bg-gray-100 flex items-center p-4 lg: border-l lg:border-l-0 border-r border-b lg:border-t border-gray-300">
+                        Vehicle Brand
+                      </div>
+                      <div className="flex items-center p-4 border-r lg:border-r-0 lg:border-t border-b border-gray-300">
+                        {allproducts.vehicle_brand}
+                      </div>
 
-                      <Descriptions.Item label="Product Brand">
-                        {product.product_brand}
-                      </Descriptions.Item>
+                      <div className="bg-gray-100 flex items-center p-4 border-b border-l lg:border-l-0  border-r border-gray-300">
+                        Vehicle Model
+                      </div>
+                      <div className="flex items-center p-4 border-r border-b lg:border-r-0 border-gray-300">
+                        {allproducts.vehicle_model}
+                      </div>
+                    </div>
 
-                      <Descriptions.Item label="Vehicle Year">
-                        {product.vehicle_year}
-                      </Descriptions.Item>
+                    <div className="grid grid-cols-2">
+                      <div className="bg-gray-100 flex items-center p-4 lg:border border-l border-r border-b border-gray-300">
+                        Product Brand
+                      </div>
+                      <div className="flex items-center p-4 lg:rounded-tr-md lg:border-t border-b border-r border-gray-300">
+                        {allproducts.product_brand}
+                      </div>
 
-                      {/* <Descriptions.Item label="Product Type">
-                      {product.product_type}
-                    </Descriptions.Item> */}
-                    </Descriptions>
-                  </ConfigProvider>
+                      <div className="bg-gray-100 flex items-center p-4 border-l border-b border-r border-gray-300 rounded-bl-md lg:rounded-bl-none">
+                        Vehicle Year
+                      </div>
+                      <div className="flex items-center p-4 rounded-br-md rounded-none border-b border-r border-gray-300">
+                        {allproducts.vehicle_year}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -609,17 +532,17 @@ export default function Prodcuts() {
                 
               </div> */}
 
-              <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 ml-5">
+              <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 lg:ml-5">
                 <Button
                   className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto  transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                  onClick={() => handleAddToCart(product.id.toString())}
+                  onClick={() => handleAddToCart(allproducts.id.toString())}
                 >
                   Add to Cart
                 </Button>
 
                 <Button
                   className="bg-gray-500 hover:bg-gray-400 w-full"
-                  onClick={() => router.push(`/Products/${product.id}`)}
+                  onClick={() => router.push(`/Products/${allproducts.id}`)}
                 >
                   Detail
                 </Button>
