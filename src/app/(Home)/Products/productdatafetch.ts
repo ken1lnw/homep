@@ -3,57 +3,116 @@ import { supabase } from "@/hook/supabase";
 import { ProductionType } from "@/components/Production/ProductionType";
 
 export async function fetchAllProduct(
-    start: number,
-    end: number,
-    filters: string[] = [] 
-  ): Promise<{ data: ProductionType[], total: number }> {
-    console.log("Fetching All products...");
+  start: number,
+  end: number,
+  filters?: {
+    searchOemNo?: string;
+    searchTycNo?: string;
+    searchVehicleBrand?: string;
+    searchVehicleModel?: string;
+    searchSide?: string;
+    searchProductBrand?: string;
+    searchProductType?: string;
+    searchYearFrom?: string;
+    searchYearTo?: string;
+  }
+): Promise<{ data: ProductionType[]; total: number }> {
+  const hasFilter = filters && Object.values(filters).some((v) => v !== "");
+
+  if (hasFilter) {
+
+    
+    const { data, error , count } = await supabase
+    .rpc("get_filtered_products", {
+      search_oem_no: filters?.searchOemNo || null,
+      search_tyc_no: filters?.searchTycNo || null,
+      search_vehicle_brand: filters?.searchVehicleBrand || null,
+      search_vehicle_model: filters?.searchVehicleModel || null,
+      search_side: filters?.searchSide || null,
+      search_product_brand: filters?.searchProductBrand || null,
+      search_product_type: filters?.searchProductType || null,
+      search_year_from: filters?.searchYearFrom || null,
+      search_year_to: filters?.searchYearTo || null,
+      // start_row: start,
+      // end_row: end,
+    },
   
-    let query = supabase
+    {
+      count : 'exact'
+    },
+  
+  // ).limit(5);
+)
+.range(0,10);
+    if (error) {
+      console.error("Error fetching filtered products:", error.message);
+      throw new Error(error.message);
+    }
+
+    
+    console.log({count});
+
+    return { data: data as ProductionType[], total: count || 0 };
+  } else {
+    const query = supabase
       .from("item_product")
-      .select("*, item_image(*)", { count: "exact" }) 
+      .select("*, item_image(*)", { count: "exact" })
       .order("id", { ascending: true })
-      .range(start, end); 
-  
+      .range(start, end);
 
-    //   const {data} = await supabase.rpc('get_filtered_component_lack_for_packing_progress' ,{
-    //     p_customer : dlwqdwq,
-    //     p_date: dadwqd
-    //   }).select('*')
-      
-
-
-
-
-    filters.forEach((filter) => {
-      const [column, operator, value] = filter.split("."); // แยกค่าสตริงให้เป็นคอลัมน์, operator และ value
-  
-      // การใช้ .ilike สำหรับกรองข้อมูลที่ตรงกับ pattern
-      if (operator === "ilike") {
-        query = query.ilike(column, `%${value}%`);
-      }
-      // การใช้ .gte สำหรับการกรองที่มากกว่าหรือเท่ากับ
-      else if (operator === "gte") {
-        query = query.gte(column, value);
-      }
-      // การใช้ .lte สำหรับการกรองที่น้อยกว่าหรือเท่ากับ
-      else if (operator === "lte") {
-        query = query.lte(column, value);
-      }
-      // สำหรับกรองทั่วไป
-      else {
-        query = query.filter(column, operator, value);
-      }
-    });
-  
-    // ดึงข้อมูลจากฐานข้อมูล
     const { data, error, count } = await query;
-  
+
     if (error) {
       console.error("Error fetching all products:", error.message);
       throw new Error(error.message);
     }
-  
+
     return { data: data as ProductionType[], total: count ?? 0 };
   }
-  
+}
+
+
+
+export async function fetchTypeProdcut(): Promise<ProductionType[]> {
+  // console.log("Fetching type products...");
+
+const { data, error } = await supabase
+        .from("item_product")
+        .select("product_type");
+  if (error) {
+    console.error("Error fetching type products:", error.message);
+    throw new Error(error.message);
+  }
+  // console.log("fetched type data");
+  return data as ProductionType[];
+}
+
+
+export async function fetchVehicleBrand(): Promise<ProductionType[]> {
+  // console.log("Fetching type products...");
+
+ const { data, error } = await supabase
+        .from("item_product")
+        .select("vehicle_brand_full");
+  if (error) {
+    console.error("Error fetching vehicle brand :", error.message);
+    throw new Error(error.message);
+  }
+  // console.log("fetched type data");
+  return data as ProductionType[];
+}
+
+
+export async function fetchVehicleModel(searchVehicleBrand: string): Promise<ProductionType[]> {
+  const { data, error } = await supabase
+    .from("item_product")
+    .select("vehicle_model_full")
+    .eq("vehicle_brand_full", searchVehicleBrand); // ✅ ใช้พารามิเตอร์ที่รับเข้ามา
+
+  if (error) {
+    console.error("Error fetching vehicle model:", error.message);
+    throw new Error(error.message);
+  }
+
+  return data as ProductionType[];
+}

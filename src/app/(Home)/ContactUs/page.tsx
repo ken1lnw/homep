@@ -4,10 +4,10 @@ export default function ContactUs() {
   return (
     <div>
       <div className="relative">
-        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px] bg-black opacity-50" />
+        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px] bg-black opacity-40" />
 
         <img
-          src="https://www.tyc.com.tw/assets/uploads/stakeholders/banner1681711387.jpg"
+          src="/tycbuild.png"
           alt="TYC Building"
           className="w-full h-[200px] lg:h-[300px] object-cover"
         />

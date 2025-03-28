@@ -4,10 +4,10 @@ export default function News() {
   return (
     <div>
       <div className="relative">
-        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-50" />
+        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-20" />
 
         <img
-          src="https://www.tyc.com.tw/assets/uploads/news/banner1681711357.jpg"
+          src="/NewsBanner.png"
           alt="news"
           className="w-full h-[200px] lg:h-[300px]  object-cover"
         />

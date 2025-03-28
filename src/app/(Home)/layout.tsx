@@ -7,7 +7,7 @@ const Layout = ({children} : {children:ReactNode}) => {
      
                   <div className="flex flex-col min-h-screen">
       <Navbar2 />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow pt-[56px]">{children}</main> {/* เพิ่ม padding-top */}
       <Footer />
     </div>
     </>

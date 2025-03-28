@@ -12,10 +12,10 @@ export default function AboutUs() {
   return (
     <div>
       <div className="relative">
-        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-40" />
+        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[300px]  bg-black opacity-20" />
 
         <img
-          src="/tycbuild.png"
+          src="/BannerHeadL2.png"
           alt="TYC Building"
           className="w-full h-[200px] lg:h-[300px] object-cover"
         />

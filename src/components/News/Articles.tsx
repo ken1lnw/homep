@@ -16,23 +16,21 @@ import { NewsType } from "../ManageNews/NewsType";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Image from "next/image";
+import { fetchArticleData, PrefetchReadMore } from "./ArticlesData";
 
 export default function Articles() {
     const router = useRouter();
     const queryClient = useQueryClient();
 
 
-  const { data, error, isLoading } = useQuery({
+  const { data : articleData, error, isLoading } = useQuery({
     queryKey: ["news_article"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("news_article")
-        .select("*,news_image(*)")
-        .order("created_at", { ascending: false }); // เรียงจากใหม่ไปเก่า
+      const articlefetch = await fetchArticleData();
 
       if (error) throw error;
 
-      return data as NewsType[];
+      return articlefetch;
     },
   });
 
@@ -43,14 +41,10 @@ export default function Articles() {
     await queryClient.prefetchQuery({
         queryKey: ["news_article", article.id],
         queryFn: async () => {
-            const { data, error } = await supabase
-                .from("news_article")
-                .select("*,news_image(*)")
-                .eq("id", article.id)
-                .single();
+            const prefetchData = await PrefetchReadMore(article.id);
 
             if (error) throw error;
-            return data;
+            return prefetchData;
         },
     });
 
@@ -65,10 +59,10 @@ export default function Articles() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-6">Latest Articles</h1>
+      <h1 className="text-4xl font-bold text-center mb-6 text-blue-500">Latest Articles</h1>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {data?.map((article) => (
+        {articleData?.map((article) => (
           <div
             key={article.id}
             className="border rounded-lg shadow-lg overflow-hidden"
@@ -77,10 +71,10 @@ export default function Articles() {
             {/* {article.news_image?.length > 0 && ( */}
             <div className="relative w-full h-52">
               <Image
-                src={article.news_image?.[0]?.path || "/image.png"}
+                src={article.news_image?.[0]?.path || "/TYC_thailand_logo_01LBLUE.png"}
                 alt={article.news_title}
                 layout="fill"
-                objectFit="cover"
+                objectFit="cover "
               />
             </div>
             {/* )} */}

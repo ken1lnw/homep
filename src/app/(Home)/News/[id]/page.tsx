@@ -56,7 +56,7 @@ export default function NewsDetail({
 
       <div className="flex justify-center">
         <img
-          src={article?.news_image?.[0]?.path}
+          src={article?.news_image?.[0]?.path || "/TYC_thailand_logo_01LBLUE.png"}
           alt={article?.news_title}
           className="w-[600px] h-[300px] mt-4"
         />

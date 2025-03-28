@@ -36,7 +36,12 @@ import DeleteModal from "../ui/deletemodal";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
-import { fetchAllProduct } from "@/app/(Home)/Products/productdatafetch";
+import {
+  fetchAllProduct,
+  fetchTypeProdcut,
+  fetchVehicleBrand,
+  fetchVehicleModel,
+} from "@/app/(Home)/Products/productdatafetch";
 
 // const ProductTypeOptions = [
 //   { label: "ALL PRODUCTS", value: "allproducts" },
@@ -64,15 +69,23 @@ export default function Prodcuts() {
   const [itemFile, setItemFile] = useState<File[] | null>(null); // Change to an array of File
 
   // const [oemNo, setOemNo] = useState<string>("");
-  const [searchOemNo, setSearchOemNo] = useState<string>("");
-  const [searchTycNo, setSearchTycNo] = useState<string>("");
-  const [searchVehicleBrand, setSearchVehicleBrand] = useState<string>("");
-  const [searchVehicleModel, setSearchVehicleModel] = useState<string>("");
-  const [searchSide, setSearchSide] = useState<string>("");
-  const [searchProductBrand, setSearchProductBrand] = useState<string>("");
-  const [searchProductType, setSearchProductType] = useState<string>("");
-  const [searchYearFrom, setSearchYearFrom] = useState<string>("");
-  const [searchYearTo, setSearchYearTo] = useState<string>("");
+  const [searchOemNo, setSearchOemNo] = useState<string | null>(null);
+  const [searchTycNo, setSearchTycNo] = useState<string | null>(null);
+  const [searchVehicleBrand, setSearchVehicleBrand] = useState<string | null>(
+    null
+  );
+  const [searchVehicleModel, setSearchVehicleModel] = useState<string | null>(
+    null
+  );
+  const [searchSide, setSearchSide] = useState<string | null>(null);
+  const [searchProductBrand, setSearchProductBrand] = useState<string | null>(
+    null
+  );
+  const [searchProductType, setSearchProductType] = useState<string | null>(
+    null
+  );
+  const [searchYearFrom, setSearchYearFrom] = useState<string | null>(null);
+  const [searchYearTo, setSearchYearTo] = useState<string | null>(null);
 
   // Function to handle the clearing of all form fields
   const handleClear = () => {
@@ -93,7 +106,9 @@ export default function Prodcuts() {
   };
 
   const { data: alldata, isLoading: isLoadingAllProduct } = useQuery({
-    queryKey: ["product_type",  searchOemNo,
+    queryKey: [
+      "product_type",
+      searchOemNo,
       searchTycNo,
       searchVehicleBrand,
       searchVehicleModel,
@@ -102,56 +117,23 @@ export default function Prodcuts() {
       searchProductType,
       currentPage,
       searchYearFrom,
-      searchYearTo,],
+      searchYearTo,
+    ],
     queryFn: async () => {
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize - 1;
-
-
-       // Build dynamic filter conditions based on input values
-       let filters = [];
-       if (searchOemNo) filters.push(`oem_no.ilike.%${searchOemNo}%`);
-       if (searchTycNo) filters.push(`tyc_no.ilike.%${searchTycNo}%`);
-       if (searchVehicleBrand) {
-         filters.push(`vehicle_brand.ilike.%${searchVehicleBrand}%`);
-         filters.push(`vehicle_brand_full.ilike.%${searchVehicleBrand}%`);
-       }
-       if (searchVehicleModel) {
-         filters.push(`vehicle_model.ilike.%${searchVehicleModel}%`);
-         filters.push(`vehicle_model_full.ilike.%${searchVehicleModel}%`);
-       }
-       if (searchSide) filters.push(`left_right.ilike.%${searchSide}%`);
-       if (searchProductBrand)
-         filters.push(`product_brand.ilike.%${searchProductBrand}%`);
- 
-       if (searchYearFrom || searchYearTo) {
-         // สร้างฟังก์ชันเพื่อแยกปีจากรูปแบบที่เป็นช่วง เช่น "1978-1980" หรือ "1976-"
-         const parseYearRange = (yearRange: string) => {
-           const [startYear, endYear] = yearRange.split("-");
-           return {
-             startYear: parseInt(startYear, 10),
-             endYear: endYear ? parseInt(endYear, 10) : null, // ถ้าไม่มีปีสิ้นสุด จะให้เป็น null
-           };
-         };
- 
-         if (searchYearFrom && searchYearTo) {
-           // ถ้ามีทั้ง Year From และ Year To
-           filters.push(`vehicle_year.gte.${searchYearFrom}`);
-           filters.push(`vehicle_year.lte.${searchYearTo}`);
-         } else if (searchYearFrom) {
-           // ถ้ามี Year From เท่านั้น
-           filters.push(`vehicle_year.gte.${searchYearFrom}`);
-         } else if (searchYearTo) {
-           // ถ้ามี Year To เท่านั้น
-           filters.push(`vehicle_year.lte.${searchYearTo}`);
-         }
- 
-         // ฟังก์ชันเพื่อค้นหาจากช่วงปีใน vehicle_year
-         filters.push(`vehicle_year.ilike.%${searchYearFrom}-${searchYearTo}%`);
-       }
-
-      const { data, total } = await fetchAllProduct(start, end,filters) ; // ส่ง start และ end ไปยัง server
-      return { data, total }; // ส่งคืนทั้ง data และ total
+      
+      return await fetchAllProduct(start, end, {
+        searchOemNo: searchOemNo ?? undefined,
+        searchTycNo: searchTycNo ?? undefined,
+        searchVehicleBrand: searchVehicleBrand ?? undefined,
+        searchVehicleModel: searchVehicleModel ?? undefined,
+        searchSide: searchSide ?? undefined,
+        searchProductBrand: searchProductBrand ?? undefined,
+        searchProductType: searchProductType ?? undefined,
+        searchYearFrom: searchYearFrom ?? undefined,
+        searchYearTo: searchYearTo ?? undefined,
+      });
     },
     staleTime: 10 * 60 * 1000, // 10 นาที
   });
@@ -159,18 +141,13 @@ export default function Prodcuts() {
   const { data: productType, isLoading: isLoadingProductType } = useQuery({
     queryKey: ["product_type"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("item_product")
-        .select("product_type");
+      const fetchtype = await fetchTypeProdcut(); // ได้ข้อมูลเลย ไม่ต้องเช็ค error แล้ว
 
-      if (error) throw error;
-
-      // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงกลับเป็น Array ที่มี label กับ value
       const uniqueProductType = Array.from(
-        new Set(data.map((item) => item.product_type))
+        new Set(fetchtype.map((item) => item.product_type))
       )
-        .filter((type) => type && type.trim() !== "" && type !== "#N/A") // ลบค่า null, undefined, และค่าว่าง
-        .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
+        .filter((type) => type && type.trim() !== "" && type !== "#N/A")
+        .sort((a, b) => a.localeCompare(b))
         .map((type) => ({
           label: type,
           value: type,
@@ -178,21 +155,16 @@ export default function Prodcuts() {
 
       return uniqueProductType;
     },
+
     staleTime: 10 * 60 * 1000, // 10 นาที
   });
 
   const { data: vehicleBrands, isLoading: isLoadingVehicleBrands } = useQuery({
     queryKey: ["vehicle_brands"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("item_product")
-        .select("vehicle_brand_full");
-
-      if (error) throw error;
-
-      // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงกลับเป็น Array ที่มี label กับ value
+      const fetchvbrand = await fetchVehicleBrand();
       const uniqueVehicleBrands = Array.from(
-        new Set(data.map((item) => item.vehicle_brand_full))
+        new Set(fetchvbrand.map((item) => item.vehicle_brand_full))
       )
         .filter((brand) => brand && brand.trim() !== "" && brand !== "#N/A") // ลบค่า null, undefined, และค่าว่าง
         .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
@@ -207,36 +179,31 @@ export default function Prodcuts() {
   });
 
   const { data: vehicleModels, isLoading: isLoadingVehicleModels } = useQuery({
-    queryKey: ["vehicle_models", searchVehicleBrand], // ดึงเฉพาะแบรนด์ที่เลือก
+    queryKey: ["vehicle_models", searchVehicleBrand],
     queryFn: async () => {
-      if (!searchVehicleBrand) return []; // ถ้ายังไม่เลือก vehicle_brand ให้คืนค่าเป็น []
-
-      const { data, error } = await supabase
-        .from("item_product")
-        .select("vehicle_model_full")
-        .eq("vehicle_brand_full", searchVehicleBrand); // ดึงเฉพาะ model ที่ตรงกับ brand ที่เลือก
-
-      if (error) throw error;
-
-      // ใช้ Set กรองค่าไม่ให้ซ้ำ และแปลงเป็น array
+      if (!searchVehicleBrand) return [];
+  
+      const fetchvmodel = await fetchVehicleModel(searchVehicleBrand); // ส่งเข้าไปตรงนี้
+  
       const uniqueVehicleModels = Array.from(
-        new Set(data.map((item) => item.vehicle_model_full))
+        new Set(fetchvmodel.map((item) => item.vehicle_model_full))
       )
         .filter(
           (model) =>
             model && model.trim() !== "" && model !== "0.00" && model !== "#N/A"
-        ) // ลบค่า null, undefined, และค่าว่าง
-        .sort((a, b) => a.localeCompare(b)) // เรียงตามตัวอักษร
+        )
+        .sort((a, b) => a.localeCompare(b))
         .map((model) => ({
           label: model,
           value: model,
         }));
-
+  
       return uniqueVehicleModels;
     },
-    enabled: !!searchVehicleBrand, // ทำงานก็ต่อเมื่อเลือก brand แล้ว
-    staleTime: 10 * 60 * 1000, // cache 10 นาที
+    enabled: !!searchVehicleBrand,
+    staleTime: 10 * 60 * 1000,
   });
+  
 
   const handleAddToCart = (productId: string) => {
     // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
@@ -269,11 +236,13 @@ export default function Prodcuts() {
     );
   };
 
+
+
   return (
     <>
       <div>
         <div className="relative">
-          <div className="absolute top-0 left-0 w-full h-[300px] bg-black opacity-50" />
+          <div className="absolute top-0 left-0 w-full h-[300px] bg-black opacity-40" />
 
           <img
             src="https://www.tyc.com.tw/assets/images/ecatalog-banner.png"
@@ -359,28 +328,28 @@ export default function Prodcuts() {
               <Input
                 placeholder="OEM No."
                 style={{ width: "100%" }}
-                value={searchOemNo}
+                value={searchOemNo ?? ""}
                 onChange={(e) => setSearchOemNo(e.target.value)}
               />
 
               <Input
                 placeholder="TYC No"
                 style={{ width: "100%" }}
-                value={searchTycNo}
+                value={searchTycNo ?? ""}
                 onChange={(e) => setSearchTycNo(e.target.value)}
               />
 
               <Input
                 placeholder="Year From"
                 style={{ width: "100%" }}
-                value={searchYearFrom}
+                value={searchYearFrom ?? ""}
                 onChange={(e) => setSearchYearFrom(e.target.value)}
               />
 
               <Input
                 placeholder="Year To"
                 style={{ width: "100%" }}
-                value={searchYearTo}
+                value={searchYearTo ?? ""}
                 onChange={(e) => setSearchYearTo(e.target.value)}
               />
             </ConfigProvider>
@@ -448,81 +417,82 @@ export default function Prodcuts() {
             </div>
           )}
 
-          {alldata?.data.map((allproducts: ProductionType) => (
-            <div
-              className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
-              key={allproducts.id}
-            >
-              <div className="flex flex-col md:flex-row gap-5 items-center w-full">
-                <div
-                  className="relative group cursor-pointer"
-                  onClick={() => router.push(`/Products/${allproducts.id}`)}
-                >
-                  <img
-                    src={
-                      allproducts.item_image[0]?.path ||
-                      "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
-                    }
-                    alt={allproducts.tyc_no}
-                    width={150}
-                    height={100}
-                    className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110"
-                  />
-                </div>
-                <div className="flex-1 h-full">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
-                    <div className="grid grid-cols-2">
-                      <div className="bg-gray-100 flex items-center p-4 rounded-tl-md border border-gray-300">
-                        OEM No.
-                      </div>
-                      <div className="flex items-center p-4 border-r  rounded-tr lg:rounded-tr-none border-t border-b border-gray-300">
-                        {allproducts.oem_no}
+          {Array.isArray(alldata?.data) &&
+            alldata.data.map((allproducts: ProductionType) => (
+              <div
+                className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
+                key={allproducts.id}
+              >
+                <div className="flex flex-col md:flex-row gap-5 items-center w-full">
+                  <div
+                    className="relative group cursor-pointer"
+                    onClick={() => router.push(`/Products/${allproducts.id}`)}
+                  >
+                    <img
+                      src={
+                        allproducts.item_image[0]?.path ||
+                        "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                      }
+                      alt={allproducts.tyc_no}
+                      width={150}
+                      height={100}
+                      className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="flex-1 h-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
+                      <div className="grid grid-cols-2">
+                        <div className="bg-gray-100 flex items-center p-4 rounded-tl-md border border-gray-300">
+                          OEM No.
+                        </div>
+                        <div className="flex items-center p-4 border-r  rounded-tr lg:rounded-tr-none border-t border-b border-gray-300">
+                          {allproducts.oem_no}
+                        </div>
+
+                        <div className="bg-gray-100 flex items-center p-4 lg:rounded-bl-md rounded-none border-l  border-b border-r border-gray-300">
+                          TYC No.
+                        </div>
+                        <div className="flex items-center p-4  border-gray-300 border-r border-b ">
+                          {allproducts.tyc_no}
+                        </div>
                       </div>
 
-                      <div className="bg-gray-100 flex items-center p-4 lg:rounded-bl-md rounded-none border-l  border-b border-r border-gray-300">
-                        TYC No.
-                      </div>
-                      <div className="flex items-center p-4  border-gray-300 border-r border-b ">
-                        {allproducts.tyc_no}
-                      </div>
-                    </div>
+                      <div className="grid grid-cols-2">
+                        <div className="bg-gray-100 flex items-center p-4 lg: border-l lg:border-l-0 border-r border-b lg:border-t border-gray-300">
+                          Vehicle Brand
+                        </div>
+                        <div className="flex items-center p-4 border-r lg:border-r-0 lg:border-t border-b border-gray-300">
+                          {allproducts.vehicle_brand}
+                        </div>
 
-                    <div className="grid grid-cols-2">
-                      <div className="bg-gray-100 flex items-center p-4 lg: border-l lg:border-l-0 border-r border-b lg:border-t border-gray-300">
-                        Vehicle Brand
-                      </div>
-                      <div className="flex items-center p-4 border-r lg:border-r-0 lg:border-t border-b border-gray-300">
-                        {allproducts.vehicle_brand}
-                      </div>
-
-                      <div className="bg-gray-100 flex items-center p-4 border-b border-l lg:border-l-0  border-r border-gray-300">
-                        Vehicle Model
-                      </div>
-                      <div className="flex items-center p-4 border-r border-b lg:border-r-0 border-gray-300">
-                        {allproducts.vehicle_model}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2">
-                      <div className="bg-gray-100 flex items-center p-4 lg:border border-l border-r border-b border-gray-300">
-                        Product Brand
-                      </div>
-                      <div className="flex items-center p-4 lg:rounded-tr-md lg:border-t border-b border-r border-gray-300">
-                        {allproducts.product_brand}
+                        <div className="bg-gray-100 flex items-center p-4 border-b border-l lg:border-l-0  border-r border-gray-300">
+                          Vehicle Model
+                        </div>
+                        <div className="flex items-center p-4 border-r border-b lg:border-r-0 border-gray-300">
+                          {allproducts.vehicle_model}
+                        </div>
                       </div>
 
-                      <div className="bg-gray-100 flex items-center p-4 border-l border-b border-r border-gray-300 rounded-bl-md lg:rounded-bl-none">
-                        Vehicle Year
-                      </div>
-                      <div className="flex items-center p-4 rounded-br-md rounded-none border-b border-r border-gray-300">
-                        {allproducts.vehicle_year}
+                      <div className="grid grid-cols-2">
+                        <div className="bg-gray-100 flex items-center p-4 lg:border border-l border-r border-b border-gray-300">
+                          Product Brand
+                        </div>
+                        <div className="flex items-center p-4 lg:rounded-tr-md lg:border-t border-b border-r border-gray-300">
+                          {allproducts.product_brand}
+                        </div>
+
+                        <div className="bg-gray-100 flex items-center p-4 border-l border-b border-r border-gray-300 rounded-bl-md lg:rounded-bl-none">
+                          Vehicle Year
+                        </div>
+                        <div className="flex items-center p-4 rounded-br-md rounded-none border-b border-r border-gray-300">
+                          {allproducts.vehicle_year}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* <div className="flex items-center my-4 md:my-0 ml-5">
+                {/* <div className="flex items-center my-4 md:my-0 ml-5">
                 <Button
                   className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto"
                   onClick={() => handleAddToCart(product.id.toString())}
@@ -532,23 +502,23 @@ export default function Prodcuts() {
                 
               </div> */}
 
-              <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 lg:ml-5">
-                <Button
-                  className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto  transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                  onClick={() => handleAddToCart(allproducts.id.toString())}
-                >
-                  Add to Cart
-                </Button>
+                <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 lg:ml-5">
+                  <Button
+                    className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto  transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                    onClick={() => handleAddToCart(allproducts.id.toString())}
+                  >
+                    Add to Cart
+                  </Button>
 
-                <Button
-                  className="bg-gray-500 hover:bg-gray-400 w-full"
-                  onClick={() => router.push(`/Products/${allproducts.id}`)}
-                >
-                  Detail
-                </Button>
+                  <Button
+                    className="bg-gray-500 hover:bg-gray-400 w-full"
+                    onClick={() => router.push(`/Products/${allproducts.id}`)}
+                  >
+                    Detail
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </>

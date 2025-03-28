@@ -16,9 +16,9 @@ export default function Home() {
       {/* <h1>{t("title")}</h1> */}
 
    
-        <img src="/Banner1.png" alt="" className="hidden md:block" />
+        <img src="/Banner1n.png" alt="" className="hidden md:block" />
 
-        <img src="/BannerMobile.png" alt="" className="md:hidden" />
+        <img src="/BannerMobilen.png" alt="" className="md:hidden" />
 
       {/* <Content1page1 /> */}
       <Content2page1 />
