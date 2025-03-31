@@ -4,8 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/hook/supabase";
 import { NewsType } from "@/components/ManageNews/NewsType";
-import { use } from "react";
+import { use, useState } from "react";
 import { LeftOutlined } from "@ant-design/icons";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { Swiper as SwiperType } from "swiper";
 
 export default function NewsDetail({
   params,
@@ -14,6 +22,8 @@ export default function NewsDetail({
 }) {
   const router = useRouter();
   const { id } = use(params); // ใช้ use() เพื่อดึงค่า params.id โดยไม่ต้องใช้ useEffect
+
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   const {
     data: article,
@@ -56,9 +66,12 @@ export default function NewsDetail({
 
       <div className="flex justify-center">
         <img
-          src={article?.news_image?.[0]?.path || "/TYC_thailand_logo_01LBLUE.png"}
+          src={
+            article?.news_image?.[0]?.path ||
+            "/TH-TYC_logoWhite.jpg"
+          }
           alt={article?.news_title}
-          className="w-[600px] h-[300px] mt-4"
+          className="w-[800px] h-[400px] mt-4 object-cover"
         />
       </div>
 
@@ -68,8 +81,45 @@ export default function NewsDetail({
         style={{ whiteSpace: "pre-wrap" }} // CSS เพื่อแสดงการเว้นวรรคในข้อความ
         dangerouslySetInnerHTML={{ __html: article?.news_description || "" }}
       />
-    </div>
 
-    
+{article?.news_image && article.news_image.length > 1 && (
+  <div className="flex justify-center">
+    <div className="my-5 max-w-2/3">
+      <Swiper
+        loop={true}
+        spaceBetween={10}
+        navigation={true}
+        thumbs={{ swiper: thumbsSwiper }}
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="mySwiper2"
+      >
+        {article.news_image.map((image, index) => (
+          <SwiperSlide key={index}>
+            <img src={image.path} alt={`image-${index}`} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <Swiper
+        onSwiper={setThumbsSwiper}
+        loop={true}
+        spaceBetween={10}
+        slidesPerView={"auto"}
+        freeMode={true}
+        watchSlidesProgress={true}
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="mySwiper"
+      >
+        {article.news_image.map((image, index) => (
+          <SwiperSlide key={index}>
+            <img src={image.path} alt={`thumb-${index}`} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  </div>
+)}
+
+    </div>
   );
 }

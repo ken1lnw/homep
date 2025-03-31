@@ -17,35 +17,44 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Image from "next/image";
 import { fetchArticleData, PrefetchReadMore } from "./ArticlesData";
+import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 
 export default function Articles() {
-    const router = useRouter();
-    const queryClient = useQueryClient();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 9;
 
-  const { data : articleData, error, isLoading } = useQuery({
-    queryKey: ["news_article"],
+  const {
+    data: articleData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["news_article", currentPage],
     queryFn: async () => {
-      const articlefetch = await fetchArticleData();
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize - 1;
+      const articlefetch = await fetchArticleData(start, end);
 
       if (error) throw error;
 
       return articlefetch;
     },
+    staleTime: 10 * 60 * 1000,
   });
-
-
 
   const handleReadMore = async (article: NewsType) => {
     // Prefetch ข้อมูลของบทความที่กำลังจะเปิด
     await queryClient.prefetchQuery({
-        queryKey: ["news_article", article.id],
-        queryFn: async () => {
-            const prefetchData = await PrefetchReadMore(article.id);
+      queryKey: ["news_article", article.id],
+      queryFn: async () => {
+        const prefetchData = await PrefetchReadMore(article.id);
 
-            if (error) throw error;
-            return prefetchData;
-        },
+        if (error) throw error;
+        return prefetchData;
+      },
+      staleTime: 10 * 60 * 1000,
     });
 
     // Set Cache ทันทีเพื่อให้หน้าใหม่โหลดเร็วขึ้น
@@ -53,16 +62,34 @@ export default function Articles() {
 
     // นำทางไปยังหน้า News/[id]
     router.push(`/News/${article.id}`);
-};
+  };
 
+  const totalPages = Math.ceil((articleData?.total || 0) / pageSize);
+  const pageLimit = 5;
 
+  const getPageRange = () => {
+    const startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
+    const endPage = Math.min(totalPages, startPage + pageLimit - 1);
+
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, index) => startPage + index
+    );
+  };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold text-center mb-6 text-blue-500">Latest Articles</h1>
+      <h1 className="text-4xl font-bold text-center mb-6 text-blue-500">
+        Latest Articles
+      </h1>
 
+      {isLoading && (
+        <div className=" w-full h-full bg-white  flex justify-center items-center">
+          <LoadingSpinner />
+        </div>
+      )}
       <div className="grid md:grid-cols-3 gap-6">
-        {articleData?.map((article) => (
+        {articleData?.data.map((article: NewsType) => (
           <div
             key={article.id}
             className="border rounded-lg shadow-lg overflow-hidden"
@@ -71,7 +98,10 @@ export default function Articles() {
             {/* {article.news_image?.length > 0 && ( */}
             <div className="relative w-full h-52">
               <Image
-                src={article.news_image?.[0]?.path || "/TYC_thailand_logo_01LBLUE.png"}
+                src={
+                  article.news_image?.[0]?.path ||
+                  "/TH-TYC_logo(Global Brand Guideline)_rgb-24.jpg"
+                }
                 alt={article.news_title}
                 layout="fill"
                 objectFit="cover "
@@ -81,7 +111,9 @@ export default function Articles() {
 
             {/* รายละเอียดข่าว */}
             <div className="p-4">
-              <h2 className="text-2xl text-blue-500 font-bold truncate">{article.news_title}</h2>
+              <h2 className="text-2xl text-blue-500 font-bold truncate">
+                {article.news_title}
+              </h2>
               <p className="text-sm text-gray-500">
                 {new Date(article.created_at).toLocaleDateString()}
               </p>
@@ -89,10 +121,10 @@ export default function Articles() {
                 {article.news_description}
               </p>
 
-              <button 
-              className="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              // onClick={() => router.push(`/News/${article.id}`)}
-              onClick={() => handleReadMore(article)}
+              <button
+                className="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-pink-500"
+                // onClick={() => router.push(`/News/${article.id}`)}
+                onClick={() => handleReadMore(article)}
               >
                 Read More
               </button>
@@ -102,27 +134,40 @@ export default function Articles() {
       </div>
 
       <div className="my-5">
-        <Pagination className="">
+        <Pagination className="md:justify-end cursor-default">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white"/>
+              <PaginationPrevious
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} // ลด currentPage เมื่อกด Previous
+                isActive={currentPage !== 1}
+                className="bg-white text-black hover:bg-transparent hover:text-black/50"
+              />
             </PaginationItem>
+
+            {getPageRange().map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  onClick={() => setCurrentPage(page)} // เปลี่ยน currentPage เมื่อกดที่หน้า
+                  isActive={page === currentPage}
+                  className={`${
+                    page === currentPage
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  } hover:bg-blue-400 hover:text-white`}
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white"/>
+              <PaginationNext
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                } // เพิ่ม currentPage เมื่อกด Next
+                isActive={currentPage !== totalPages}
+                className="bg-white text-black hover:bg-transparent hover:text-black/50"
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>

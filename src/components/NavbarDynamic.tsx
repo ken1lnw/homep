@@ -115,6 +115,10 @@ export default function NavbarDynamic() {
     },
   }));
 
+
+  const fontFamily = currentLang === "th" ? "Noto Sans Thai Looped" : "Montserrat";
+
+
   return (
     <>
       <motion.div
@@ -126,7 +130,13 @@ export default function NavbarDynamic() {
         <ConfigProvider
           theme={{
             token: {
-              fontFamily: "Montserrat",
+              // fontFamily: "Montserrat",
+              // fontFamily: "Noto Sans Thai Looped",
+              fontFamily: fontFamily, // Change fontFamily based on language
+
+
+              
+
             },
           }}
         >
@@ -194,8 +204,9 @@ export default function NavbarDynamic() {
                 />
 
                 <div className="hidden lg:flex !text-black gap-4">
-                  <div className="relative w-full">
+                  <div className="relative w-full flex ">
                     <Select
+                      allowClear
                       showSearch
                       placeholder="Search..."
                       onSearch={(value) => setSearchQuery(value)}
@@ -221,7 +232,20 @@ export default function NavbarDynamic() {
                           value={item.oem_no} // Use the oem_no as the value
                           className="!text-black"
                         >
-                          {item.oem_no}
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={
+                                item.item_image[0]?.path ||
+                                "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                              }
+                              alt={item.tyc_no || item.oem_no}
+                              width={30}
+                              height={30}
+                              className="rounded-2xl"
+                            />
+
+                            {item.oem_no}
+                          </div>
                         </Select.Option>
                       ))}
                     </Select>

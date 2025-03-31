@@ -53,7 +53,7 @@ export default function AboutUsContent5() {
             initial={{ opacity: 0, x: 200 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-            src="https://genera.com/_images/About-img-01.jpg"
+            src="/qualitya.jpg"
             alt=""
             className="w-full h-full object-contain  bg-white"
           />

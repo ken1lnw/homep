@@ -420,7 +420,7 @@ export default function Prodcuts() {
           {Array.isArray(alldata?.data) &&
             alldata.data.map((allproducts: ProductionType) => (
               <div
-                className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10"
+                className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10 md:gap-5 lg:gap-0"
                 key={allproducts.id}
               >
                 <div className="flex flex-col md:flex-row gap-5 items-center w-full">
@@ -436,10 +436,10 @@ export default function Prodcuts() {
                       alt={allproducts.tyc_no}
                       width={150}
                       height={100}
-                      className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110"
+                      className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110 lg:w-[100px] xl:w-[120px] 2xl:w-[150px]"
                     />
                   </div>
-                  <div className="flex-1 h-full">
+                  <div className="flex-1 h-full w-full">
                     <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
                       <div className="grid grid-cols-2">
                         <div className="bg-gray-100 flex items-center p-4 rounded-tl-md border border-gray-300">
@@ -492,15 +492,7 @@ export default function Prodcuts() {
                   </div>
                 </div>
 
-                {/* <div className="flex items-center my-4 md:my-0 ml-5">
-                <Button
-                  className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto"
-                  onClick={() => handleAddToCart(product.id.toString())}
-                >
-                  Add to Cart
-                </Button>
-                
-              </div> */}
+
 
                 <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 lg:ml-5">
                   <Button

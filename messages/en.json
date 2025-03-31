@@ -14,6 +14,37 @@
     "Products": "Products"
   },
   "Content2": {
-    "Products": "Products"
+    "weare": "We are committed to taking on new worlds,",
+    "weare2": "new technologies and new dreams.",
+    "weare3": "Bringing safety and a smile to people is what has driven us all these years, and is what continues to motivate us daily. Hence, at TYC, we put a lot of focus and devotion on each one of our products in the hope that TYC will one day shine on every corner of the world.",
+    "benefits": "Benefits",
+    "tech": "Technology",
+    "tech2": "Using science to enhance product and process innovation.",
+    "qua": "Quality",
+    "qua2": "Surpassing customer expectations and industry standards.",
+    "proc": "Process",
+    "proc2": "Creating a product, from design to delivery.",
+    "sust": "Sustainability",
+    "sust2": "Meeting current and future demands of global customer without environmental compromise."
+  },
+  "Benefits": {
+    "benefits": "Benefits",
+    "tech": "Technology",
+    "tech2": "Using science to enhance product and process innovation.",
+    "qua": "Quality",
+    "qua2": "Surpassing customer expectations and industry standards.",
+    "proc": "Process",
+    "proc2": "Creating a product, from design to delivery.",
+    "sust": "Sustainability",
+    "sust2": "Meeting current and future demands of global customer without environmental compromise."
+  },
+  "QualityA":{
+    "qua": "QUALITY AUTOMOTIVE PARTS WITH",
+    "qua2": "ROAD SAFETY ASSURANCE",
+    "qua3":"For Replacement Aftermarket Automotive Spare Parts , With our comprehensive selection of aftermarket spare parts,",
+    "qua4":"we provide a one-stop-shop premium service to our customers."
+  },
+  "OurC":{
+    "our":"Our Customers"
   }
 }

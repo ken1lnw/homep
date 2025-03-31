@@ -91,14 +91,17 @@ export default async function RootLayout({
   // Providing all messages to the client
   // side is the easiest way to get started
   const messages = await getMessages();
+  const currentClassName = locale === 'th' ? NotoFont.className : TYCFont.className;
+
   return (
     <html lang={locale}>
       <body
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        className={`${TYCFont.className}`}
+        // className={`${TYCFont.className}`}
         // className={MitrFont.className}
         // className={IBMFont.className}
         // className={NotoFont.className}
+        className={currentClassName}
 
       >
         <CustomQueryClientProvider>

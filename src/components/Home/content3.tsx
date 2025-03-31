@@ -3,8 +3,12 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+
 
 const Content3page1 = () => {
+    const t = useTranslations("Content2");
+  
   return (
     <>
       <div className="relative w-full h-[500px]">
@@ -39,8 +43,12 @@ const Content3page1 = () => {
               {/* We are committed to taking on new worlds, <br />
               
               new technologies and new dreams. */}
-              We are committed to taking on new worlds, <br />
-              new technologies and new dreams.
+              {/* We are committed to taking on new worlds, <br />
+              new technologies and new dreams. */}
+
+
+              {t("weare")}<br />
+              {t("weare2")}
             </h1>
             <p className="text-md md:text-lg lg:text-xl break-words my-6">
               {/* Bringing safety and a smile to people is what has driven us all
@@ -48,11 +56,15 @@ const Content3page1 = () => {
               TYC, we put a lot of focus and devotion on each one of our
               products in the hope that TYC will one day shine on every corner
               of the world. */}
-              Bringing safety and a smile to people is what has driven us all
+
+
+              {/* Bringing safety and a smile to people is what has driven us all
               these years, and is what continues to motivate us daily. Hence, at
               TYC, we put a lot of focus and devotion on each one of our
               products in the hope that TYC will one day shine on every corner
-              of the world.
+              of the world. */}
+
+              {t("weare3")}
             </p>
           </motion.div>
         </div>

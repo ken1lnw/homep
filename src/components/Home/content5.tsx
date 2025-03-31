@@ -8,15 +8,20 @@ import {
   VerifiedOutlined,
 } from "@ant-design/icons";
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 
 // Motion animation variant
 
 const Content5page1 = () => {
+      const t = useTranslations("OurC");
+  
   return (
     <>
       <div className="bg-white py-10 md:px-8 lg:px-18 xl:px-32 mb-5">
         <h1 className=" text-5xl text-[#0172E5] font-bold text-center lg:text-left">
-          Our Customers
+          {/* Our Customers */}
+          {t("our")}
+
         </h1>
         <div className=" w-full">
           {/* <div className="grid md:grid-cols-3 gap-5"> */}

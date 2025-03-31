@@ -39,7 +39,7 @@ const fadeUpVariant = {
 };
 
 const Content2page1 = () => {
-  const t = useTranslations("Content2");
+  const t = useTranslations("Content1");
 
   // Type the state as SwiperType | null
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);

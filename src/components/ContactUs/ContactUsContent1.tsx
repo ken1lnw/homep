@@ -48,7 +48,7 @@ export default function ContactUsContent1() {
           <div className="col-span-1">
             <h1 className="text-xl font-bold mb-5">GENERAL INQUIRIES</h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:max-w-2/3 text-xl ">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 xl:max-w-2/3 text-xl ">
             <div>
               <label htmlFor="name">
                 Name <span className="text-pink-500">*</span>
