@@ -21,17 +21,70 @@ import { toast } from "sonner";
 import { fetchCartItems } from "@/app/(Home)/Cart/cartdata";
 
 import { InputNumber } from "antd";
+import { useBucket } from "@/store/bucket";
 
 export default function CartComponent() {
   const router = useRouter();
+  const store = useBucket();
+  const items = Object.keys(store.data).map(Number);
+  const { data: qty } = store;
   const [cartItems, setCartItems] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5; // จำนวนรายการต่อหน้า
+  const cartLength = Object.keys(store.data).length;
+  // const [qty, setQty] = useState<{ [key: number]: number }>({});
 
-  useEffect(() => {
-    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartItems(cartData);
-  }, []);
+  console.log(store.data);
+
+  const handleQtyChange = (id: number, value: number | null) => {
+    store.setData(id, value || 1);
+    // setQty((prevQty) => ({
+    //   ...prevQty,
+    //   [id]: value ?? 1,
+    // }));
+
+    // const test = {
+    //   ...qty,
+    //   [id]: value ?? 1,
+    // }
+
+    // localStorage.setItem('qty',test )
+    // setQty(test)
+  };
+
+  // useEffect(() => {
+  //   // Load cart items
+  //   const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+  //   const numericCartData = cartData.map((item: any) => Number(item));
+  //   setCartItems(numericCartData);
+
+  //   // Load quantity data
+  //   const savedQty = JSON.parse(localStorage.getItem("qty") || "{}");
+
+  //   // Initialize missing quantity values to 1
+  //   const updatedQty = { ...savedQty };
+  //   numericCartData.forEach((itemId: any) => {
+  //     if (!updatedQty[itemId]) {
+  //       updatedQty[itemId] = 1;
+  //     }
+  //   });
+
+  //   setQty(updatedQty);
+  // }, []);
+
+  // Keep the separate useEffect for saving qty changes to localStorage
+  // useEffect(() => {
+  //   localStorage.setItem("qty", JSON.stringify(qty));
+  // }, [qty]);
+
+  // useEffect(() => {
+  //   console.log("Cart quantities updated:", qty); // ตรวจสอบค่า qty ทุกครั้งที่มีการอัปเดต
+  // }, [qty]); // useEffect นี้จะทำงานเมื่อ qty เปลี่ยนแปลง
+
+  // useEffect(() => {
+  //   const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+  //   setCartItems(cartData);
+  // }, []);
 
   // const { data, isLoading, refetch } = useQuery({
   //   queryKey: ["item_product", cartItems],
@@ -47,36 +100,36 @@ export default function CartComponent() {
   // });
 
   const { data, isLoading, refetch, error } = useQuery({
-    queryKey: ["item_product", cartItems],
+    queryKey: ["item_product", items],
     queryFn: async () => {
-      if (cartItems.length === 0) return [];
-      const fetchedData = await fetchCartItems(cartItems); // เก็บค่าผลลัพธ์จากฟังก์ชัน fetchCartItems
+      // const items = Object.keys(store.data).map(Number)
+      if (items.length === 0) return [];
+      const fetchedData = await fetchCartItems(items); // เก็บค่าผลลัพธ์จากฟังก์ชัน fetchCartItems
       return fetchedData; // คืนค่าข้อมูลที่ดึงมา
     },
   });
 
   // console.log(error;)
 
-  useEffect(() => {
-    const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartItems(cartData.map((item: string) => Number(item))); // แปลง string เป็น number
-  }, []);
-
   // ฟังก์ชันลบสินค้า
   const removeFromCart = (id: number) => {
-    const updatedCart = cartItems
-      .filter((item) => item !== id) // ลบ id ที่เลือกออก
-      .map(String); // แปลงเป็น string ก่อนเก็บใน localStorage
-
-    setCartItems(updatedCart.map(Number)); // อัปเดต state โดยแปลงกลับเป็น number
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    refetch(); // อัปเดตข้อมูลใหม่
+    store.removeData(id);
     toast.success("Removed Product From Cart");
     router.refresh();
+    // const updatedCart = cartItems
+    //   .filter((item) => item !== id) // ลบ id ที่เลือกออก
+    //   .map(String); // แปลงเป็น string ก่อนเก็บใน localStorage
+
+    // setCartItems(updatedCart.map(Number)); // อัปเดต state โดยแปลงกลับเป็น number
+    // localStorage.setItem("cart", JSON.stringify(updatedCart));
+    // refetch(); // อัปเดตข้อมูลใหม่
+    // toast.success("Removed Product From Cart");
+    // router.refresh();
   };
 
   // คำนวณจำนวนหน้าทั้งหมด
-  const totalPages = Math.ceil(cartItems.length / itemsPerPage);
+  // const totalPages = Math.ceil(cartItems.length / itemsPerPage);
+  const totalPages = Math.ceil(Object.keys(store.data).length / itemsPerPage);
 
   // ดึงข้อมูลเฉพาะหน้าที่เลือก
   const currentItems = data?.slice(
@@ -122,24 +175,29 @@ export default function CartComponent() {
         <div className="flex justify-between items-center text-2xl md:text-4xl mt-5">
           <div className="flex gap-2 font-bold">
             <h1>Total Items :</h1>
-            <h2 className="text-blue-500">{cartItems.length}</h2>
+            <h2 className="text-blue-500">{cartLength}</h2>
             <h2>items</h2>
           </div>
 
-          <Button
-            variant="destructive"
-            onClick={() => {
-              setCartItems([]);
-              localStorage.setItem("cart", "[]");
-              toast.success("Removed All Products From Cart");
-              router.refresh();
-            }}
-            className="hover:bg-red-500"
-          >
-            <span>
-              <DeleteOutlined className="" /> Clear All
-            </span>
-          </Button>
+          {cartLength < 1 ? (
+           <></> // แสดงข้อความเมื่อไม่มีสินค้าในตะกร้า
+          ) : (
+            <Button
+              variant="destructive"
+              onClick={() => {
+                // setCartItems([]);
+                // localStorage.setItem("cart", "[]");
+                store.clearData();
+                toast.success("Removed All Products From Cart");
+                router.refresh();
+              }}
+              className="hover:bg-red-500"
+            >
+              <span>
+                <DeleteOutlined className="" /> Clear All
+              </span>
+            </Button>
+          )}
         </div>
 
         {totalPages > 1 && (
@@ -287,9 +345,7 @@ export default function CartComponent() {
               //   </div>
               // </div>
 
-
-
- <div
+              <div
                 className="flex flex-col  md:flex-row  border rounded-lg shadow-sm my-4 p-4 lg:p-0 lg:py-2 lg:px-10 md:gap-5 lg:gap-0"
                 key={xx.id}
               >
@@ -362,15 +418,15 @@ export default function CartComponent() {
                   </div>
                 </div>
 
-       
                 <div className="flex flex-col justify-center gap-2 items-center my-4 md:my-0 lg:ml-5">
-                   <ConfigProvider direction="ltr">
-                     <InputNumber
+                  <ConfigProvider direction="ltr">
+                    <InputNumber
                       suffix="QTY"
                       min={1}
                       max={999}
-                      defaultValue={1}
-                      style={{ width: "100%"}}
+                      value={qty[xx.id] || 1}
+                      onChange={(value) => handleQtyChange(xx.id, value)} // อัปเดตจำนวนเมื่อมีการเปลี่ยนแปลง
+                      style={{ width: "100%" }}
                       className="center-num"
                     />
                   </ConfigProvider>
@@ -394,7 +450,6 @@ export default function CartComponent() {
                   </Button>
                 </div>
               </div>
-              
             ))}
         </div>
       </div>

@@ -50,7 +50,7 @@ export async function fetchAllProduct(
     }
 
     
-    console.log({count});
+    // console.log({count});
 
     return { data: data as ProductionType[], total: count || 0 };
   } else {

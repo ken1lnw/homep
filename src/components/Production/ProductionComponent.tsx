@@ -42,6 +42,7 @@ import {
   fetchVehicleBrand,
   fetchVehicleModel,
 } from "@/app/(Home)/Products/productdatafetch";
+import { useBucket } from "@/store/bucket";
 
 // const ProductTypeOptions = [
 //   { label: "ALL PRODUCTS", value: "allproducts" },
@@ -50,6 +51,7 @@ import {
 
 export default function Prodcuts() {
   const queryClient = useQueryClient();
+  const store = useBucket()
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 5;
@@ -206,19 +208,38 @@ export default function Prodcuts() {
   
 
   const handleAddToCart = (productId: string) => {
-    // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
-    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    
+    // store.setData(+productId, 1)
 
-    // เช็คว่ามีสินค้ารายการนี้ในตระกร้าหรือไม่
-    if (!cart.includes(productId)) {
-      // ถ้าไม่มี ให้เพิ่ม id ของสินค้าลงไป
-      cart.push(productId);
-      // บันทึกข้อมูลกลับไปที่ localStorage
-      localStorage.setItem("cart", JSON.stringify(cart));
-      toast.success("Product added to cart!");
-    } else {
-      toast.info("Product is already in the cart.");
-    }
+
+// เช็คว่ามีสินค้าในตะกร้าหรือไม่
+if (store.data[+productId]) {
+  // ถ้ามีสินค้าในตะกร้าแล้ว ให้แสดง toast error
+  toast.info("Product is already in the cart.");
+} else {
+  // ถ้ายังไม่มีสินค้าในตะกร้า ให้เพิ่มสินค้าใหม่
+  store.setData(+productId, 1);  // เพิ่มสินค้าใหม่ไปยัง store
+  toast.success("Product added to cart!");
+}
+
+
+
+
+
+
+    // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
+    // let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    // // เช็คว่ามีสินค้ารายการนี้ในตระกร้าหรือไม่
+    // if (!cart.includes(productId)) {
+    //   // ถ้าไม่มี ให้เพิ่ม id ของสินค้าลงไป
+    //   cart.push(productId);
+    //   // บันทึกข้อมูลกลับไปที่ localStorage
+    //   localStorage.setItem("cart", JSON.stringify(cart));
+    //   toast.success("Product added to cart!");
+    // } else {
+    //   toast.info("Product is already in the cart.");
+    // }
     router.refresh();
   };
 

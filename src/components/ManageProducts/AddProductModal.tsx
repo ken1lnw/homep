@@ -16,6 +16,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
+import { AddProduct } from "@/app/(Admin)/Admin/ManageProducts/productdatafetchadmin";
 
 export function AddProductModal() {
   const queryClient = useQueryClient();
@@ -28,135 +29,71 @@ export function AddProductModal() {
   const [model, setModel] = useState("");
   const [itemFile, setItemFile] = useState<File[]>([]);
 
+  const [oemNumber, setOemNumber] = useState("");
+  const [tycNumber, setTycNumber] = useState("");
+  const [vehicleBrandShort, setVehicleBrandShort] = useState("");
+  const [vehicleBrandFull, setVehicleBrandFull] = useState("");
+  const [vehicleModelShort, setVehicleModelShort] = useState("");
+  const [vehicleModelFull, setVehicleModelFull] = useState("");
+  const [vehicleYear, setVehicleYear] = useState("");
+  const [side, setSide] = useState("");
+  const [productBrand, setProductBrand] = useState("");
+  const [productType, setProductType] = useState("");
+  const [fullspec, setFullspec] = useState("");
+
+  const resetState = () => {
+    setOemNumber(""); 
+    setTycNumber(""); 
+    setVehicleBrandShort(""); 
+    setVehicleBrandFull(""); 
+    setVehicleModelShort(""); 
+    setVehicleModelFull(""); 
+    setVehicleYear(""); 
+    setSide(""); 
+    setProductBrand("");  
+    setProductType("");  
+    setFullspec(""); 
+    setItemFile([]);  
+  };
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (newProduct: any) => {
-      // ตรวจสอบข้อมูลให้ครบถ้วนก่อนการเพิ่ม
-      if (
-        !newProduct.item_number ||
-        !newProduct.item_description ||
-        !newProduct.brand ||
-        !newProduct.model
-      ) {
-        toast.error("Please fill in all the required fields.");
-        throw new Error("Missing required fields");
+      try {
+        if  (!oemNumber || !tycNumber || !vehicleBrandShort || !vehicleBrandFull
+  || !vehicleModelShort || !vehicleModelFull || !vehicleYear || !side
+  || !productBrand || !productType || !fullspec) {
+          throw new Error("Please fill in all the required fields.");
+        }
+
+        const { data } = await AddProduct({
+          oemNumber: newProduct.oem_no,  // Change from oem_no to oemNumber
+          tycNumber: newProduct.tyc_no,  // Change from tyc_no to tycNumber
+          vehicleBrandShort: newProduct.vehicle_brand,  // Change from vehicle_brand to vehicleBrandShort
+          vehicleBrandFull: newProduct.vehicle_brand_full,  // Change from vehicle_brand_full to vehicleBrandFull
+          vehicleModelShort: newProduct.vehicle_model,  // Change from vehicle_model to vehicleModelShort
+          vehicleModelFull: newProduct.vehicle_model_full,  // Change from vehicle_model_full to vehicleModelFull
+          vehicleYear: newProduct.vehicle_year,  // Change from vehicle_year to vehicleYear
+          side: newProduct.left_right,  // Change from left_right to side
+          productBrand: newProduct.product_brand,  // Change from product_brand to productBrand
+          productType: newProduct.product_type,  // Change from product_type to productType
+          fullspec: newProduct.full_specifications,  // Change from full_specifications to fullspec
+          itemFile: newProduct.file,  // Keep the itemFile as is
+        });
+
+        
+        await queryClient.invalidateQueries({
+          queryKey: ["item_product"],
+        });
+        setIsOpen(false);
+        toast.success("Product added successfully!");
+        resetState();
+      } catch (error: any) {
+        toast.error(error.message);
       }
-
-      // ตรวจสอบว่า item_number นี้มีอยู่ในฐานข้อมูลหรือไม่
-      const { data: existingItem, error: fetchError } = await supabase
-        .from("item_product")
-        .select("item_number")
-        .eq("item_number", newProduct.item_number);
-
-      if (fetchError) {
-        toast.error("Error checking item number!");
-        throw fetchError;
-      }
-
-      // หากพบ item_number ที่ซ้ำกัน ให้เรียก onError
-      if (existingItem && existingItem.length > 0) {
-        const error = new Error(
-          `Item number ${newProduct.item_number} already exists!`
-        );
-        throw error; // เกิดข้อผิดพลาดและโยนไปที่ onError
-      }
-
-      // ถ้าไม่มีการซ้ำ ให้ดำเนินการแทรกข้อมูลใหม่
-      const { data, error } = await supabase
-        .from("item_product")
-        .insert({
-          item_number: newProduct.item_number,
-          item_description: newProduct.item_description,
-          brand: newProduct.brand,
-          model: newProduct.model,
-        })
-        .select("id")
-        .single();
-
-      if (error) throw error;
-
-      console.log("data", data);
-
-      // ถ้ามีไฟล์ให้ทำการอัพโหลด
-      if (newProduct.file && newProduct.file.length > 0) {
-        const paths = await uploadFiles(newProduct.file);
-
-        if (!paths) return; // หากการอัพโหลดล้มเหลว ให้หยุดการทำงาน
-
-        const imagePaths = paths.map((path) => ({
-          item_id: data.id,
-          path,
-        }));
-
-        const { error: ImageError } = await supabase
-          .from("item_image")
-          .insert(imagePaths);
-
-        if (ImageError) throw ImageError;
-      }
-
-      return data;
-    },
-    onSuccess: async () => {
-      toast.success("Product added successfully!");
-      await queryClient.invalidateQueries({
-        queryKey: ["item_product"],
-      });
-      setIsOpen(false); 
-      resetState(); 
-    },
-    onError: async (error) => {
-      toast.error(error.message);
     },
   });
 
-  // Upload file using standard upload
-  async function uploadFiles(files: File[]) {
-    const filePaths: string[] = []; // เก็บ paths ของไฟล์ทั้งหมด
-
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`; // ตั้งชื่อไฟล์ที่ไม่ซ้ำ
-      const filePath = `${fileName}`;
-
-      const { data, error } = await supabase.storage
-        .from("product_image")
-        .upload(filePath, file, {
-          contentType: "image/jpeg",
-          upsert: true,
-        });
-
-      if (error) {
-        toast.error("Upload failed!");
-        console.error("Upload error:", error);
-        return null;
-      }
-
-      const publicURL = supabase.storage
-        .from("product_image")
-        .getPublicUrl(filePath).data.publicUrl;
-
-      if (!publicURL) {
-        toast.error("Failed to get public URL!");
-        console.error("URL error:", publicURL);
-        return null;
-      }
-
-      filePaths.push(publicURL); // เก็บ public URL ของแต่ละไฟล์
-
-      toast.success("Upload successful!");
-      console.log("File uploaded:", data);
-    }
-
-    return filePaths; // คืนค่า array ของ paths
-  }
-
-  const resetState = () => {
-    setItemNumber("");  // Reset the item number
-    setItemDescription("");  // Reset the item description
-    setBrand("");  // Reset the brand
-    setModel("");  // Reset the model
-    setItemFile([]);  // Reset the file input (clear selected files)
-  };
+  
   
 
   return (
@@ -174,7 +111,7 @@ export function AddProductModal() {
           <PlusSquareFilled /> Add Product
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}>
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
             Add Product
@@ -186,55 +123,146 @@ export function AddProductModal() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="itemno" className="text-right">
-              Item No.
+            <Label htmlFor="oemNumber" className="text-left">
+              OEM No.
             </Label>
             <Input
-              id="itemno"
-              value={itemNumber}
-              onChange={(e) => setItemNumber(e.target.value)}
+              id="oemNumber"
+              value={oemNumber}
+              onChange={(e) => setOemNumber(e.target.value)}
               className="col-span-3"
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="itemdescription" className="">
-              Item Description
+            <Label htmlFor="tycNumber" className="text-left">
+              TYC No.
             </Label>
             <Input
-              id="itemdescription"
-              value={itemDescription}
-              onChange={(e) => setItemDescription(e.target.value)}
+              id="tycNumber"
+              value={tycNumber}
+              onChange={(e) => setTycNumber(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="vehicleBrandShort" className="text-left">
+              Vehicle Brand Short
+            </Label>
+            <Input
+              id="vehicleBrandShort"
+              value={vehicleBrandShort}
+              onChange={(e) => setVehicleBrandShort(e.target.value)}
               className="col-span-3"
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="brand" className="text-right">
-              Brand
+            <Label htmlFor="vehicleBrandFull" className="text-left">
+              Vehicle Brand Full
             </Label>
             <Input
-              id="brand"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
+              id="vehicleBrandFull"
+              value={vehicleBrandFull}
+              onChange={(e) => setVehicleBrandFull(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="vehicleModelShort" className="text-left">
+              Vehicle Model Short
+            </Label>
+            <Input
+              id="vehicleModelShort"
+              value={vehicleModelShort}
+              onChange={(e) => setVehicleModelShort(e.target.value)}
               className="col-span-3"
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="model" className="text-right">
-              Model
+            <Label htmlFor="vehicleModelFull" className="text-left">
+              Vehicle Model Full
             </Label>
             <Input
-              id="model"
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
+              id="vehicleModelFull"
+              value={vehicleModelFull}
+              onChange={(e) => setVehicleModelFull(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="vehicleYear" className="text-left">
+              Vehicle Year
+            </Label>
+            <Input
+              id="vehicleYear"
+              value={vehicleYear}
+              onChange={(e) => setVehicleYear(e.target.value)}
               className="col-span-3"
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="uploadimage" className="text-right">
+            <Label htmlFor="side" className="text-left">
+              Side
+            </Label>
+            <Input
+              id="side"
+              value={side}
+              onChange={(e) => setSide(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+          
+
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="productBrand" className="text-left">
+              Product Brand
+            </Label>
+            <Input
+              id="productBrand"
+              value={productBrand}
+              onChange={(e) => setProductBrand(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="productType" className="text-left">
+              Product Type
+            </Label>
+            <Input
+              id="productType"
+              value={productType}
+              onChange={(e) => setProductType(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+          
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="fullspec" className="">
+              Full Specifications
+            </Label>
+            <Input
+              id="fullspec"
+              value={fullspec}
+              onChange={(e) => setFullspec(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="uploadimage" className="text-left">
               Upload Images
             </Label>
             <Input
@@ -253,25 +281,43 @@ export function AddProductModal() {
             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
             onClick={async () => {
               // ตรวจสอบว่า item_number, item_description, brand, model ถูกกรอกหรือไม่
-              if (!itemNumber || !itemDescription || !brand || !model) {
+              if (!oemNumber || !tycNumber || !vehicleBrandShort || !vehicleBrandFull
+                || !vehicleModelShort|| !vehicleModelFull|| !vehicleYear|| !side
+              || !productBrand|| !productType|| !fullspec)
+                {
                 toast.error("Please fill in all the required fields.");
                 return; // ไม่ทำการเรียก mutate ถ้าข้อมูลไม่ครบ
               }
 
               if (itemFile && itemFile.length > 0) {
                 mutate({
-                  item_number: itemNumber,
-                  item_description: itemDescription,
-                  brand: brand,
-                  model: model,
+
+                  oem_no:oemNumber,
+                  tyc_no:tycNumber,
+                  vehicle_brand:vehicleBrandShort,  
+                  vehicle_brand_full:vehicleBrandFull,
+                  vehicle_model:vehicleModelShort,
+                  vehicle_model_full:vehicleModelFull,
+                  vehicle_year:vehicleYear,
+                  left_right:side,
+                  product_brand:productBrand,
+                  product_type:productType,
+                  full_specifications:fullspec,
                   file: itemFile, // ส่งไฟล์ที่เลือก
                 });
               } else {
                 mutate({
-                  item_number: itemNumber,
-                  item_description: itemDescription,
-                  brand: brand,
-                  model: model,
+                  oem_no:oemNumber,
+                  tyc_no:tycNumber,
+                  vehicle_brand:vehicleBrandShort,
+                  vehicle_brand_full:vehicleBrandFull,
+                  vehicle_model:vehicleModelShort,
+                  vehicle_model_full:vehicleModelFull,
+                  vehicle_year:vehicleYear,
+                  left_right:side,
+                  product_brand:productBrand,
+                  product_type:productType,
+                  full_specifications:fullspec,
                 });
               }
             }}

@@ -12,6 +12,7 @@
 // }
 
 export interface ProductionType {
+    productId: number
     id: number,
     created_at: string,
     oem_no: string,

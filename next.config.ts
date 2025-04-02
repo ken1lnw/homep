@@ -6,7 +6,17 @@ const nextConfig: NextConfig = {
    images: {
     domains: ["jpzwsljcpqbpzphlilsi.supabase.co"],
   },
+
+  experimental:{
+    serverActions:{
+      bodySizeLimit:"4mb"
+    }
+  }
+
+  
 };
+
+
 
 
 const withNextIntl = createNextIntlPlugin();

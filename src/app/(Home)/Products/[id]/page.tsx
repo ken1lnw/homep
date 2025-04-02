@@ -37,6 +37,7 @@ import {
   fetchProductId,
   fetchRecentProducts,
 } from "@/app/(Home)/Products/[id]/productidfetch";
+import { useBucket } from "@/store/bucket";
 
 export default function ProdcutsDetail({
   params,
@@ -47,7 +48,7 @@ export default function ProdcutsDetail({
   const { id } = use(params);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-
+const store = useBucket()
   // const {
   //   data: product,
   //   isLoading,
@@ -109,18 +110,33 @@ export default function ProdcutsDetail({
 
   const handleAddToCart = (productId: string) => {
     // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
-    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    // let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-    // เช็คว่ามีสินค้ารายการนี้ในตระกร้าหรือไม่
-    if (!cart.includes(productId)) {
-      // ถ้าไม่มี ให้เพิ่ม id ของสินค้าลงไป
-      cart.push(productId);
-      // บันทึกข้อมูลกลับไปที่ localStorage
-      localStorage.setItem("cart", JSON.stringify(cart));
-      toast.success("Product added to cart!");
+    // // เช็คว่ามีสินค้ารายการนี้ในตระกร้าหรือไม่
+    // if (!cart.includes(productId)) {
+    //   // ถ้าไม่มี ให้เพิ่ม id ของสินค้าลงไป
+    //   cart.push(productId);
+    //   // บันทึกข้อมูลกลับไปที่ localStorage
+    //   localStorage.setItem("cart", JSON.stringify(cart));
+    //   toast.success("Product added to cart!");
+    // } else {
+    //   toast.warning("Product is already in the cart.");
+    // }
+
+
+    if (store.data[+productId]) {
+      // ถ้ามีสินค้าในตะกร้าแล้ว ให้แสดง toast error
+      toast.info("Product is already in the cart.");
     } else {
-      toast.warning("Product is already in the cart.");
+      // ถ้ายังไม่มีสินค้าในตะกร้า ให้เพิ่มสินค้าใหม่
+      store.setData(+productId, 1);  // เพิ่มสินค้าใหม่ไปยัง store
+      toast.success("Product added to cart!");
     }
+    
+    
+    
+
+
     router.refresh();
   };
 

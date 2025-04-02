@@ -24,15 +24,15 @@ const data = {
       items: [
         {
           title: "Products Manage",
-          url: "/Admin/ManageProducts", // แทนที่ด้วย URL ที่ต้องการ
+          url: "/Admin/ManageProducts", 
         },
         {
           title: "News Manage",
-          url: "/Admin/ManageNews", // แทนที่ด้วย URL ที่ต้องการ
+          url: "/Admin/ManageNews", 
         },
         {
           title: "Login",
-          url: "/Admin/Login", // แทนที่ด้วย URL ที่ต้องการ
+          url: "/Admin/Login", 
         },
       ],
     },
@@ -61,7 +61,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="cursor-default">
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton

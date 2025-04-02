@@ -34,6 +34,7 @@ import {
 } from "next/font/google";
 import { motion } from "framer-motion";
 import { fetchNavbarData } from "@/app/(Home)/navsearch";
+import { useBucket } from "@/store/bucket";
 
 const { Header } = Layout;
 
@@ -48,6 +49,7 @@ export default function NavbarDynamic() {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(); // For user selection (if needed)
   const [currentLang, setCurrentLang] = useState<string>("en");
   const cartCount = JSON.parse(localStorage.getItem("cart") || "[]").length;
+  const cartBucket = useBucket();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -257,7 +259,7 @@ export default function NavbarDynamic() {
                   className="hidden lg:flex "
                 >
                   <span>
-                    <Badge count={cartCount}>
+                    <Badge count={Object.keys(cartBucket.data).length}>
                       <ShoppingCartOutlined
                         className="hover:!text-blue-400"
                         style={{ fontSize: "18px", color: "white" }}
