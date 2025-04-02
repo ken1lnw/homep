@@ -288,7 +288,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
               {news.news_image.map((img, index) => (
                 <div
                   key={index}
-                  className={`relative w-[100px] h-[100px] border rounded ${
+                  className={`relative w-[100px] h-[100px] border rounded  flex items-center justify-center ${
                     selectedImages.includes(img.id) ? "border-red-500" : ""
                   }`}
                 >

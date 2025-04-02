@@ -16,7 +16,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
-import { AddProduct } from "@/app/(Admin)/Admin/ManageProducts/productdatafetchadmin";
+import { AddProduct } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
 
 export function AddProductModal() {
   const queryClient = useQueryClient();
@@ -111,7 +111,7 @@ export function AddProductModal() {
           <PlusSquareFilled /> Add Product
         </Button>
       </DialogTrigger>
-      <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}>
+      <DialogContent >
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
             Add Product
@@ -122,7 +122,7 @@ export function AddProductModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
             <Label htmlFor="oemNumber" className="text-left">
               OEM No.
             </Label>
@@ -134,7 +134,8 @@ export function AddProductModal() {
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="tycNumber" className="text-left">
               TYC No.
             </Label>
@@ -147,7 +148,8 @@ export function AddProductModal() {
           </div>
 
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="vehicleBrandShort" className="text-left">
               Vehicle Brand Short
             </Label>
@@ -159,7 +161,8 @@ export function AddProductModal() {
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="vehicleBrandFull" className="text-left">
               Vehicle Brand Full
             </Label>
@@ -172,7 +175,8 @@ export function AddProductModal() {
           </div>
 
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="vehicleModelShort" className="text-left">
               Vehicle Model Short
             </Label>
@@ -184,7 +188,8 @@ export function AddProductModal() {
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="vehicleModelFull" className="text-left">
               Vehicle Model Full
             </Label>
@@ -197,7 +202,8 @@ export function AddProductModal() {
           </div>
 
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="vehicleYear" className="text-left">
               Vehicle Year
             </Label>
@@ -209,7 +215,8 @@ export function AddProductModal() {
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="side" className="text-left">
               Side
             </Label>
@@ -223,7 +230,8 @@ export function AddProductModal() {
           
 
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="productBrand" className="text-left">
               Product Brand
             </Label>
@@ -235,7 +243,8 @@ export function AddProductModal() {
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="productType" className="text-left">
               Product Type
             </Label>
@@ -248,7 +257,8 @@ export function AddProductModal() {
           </div>
           
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="fullspec" className="">
               Full Specifications
             </Label>
@@ -261,7 +271,8 @@ export function AddProductModal() {
           </div>
 
 
-          <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+
             <Label htmlFor="uploadimage" className="text-left">
               Upload Images
             </Label>

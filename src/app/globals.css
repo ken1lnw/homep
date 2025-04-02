@@ -256,3 +256,34 @@ body {
 .center-num .ant-input-number-input {
   text-align: center !important;
 }
+
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-reverse-slower {
+  animation: rotate 4s linear infinite;
+}
+.animate-spin-slow {
+  animation: rotate 4s linear infinite;
+}
+
+
+
+.mySwiperAwards .swiper .swiper-slide {
+  height: auto;
+}
+
+.mySwiperAwards .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

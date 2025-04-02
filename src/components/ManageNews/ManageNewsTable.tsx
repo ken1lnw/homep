@@ -14,7 +14,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -22,77 +21,69 @@ import {
 } from "@/components/ui/pagination";
 
 import { NewsType } from "./NewsType";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
 import Image from "next/image";
 import { AddNewsModal } from "./AddNewsModal";
 import { Input } from "../ui/input";
 import { EditNewsModal } from "./EditNewsModal";
+import { deleteNews, fetchNews } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
 
 export default function ManageNewsTable() {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 10;
-  const [searchQuery, setSearchQuery] = useState(""); // สร้างสถานะเก็บคำค้นหา
+  const [searchQuery, setSearchQuery] = useState("");
 
+  // Fetch news articles
   const { data, error, isLoading } = useQuery({
     queryKey: ["news_article", currentPage, searchQuery],
-    queryFn: async () => {
-      const start = (currentPage - 1) * pageSize;
-      const end = start + pageSize - 1;
-      const { data, error, count } = await supabase
-        .from("news_article")
-        .select("*,news_image(*)", { count: "exact" })
-        .range(start, end)
-        .or(
-          `news_title.ilike.%${searchQuery}%,news_description.ilike.%${searchQuery}%`
-        )
-        .order("id", { ascending: true });
-      if (error) throw error;
+    queryFn: () => fetchNews(currentPage, pageSize, searchQuery),
+  });
 
-      return { news: data as NewsType[], total: count || 0 };
+  // Delete news article
+  const deleteMutation = useMutation({
+    mutationFn: (newsId: string) => deleteNews(newsId),
+    onSuccess: () => {
+      toast.success("News and associated images deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["news_article"] });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting news:", error);
+      toast.error("Failed to delete news.");
     },
   });
 
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>Error loading products</div>;
-
-  async function deleteNews(newsId: string) {
-    const { error: deleteNewsError } = await supabase
-      .from("news_article")
-      .delete()
-      .eq("id", newsId);
-
-    if (deleteNewsError) {
-      console.error("Error deleting news:", deleteNewsError);
-      toast.error("Failed to delete news.");
-      return;
-    }
-
-    toast.success("News and associated images deleted successfully!");
-    await queryClient.invalidateQueries({ queryKey: ["news_article"] });
-  }
-
   const totalPages = Math.ceil((data?.total || 0) / pageSize);
+  const pageLimit = 5;
+
+  // Pagination range logic
+  const getPageRange = () => {
+    const startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
+    const endPage = Math.min(totalPages, startPage + pageLimit - 1);
+
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, index) => startPage + index
+    );
+  };
 
   return (
     <>
-      <div className="flex justify-between items-center my-2">
+      <div className="flex flex-col  my-2 gap-2 md:flex-row md:justify-between md:items-center  md:gap-0">
         <Input
           type="text"
           placeholder="Search"
-          className="w-48"
+          className="w-full md:w-48"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        {/* <AddProductModal /> */}
         <AddNewsModal />
       </div>
 
       <Table>
-        <TableCaption>A list of your recent News.</TableCaption>
+        <TableCaption>Total Items : {data?.total}</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">News No.</TableHead>
@@ -100,7 +91,6 @@ export default function ManageNewsTable() {
             <TableHead>News Description</TableHead>
             <TableHead>News Date</TableHead>
             <TableHead>Image</TableHead>
-
             <TableHead className="text-right">Manage</TableHead>
           </TableRow>
         </TableHeader>
@@ -115,10 +105,8 @@ export default function ManageNewsTable() {
               >
                 {xx.news_description}
               </TableCell>
-              <TableCell className="">
-                {/* {xx.created_at} */}
+              <TableCell>
                 {new Date(xx.created_at).toLocaleDateString()}
-
               </TableCell>
               <TableCell>
                 {xx.news_image.length > 0 && xx.news_image[0].path && (
@@ -130,10 +118,11 @@ export default function ManageNewsTable() {
                   />
                 )}
               </TableCell>
-
               <TableCell className="text-right space-x-1">
                 <EditNewsModal news={xx} />
-                <DeleteModal onDelete={() => deleteNews(xx.id.toString())} />
+                <DeleteModal
+                  onDelete={() => deleteMutation.mutate(xx.id.toString())}
+                />
               </TableCell>
             </TableRow>
           ))}
@@ -141,7 +130,7 @@ export default function ManageNewsTable() {
       </Table>
 
       <div className="my-5">
-        <Pagination>
+        <Pagination className="cursor-default">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
@@ -149,13 +138,18 @@ export default function ManageNewsTable() {
                 isActive={currentPage !== 1}
               />
             </PaginationItem>
-            {[...Array(totalPages)].map((_, index) => (
-              <PaginationItem key={index}>
+            {getPageRange().map((page) => (
+              <PaginationItem key={page}>
                 <PaginationLink
-                  onClick={() => setCurrentPage(index + 1)}
-                  isActive={currentPage === index + 1}
+                  onClick={() => setCurrentPage(page)}
+                  isActive={page === currentPage}
+                  className={`${
+                    page === currentPage
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  } hover:bg-blue-400 hover:text-white`}
                 >
-                  {index + 1}
+                  {page}
                 </PaginationLink>
               </PaginationItem>
             ))}

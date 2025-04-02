@@ -7,7 +7,7 @@ export async function fetchNavbarData(searchQuery: string): Promise<ProductionTy
           .from("item_product")
           .select("*,item_image(*)", { count: "exact" })
           .or(
-            `full_specifications.ilike.%${searchQuery}%,oem_no.ilike.%${searchQuery}%,tyc_no.ilike.%${searchQuery}%`
+            `full_specifications.ilike.%${searchQuery}%,oem_no.ilike.%${searchQuery}%,tyc_no.ilike.%${searchQuery}%,vehicle_brand.ilike.%${searchQuery}%,vehicle_brand_full.ilike.%${searchQuery}%,vehicle_model.ilike.%${searchQuery}%,vehicle_model_full.ilike.%${searchQuery}%,vehicle_year.ilike.%${searchQuery}%,product_type.ilike.%${searchQuery}%,left_right.ilike.%${searchQuery}%,product_brand.ilike.%${searchQuery}%`
           )
           .order("id", { ascending: true })
           .limit(5);

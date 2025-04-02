@@ -109,13 +109,6 @@ export default function NavbarDynamic() {
     enabled: searchQuery !== "", // เมื่อมีการค้นหาจะเรียกใช้งาน query
   });
 
-  const dropdownItems = data?.slice(0, 5).map((item) => ({
-    key: item.id,
-    label: item.oem_no || item.tyc_no || item.full_specifications,
-    onClick: () => {
-      console.log(`Selected item: ${item.id}`);
-    },
-  }));
 
 
   const fontFamily = currentLang === "th" ? "Noto Sans Thai Looped" : "Montserrat";
@@ -246,7 +239,7 @@ export default function NavbarDynamic() {
                               className="rounded-2xl"
                             />
 
-                            {item.oem_no}
+{item.oem_no || item.tyc_no}
                           </div>
                         </Select.Option>
                       ))}
@@ -256,10 +249,10 @@ export default function NavbarDynamic() {
 
                 <button
                   onClick={() => router.push("/Cart")}
-                  className="hidden lg:flex "
+                  className="hidden lg:flex relative "
                 >
                   <span>
-                    <Badge count={Object.keys(cartBucket.data).length}>
+                    <Badge count={Object.keys(cartBucket.data).length} className="absolute">
                       <ShoppingCartOutlined
                         className="hover:!text-blue-400"
                         style={{ fontSize: "18px", color: "white" }}

@@ -32,7 +32,7 @@ import Image from "next/image";
 import { EditProductModal } from "./EditProductModal";
 import { AddProductModal } from "./AddProductModal";
 import { Input } from "../ui/input";
-import { fetchAllProduct,deleteProduct } from "@/app/(Admin)/Admin/ManageProducts/productdatafetchadmin";
+import { fetchAllProduct,deleteProduct } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
 
 export default function ManageProductsTable() {
   const queryClient = useQueryClient();
@@ -102,11 +102,11 @@ export default function ManageProductsTable() {
 
   return (
     <>
-      <div className="flex justify-between items-center my-2">
+      <div className="flex flex-col  my-2 gap-2 md:flex-row md:justify-between md:items-center  md:gap-0">
       <Input
           type="text"
           placeholder="Search"
-          className="w-48"
+          className="w-full md:w-48"
           value={searchQuery} 
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -156,7 +156,7 @@ export default function ManageProductsTable() {
       </Table>
 
       <div className="my-5">
-       <Pagination className="md:justify-end cursor-default">
+       <Pagination className="cursor-default">
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious

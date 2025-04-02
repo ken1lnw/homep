@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import { ProductionType } from "../Production/ProductionType";
 import ImgPreviewUpload from "./ImgPreviewUpload";
 import Image from "next/image";
+import { updateProduct, uploadFiles, deleteImages } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
 
 interface EditProductModalProps {
   product: ProductionType;
@@ -73,167 +74,39 @@ export function EditProductModal({ product }: EditProductModalProps) {
     setSelectedImages([]); 
   }, [product]);
 
+
   const { mutate, isPending } = useMutation({
-    mutationFn: async (updateProduct: any) => {
-      // Validate fields before updating
-      if (
-        !oemNumber ||
-        !tycNumber ||
-        !vehicleBrandShort ||
-        !vehicleBrandFull ||
-        !vehicleModelShort ||
-        !vehicleModelFull ||
-        !vehicleYear ||
-        !side ||
-        !productBrand ||
-        !productType ||
-        !fullspec
-      ) {
-        toast.error("Please fill in all the required fields.");
-        throw new Error("Missing required fields");
-      }
-
-      const { data: existingItem, error: fetchError } = await supabase
-        // .from("item_product")
-        // .select("item_number")
-        // .eq("item_number", updateProduct.item_number)
-        // .neq("id", product.id);
-
-        .from("item_product")
-        .select("tyc_no") 
-        .eq("tyc_no", tycNumber) 
-        .neq("id",product.id)
-
-      if (fetchError) {
-        toast.error("Error checking item number!");
-        throw fetchError;
-      }
-
-      // Check for duplicates
-      if (existingItem && existingItem.length > 0) {
-        const error = new Error(
-          `TYC Number ${tycNumber} already exists!`
-        );
-        throw error;
-      }
-
-      // If there are selected files, upload them
-      if (itemFile && itemFile.length > 0) {
-        const paths = await uploadFiles(itemFile); // Upload the selected files
-
-        if (!paths) return; // If the upload failed, stop the process
-
-        const imagePaths = paths.map((path) => ({
-          item_id: product.id, // Use the current product's ID
-          path,
-        }));
-
-        const { error: imageError } = await supabase
-          .from("item_image")
-          .insert(imagePaths);
-
-        if (imageError) {
-          toast.error("Error inserting image data!");
-          console.error("Image Insert Error:", imageError);
-          throw imageError;
-        }
-      }
-
-      // Proceed with the update if no duplicates found
-      const { data, error } = await supabase
-        .from("item_product")
-        .update({
-          // item_number: updateProduct.item_number,
-          // item_description: updateProduct.item_description,
-          // brand: updateProduct.brand,
-          // model: updateProduct.model,
-
-          oem_no: oemNumber, // ใช้ค่า oemNumber จาก state
-        tyc_no: tycNumber, // ใช้ค่า tycNumber จาก state
-        vehicle_brand: vehicleBrandShort, // ใช้ค่า vehicleBrandShort จาก state
-        vehicle_brand_full: vehicleBrandFull, // ใช้ค่า vehicleBrandFull จาก state
-        vehicle_model: vehicleModelShort, // ใช้ค่า vehicleModelShort จาก state
-        vehicle_model_full: vehicleModelFull, // ใช้ค่า vehicleModelFull จาก state
-        vehicle_year: vehicleYear, // ใช้ค่า vehicleYear จาก state
-        left_right: side, // ใช้ค่า side จาก state
-        product_brand: productBrand, // ใช้ค่า productBrand จาก state
-        product_type: productType, // ใช้ค่า productType จาก state
-        full_specifications: fullspec, // ใช้ค่า fullspec จาก state
-        
-        })
-        .eq("id", product.id) // Use product ID to update
-        .select("id")
-        .single();
-
-      if (error) throw error;
-
-      return data;
+    mutationFn: async () => {
+      await updateProduct(
+        product.id,
+        {
+          oemNumber,
+          tycNumber,
+          vehicleBrandShort,
+          vehicleBrandFull,
+          vehicleModelShort,
+          vehicleModelFull,
+          vehicleYear,
+          side,
+          productBrand,
+          productType,
+          fullspec,
+          itemFile,
+        },
+        selectedImages.map(Number) // Convert selectedImages to numbers
+      );
     },
     onSuccess: async () => {
       toast.success("Product updated successfully!");
-      await queryClient.invalidateQueries({
-        queryKey: ["item_product"],
-      });
-
-      setIsOpen(false); // Close the modal on success
-      resetState(); // Reset state after closing the modal
+      setIsOpen(false); // Close the modal
+      resetState(); // Reset state
+      await queryClient.invalidateQueries({ queryKey: ["item_product"] });
     },
-    onError: async (error) => {
-      toast.error(error.message);
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to update product.");
+      console.error("Update error:", error);
     },
   });
-
-  // Upload file using standard upload
-  async function uploadFiles(files: File[]) {
-    const filePaths: string[] = []; // เก็บ paths ของไฟล์ทั้งหมด
-
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`; // ตั้งชื่อไฟล์ที่ไม่ซ้ำ
-      const filePath = `${fileName}`;
-
-      const { data, error } = await supabase.storage
-        .from("product_image")
-        .upload(filePath, file, {
-          contentType: "image/jpeg",
-          upsert: true,
-        });
-
-      if (error) {
-        toast.error("Upload failed!");
-        console.error("Upload error:", error);
-        return null;
-      }
-
-      const publicURL = supabase.storage
-        .from("product_image")
-        .getPublicUrl(filePath).data.publicUrl;
-
-      if (!publicURL) {
-        toast.error("Failed to get public URL!");
-        console.error("URL error:", publicURL);
-        return null;
-      }
-
-      filePaths.push(publicURL); // เก็บ public URL ของแต่ละไฟล์
-
-      toast.success("Upload successful!");
-      console.log("File uploaded:", data);
-    }
-
-    return filePaths; // คืนค่า array ของ paths
-  }
-
- 
-  const handleImageDelete = () => {
-    if (selectedImages.length > 0) {
-      Promise.all(
-        selectedImages.map(async (xx) => {
-          await supabase.from("item_image").delete().eq("id", xx);
-        })
-      );
-    }
-  };
 
 
   const handleImageSelect = (imgPath: string) => {
@@ -247,7 +120,8 @@ export function EditProductModal({ product }: EditProductModalProps) {
   };
 
 
-  const handleSubmit = async () => {
+ 
+const handleSubmit = () => {
     if (
       !oemNumber ||
       !tycNumber ||
@@ -264,23 +138,10 @@ export function EditProductModal({ product }: EditProductModalProps) {
       toast.error("Please fill in all the required fields.");
       return;
     }
-  
-    await handleImageDelete(); // Delete selected images
-  
-    mutate({
-      oem_number: oemNumber,
-      tyc_number: tycNumber,
-      vehicle_brand_short: vehicleBrandShort,
-      vehicle_brand_full: vehicleBrandFull,
-      vehicle_model_short: vehicleModelShort,
-      vehicle_model_full: vehicleModelFull,
-      vehicle_year: vehicleYear,
-      side: side,
-      product_brand: productBrand,
-      product_type: productType,
-      fullspec: fullspec,
-    });
+
+    mutate(); // Trigger the mutation
   };
+
 
   // const handleSubmit = async () => {
   //   if (!itemNumber || !itemDescription || !brand || !model) {
@@ -355,7 +216,7 @@ export function EditProductModal({ product }: EditProductModalProps) {
           <EditFilled style={{ fontSize: "20px", fontWeight: "bold" }} />
         </Button>
       </DialogTrigger>
-      <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}>
+      <DialogContent >
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
             Edit Product
@@ -511,7 +372,7 @@ export function EditProductModal({ product }: EditProductModalProps) {
               {product.item_image.map((img, index) => (
                 <div
                   key={index}
-                  className={`relative w-[100px] h-[100px] border rounded ${
+                  className={`relative w-[100px] h-[100px] border rounded  flex items-center justify-center ${
                     selectedImages.includes(img.id) ? "border-red-500" : ""
                   }`}
                 >

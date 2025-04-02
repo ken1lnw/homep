@@ -92,28 +92,28 @@ export default function CartFormComponent() {
         })
         .join("\n"); // Join the details into a string
 
-      await sendMail({
-        email: email,
-        // sendTo: "your-receiver-email@example.com", // You can set the receiver email or use the SITE_MAIL_RECIEVER
-        subject: "New Inquiry from " + company,
-        text: `You have a new inquiry from ${company} (${name}).\n
-        Country/Region: ${country}\n
-        Mobile: ${mobile}\n
-        Phone: ${phone}\n
-        Fax: ${fax}\n
-        Address: ${address}\n
-        Inquiry: ${inquiry}\n
-         Product Details:\n${productDetails}
-        `,
-        html: `<p>You have a new inquiry from <strong>${company}</strong> (${name}).</p>
-        <p><strong>Country/Region:</strong> ${country}</p>
-        <p><strong>Mobile:</strong> ${mobile}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Fax:</strong> ${fax}</p>
-        <p><strong>Address:</strong> ${address}</p>
-        <p><strong>Inquiry:</strong><br />${inquiry}</p>
-         <p><strong>Product Details:</strong><br />${productDetails}</p>`,
-      });
+        await sendMail({
+          email: email,
+          // sendTo: "your-receiver-email@example.com", // You can set the receiver email or use the SITE_MAIL_RECIEVER
+          subject: `New Inquiry from ${company || ""}`,
+          text: `You have a new inquiry from ${company || ""} (${name || ""}).\n
+          Country/Region: ${country || ""}\n
+          Mobile: ${mobile || ""}\n
+          Phone: ${phone || ""}\n
+          Fax: ${fax || ""}\n
+          Address: ${address || ""}\n
+          Inquiry: ${inquiry || ""}\n
+          Product Details: ${productDetails || ""}\n
+          `,
+          html: `<p>You have a new inquiry from <strong>${company || ""}</strong> (${name || ""}).</p>
+          <p><strong>Country/Region:</strong> ${country || ""}</p>
+          <p><strong>Mobile:</strong> ${mobile || ""}</p>
+          <p><strong>Phone:</strong> ${phone || ""}</p>
+          <p><strong>Fax:</strong> ${fax || ""}</p>
+          <p><strong>Address:</strong> ${address || ""}</p>
+          <p><strong>Inquiry:</strong><br/>${inquiry || ""}</p>
+          <p><strong>Product Details:</strong><br/>${productDetails || ""}</p>`,
+        });
       // localStorage.removeItem("cart");
       // router.refresh();
       cartItems.clearData();

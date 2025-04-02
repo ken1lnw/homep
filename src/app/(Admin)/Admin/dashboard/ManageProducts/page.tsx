@@ -6,8 +6,10 @@ import { PlusSquareFilled } from "@ant-design/icons";
 
 export default function ManageProducts() {
   return (
-    <div className="bg-blue-500 w-screen flex justify-center p-4">
-      <div className="bg-white w-full p-6 rounded-lg shadow-lg">
+    // <div className="bg-blue-500 w-screen flex justify-center p-4">
+    //   <div className="bg-white w-full p-6 rounded-lg shadow-lg">
+    <div className="">
+      <div className="">
         <div className="flex">
           <h1 className="text-4xl font-bold">Products List</h1>
         </div>

@@ -312,6 +312,9 @@ const store = useBucket()
                           <Descriptions.Item label="Product Type">
                             {product.product_type}
                           </Descriptions.Item>
+                          <Descriptions.Item label="Full Specifications">
+                            {product.full_specifications}
+                          </Descriptions.Item>
                         </Descriptions>
                       </ConfigProvider>
                     </div>
@@ -377,6 +380,9 @@ const store = useBucket()
                       } // ใช้ URL ของภาพที่ได้จาก API
                       alt={product.oem_no || product.tyc_no || "Product Image"} // ใช้ชื่อสินค้าหรือข้อมูลที่เหมาะสม
                     />
+                    <div className="absolute h-full items-end flex">
+                    {`OEM.NO : ${product.oem_no}` || `TYC.NO : ${product.tyc_no}`}
+                    </div>
                     <div
                       className="absolute top-0  h-full w-full flex flex-col items-center justify-center bg-black/80  
                     text-[#0172E5] font-semibold p-1 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer rounded"
@@ -394,6 +400,7 @@ const store = useBucket()
                       </div>
                     </div>
                   </div>
+                  
                 </SwiperSlide>
               ))
             ) : (

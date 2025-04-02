@@ -7,7 +7,8 @@ const SITE_MAIL_RECIEVER = process.env.SITE_MAIL_RECIEVER;
 const transporter = nodemailer.createTransport({
 //   service: 'gmail',
   host: SMTP_SERVER_HOST,
-  port: 587,
+  // port: 587,
+  port:25,
   secure: false,
   auth: {
     user: SMTP_SERVER_USERNAME,

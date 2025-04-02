@@ -1,11 +1,35 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Timeline } from "antd";
 import { FaDotCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function HistoryComponent() {
+
+  const [timelineMode, setTimelineMode] = useState<'left' | 'alternate' | 'right'>('left');
+
+  // Function to check screen size and set the appropriate mode
+  const handleResize = () => {
+    if (window.innerWidth >= 1024) { // 1024px is the 'lg' breakpoint in Tailwind
+      setTimelineMode('alternate');
+    } else {
+      setTimelineMode('left');
+    }
+  };
+
+  // Set initial mode and add resize listener
+  useEffect(() => {
+    handleResize(); // Set initial mode based on screen size
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  
   const raw = [
     {
       dot: <FaDotCircle className="text-pink-500" />,
@@ -28,7 +52,7 @@ export default function HistoryComponent() {
             Happiness, Convenience, Hope & Encouragement to others.
           </p>
 
-          <div className="flex justify-end"> 
+          <div className="flex md:justify-end"> 
             <img
               src="https://www.tyc.com.tw/assets/uploads/about/history/year1434523994.png"
               alt=""
@@ -116,7 +140,7 @@ export default function HistoryComponent() {
             In 1998 the new sun rays design shows a clear and neat conveying
             TYC‘s goal of Lighting up the world!
           </p>
-          <div className="flex justify-end"> 
+          <div className="flex md:justify-end"> 
 
           <img
             src="https://www.tyc.com.tw/assets/uploads/about/history/year1432807349.png"
@@ -428,8 +452,10 @@ export default function HistoryComponent() {
             PROGRESS THROUGH TIME
           </h1>
         </div>
+
+        <div className="p-2">
         <Timeline
-          mode="alternate"
+          mode={timelineMode}
           items={raw.reverse().map((xx, index) => {
             return {
               children: xx.children,
@@ -438,6 +464,8 @@ export default function HistoryComponent() {
             };
           })}
         />
+
+</div>
       </div>
     </>
   );

@@ -18,6 +18,7 @@ import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
 import { NewsType } from "./NewsType";
+import { addNews } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
 
 export function AddNewsModal() {
   const queryClient = useQueryClient();
@@ -28,124 +29,26 @@ export function AddNewsModal() {
   const [newsDescription, setNewsDescription] = useState("");
   const [itemFile, setItemFile] = useState<File[]>([]);
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (newNews: any) => {
-      // ตรวจสอบข้อมูลให้ครบถ้วนก่อนการเพิ่ม
-      if (
-        !newNews.news_title ||
-        !newNews.news_description 
   
-      ) {
-        toast.error("Please fill in all the required fields.");
-        throw new Error("Missing required fields");
-      }
-
-      // ตรวจสอบว่า news_title นี้มีอยู่ในฐานข้อมูลหรือไม่
-      const { data: existingItem, error: fetchError } = await supabase
-        .from("news_article")
-        .select("news_title")
-        .eq("news_title", newNews.news_title);
-
-      if (fetchError) {
-        toast.error("Error checking news title!");
-        throw fetchError;
-      }
-
-      // หากพบ news_title ที่ซ้ำกัน ให้เรียก onError
-      if (existingItem && existingItem.length > 0) {
-        const error = new Error(
-          `News Title ${newNews.news_title} already exists!`
-        );
-        throw error; // เกิดข้อผิดพลาดและโยนไปที่ onError
-      }
-
-      // ถ้าไม่มีการซ้ำ ให้ดำเนินการแทรกข้อมูลใหม่
-      const { data, error } = await supabase
-        .from("news_article")
-        .insert({
-          news_title: newNews.news_title,
-          news_description: newNews.news_description
-        })
-        .select("id")
-        .single();
-
-      if (error) throw error;
-
-      console.log("data", data);
-
-      // ถ้ามีไฟล์ให้ทำการอัพโหลด
-      if (newNews.file && newNews.file.length > 0) {
-        const paths = await uploadFiles(newNews.file);
-
-        if (!paths) return; // หากการอัพโหลดล้มเหลว ให้หยุดการทำงาน
-
-        const imagePaths = paths.map((path) => ({
-          news_id: data.id,
-          path,
-        }));
-
-        const { error: ImageError } = await supabase
-          .from("news_image")
-          .insert(imagePaths);
-
-        if (ImageError) throw ImageError;
-      }
-
-      return data;
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (newNews: {
+      news_title: string;
+      news_description: string;
+      file?: File[];
+    }) => {
+      await addNews(newNews);
     },
     onSuccess: async () => {
       toast.success("News added successfully!");
-      await queryClient.invalidateQueries({
-        queryKey: ["news_article"],
-      });
+      await queryClient.invalidateQueries({ queryKey: ["news_article"] });
       setIsOpen(false);
       resetState();
     },
-    onError: async (error) => {
-      toast.error(error.message);
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to add news.");
     },
   });
 
-  // Upload file using standard upload
-  async function uploadFiles(files: File[]) {
-    const filePaths: string[] = []; // เก็บ paths ของไฟล์ทั้งหมด
-
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`; // ตั้งชื่อไฟล์ที่ไม่ซ้ำ
-      const filePath = `${fileName}`;
-
-      const { data, error } = await supabase.storage
-        .from("news_image")
-        .upload(filePath, file, {
-          contentType: "image/jpeg",
-          upsert: true,
-        });
-
-      if (error) {
-        toast.error("Upload failed!");
-        console.error("Upload error:", error);
-        return null;
-      }
-
-      const publicURL = supabase.storage
-        .from("news_image")
-        .getPublicUrl(filePath).data.publicUrl;
-
-      if (!publicURL) {
-        toast.error("Failed to get public URL!");
-        console.error("URL error:", publicURL);
-        return null;
-      }
-
-      filePaths.push(publicURL); // เก็บ public URL ของแต่ละไฟล์
-
-      toast.success("Upload successful!");
-      console.log("File uploaded:", data);
-    }
-
-    return filePaths; // คืนค่า array ของ paths
-  }
 
   const resetState = () => {
     setNewsTitle(""); // Reset the item number

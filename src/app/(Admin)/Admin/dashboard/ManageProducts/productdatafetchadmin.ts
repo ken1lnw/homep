@@ -124,7 +124,7 @@
 
 
   // Function to upload files to Supabase
-  async function uploadFiles(files: File[]): Promise<string[] | null> {
+ export async function uploadFiles(files: File[]): Promise<string[] | null> {
     const filePaths: string[] = [];
 
     for (const file of files) {
@@ -177,3 +177,106 @@
   return { success: true }; // ส่งค่าผลลัพธ์ว่าไม่มี error
   
   }
+
+
+
+
+
+  // Delete selected images from the database
+export async function deleteImages(imageIds: number[]): Promise<void> {
+  for (const id of imageIds) {
+    const { error } = await supabase.from("item_image").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting image:", error);
+      throw error;
+    }
+  }
+}
+
+
+
+
+  
+// Update product details in the database
+export async function updateProduct(
+  productId: number,
+  updatedProduct: {
+    oemNumber: string;
+    tycNumber: string;
+    vehicleBrandShort: string;
+    vehicleBrandFull: string;
+    vehicleModelShort: string;
+    vehicleModelFull: string;
+    vehicleYear: string;
+    side: string;
+    productBrand: string;
+    productType: string;
+    fullspec: string;
+    itemFile?: File[];
+  },
+  selectedImageIds: number[]
+): Promise<void> {
+  // Delete selected images
+  if (selectedImageIds.length > 0) {
+    await deleteImages(selectedImageIds);
+  }
+
+  // Check for duplicate TYC number
+  const { data: existingItem, error: fetchError } = await supabase
+    .from("item_product")
+    .select("tyc_no")
+    .eq("tyc_no", updatedProduct.tycNumber)
+    .neq("id", productId);
+
+  if (fetchError) {
+    throw fetchError;
+  }
+
+  if (existingItem && existingItem.length > 0) {
+    throw new Error(`TYC Number ${updatedProduct.tycNumber} already exists!`);
+  }
+
+  // Upload new files if provided
+  let imagePaths: { item_id: number; path: string }[] = [];
+  if (updatedProduct.itemFile && updatedProduct.itemFile.length > 0) {
+    const paths = await uploadFiles(updatedProduct.itemFile);
+    if (!paths) {
+      throw new Error("File upload failed.");
+    }
+
+    imagePaths = paths.map((path) => ({
+      item_id: productId,
+      path,
+    }));
+
+    const { error: imageError } = await supabase
+      .from("item_image")
+      .insert(imagePaths);
+
+    if (imageError) {
+      throw imageError;
+    }
+  }
+
+  // Update product details
+  const { error } = await supabase
+    .from("item_product")
+    .update({
+      oem_no: updatedProduct.oemNumber,
+      tyc_no: updatedProduct.tycNumber,
+      vehicle_brand: updatedProduct.vehicleBrandShort,
+      vehicle_brand_full: updatedProduct.vehicleBrandFull,
+      vehicle_model: updatedProduct.vehicleModelShort,
+      vehicle_model_full: updatedProduct.vehicleModelFull,
+      vehicle_year: updatedProduct.vehicleYear,
+      left_right: updatedProduct.side,
+      product_brand: updatedProduct.productBrand,
+      product_type: updatedProduct.productType,
+      full_specifications: updatedProduct.fullspec,
+    })
+    .eq("id", productId);
+
+  if (error) {
+    throw error;
+  }
+}

@@ -1,66 +1,105 @@
 "use client";
-
 import React from "react";
-import type { FormProps } from "antd";
-import { Button, Checkbox, Form, Input } from "antd";
-import Image from "next/image";
+import { useFlowManager } from "@/providers/flow-manager-provider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/atom/buttom";
+import { ForgotPasswordModalComponent } from "./dialog-forgot-password";
 
-type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
-};
+const signinFormSchema = z.object({
+    email: z.string().email({ message: "Please enter a valid email" }),
+    password: z.string().min(1, { message: "Password required." }),
+});
 
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
+type SignInFormValues = z.infer<typeof signinFormSchema>;
 
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+export default function SignInClient() {
+    const { login } = useFlowManager();
+    const [loading, setLoading] = React.useState(false);
+    const form = useForm<SignInFormValues>({
+        resolver: zodResolver(signinFormSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+        mode: "onChange",
+    });
 
-export default function LoginComponent() {
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 h-screen w-screen">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <div className=" flex justify-center my-5">
-        <Image src="/brand-2023.png" alt="" width={150} height={250} />
-        </div>
-        <Form
-          name="basic"
-          layout="vertical"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item<FieldType>
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input className="w-full" />
-          </Form.Item>
+    async function onSubmit(values: SignInFormValues) {
+        setLoading(true);
+        const res = await login(values.email, values.password);
+        if (res == false) setLoading(false);
+    }
 
-          <Form.Item<FieldType>
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input.Password className="w-full" />
-          </Form.Item>
-
-          <Form.Item<FieldType> name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="w-full">
-              Submit
-            </Button>
-          </Form.Item>
+    return (
+        <Form {...form}>
+            <form className="grid gap-2" onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="grid gap-4">
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem className="w-full space-y-1">
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="name@example.com"
+                                        type="email"
+                                        autoCapitalize="none"
+                                        autoComplete="email"
+                                        autoCorrect="off"
+                                        className="bg-background"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem className="w-full space-y-1">
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Password"
+                                        type="password"
+                                        autoCapitalize="none"
+                                        autoComplete="off"
+                                        autoCorrect="off"
+                                        className="bg-background"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div className="flex justify-end">
+                    <ForgotPasswordModalComponent />
+                </div>
+                <Button
+                    loading={loading}
+                    type="submit"
+                    className="h-10 space-x-2 rounded border-none transition"
+                    color="blue5"
+                >
+                    Sign In with Email
+                </Button>
+            </form>
         </Form>
-      </div>
-    </div>
-  );
+    );
 }
