@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import {
   Menu,
   ConfigProvider,
@@ -90,7 +90,14 @@ export default function NavbarDynamic() {
   const navItems = [
     { label: t("Home"), key: "" },
     { label: t("Products"), key: "Products" },
-    { label: t("News"), key: "News" },
+    {
+      label: t("News"),
+      key: "News",
+      children: [
+        { label: "Article", key: "News" },
+        { label: "New Prdocut", key: "NewProduct" },
+      ],
+    },
     { label: t("About Us"), key: "AboutUs" },
     { label: t("Contact Us"), key: "ContactUs" },
   ];
@@ -109,10 +116,8 @@ export default function NavbarDynamic() {
     enabled: searchQuery !== "", // เมื่อมีการค้นหาจะเรียกใช้งาน query
   });
 
-
-
-  const fontFamily = currentLang === "th" ? "Noto Sans Thai Looped" : "Montserrat";
-
+  const fontFamily =
+    currentLang === "th" ? "IBM Plex Sans Thai " : "Montserrat";
 
   return (
     <>
@@ -128,10 +133,6 @@ export default function NavbarDynamic() {
               // fontFamily: "Montserrat",
               // fontFamily: "Noto Sans Thai Looped",
               fontFamily: fontFamily, // Change fontFamily based on language
-
-
-              
-
             },
           }}
         >
@@ -169,24 +170,46 @@ export default function NavbarDynamic() {
                       itemColor: "#ffffff",
                       horizontalItemSelectedBg: "#E81F76", // Background color of the selected item
                       horizontalItemSelectedColor: "#ffffff", // Text color for the selected item
-                      itemSelectedBg: "#55b4ff",
+                      // itemSelectedBg: "#55b4ff",
                       itemSelectedColor: "#ffffff", // Set the text color to white when selected
+                      itemActiveBg: "#ffffff",
+                      popupBg: "#55b4ff",
+                      // subMenuItemBg:"#E81F76",
+                      subMenuItemSelectedColor: "#ffffff",
+                      subMenuItemBg: "#E81F76",
+                      controlItemBgActive: "#E81F76",
                     },
                   },
                   token: {
                     colorText: "#00000",
-                    fontSize: 16,
+                    fontSize: 18,
                   },
                 }}
               >
                 <Menu
                   mode="horizontal"
                   selectedKeys={[activeKey]}
-                  items={navItems.map((item) => ({
-                    label: item.label,
-                    key: item.key,
-                    onClick: () => router.push(`/${item.key}`),
-                  }))}
+                  items={navItems.map((item) => {
+                    // Check if item has children
+                    if (item.children) {
+                      return {
+                        label: item.label,
+                        key: item.key,
+                        children: item.children.map((child) => ({
+                          label: child.label,
+                          key: child.key,
+                          onClick: () =>
+                            router.push(`/${item.key}/${child.key}`), // Navigate to the child route
+                        })),
+                      };
+                    } else {
+                      return {
+                        label: item.label,
+                        key: item.key,
+                        onClick: () => router.push(`/${item.key}`),
+                      };
+                    }
+                  })}
                   disabledOverflow={true}
                   style={
                     {
@@ -239,7 +262,7 @@ export default function NavbarDynamic() {
                               className="rounded-2xl"
                             />
 
-{item.oem_no || item.tyc_no}
+                            {item.oem_no || item.tyc_no}
                           </div>
                         </Select.Option>
                       ))}
@@ -252,7 +275,10 @@ export default function NavbarDynamic() {
                   className="hidden lg:flex relative "
                 >
                   <span>
-                    <Badge count={Object.keys(cartBucket.data).length} className="absolute">
+                    <Badge
+                      count={Object.keys(cartBucket.data).length}
+                      className="absolute"
+                    >
                       <ShoppingCartOutlined
                         className="hover:!text-blue-400"
                         style={{ fontSize: "18px", color: "white" }}
@@ -285,9 +311,9 @@ export default function NavbarDynamic() {
                             <div className="flex items-center justify-center">
                               <a href="/">
                                 <Image
-                                  src="/TYC_thailand_logo_01LBLUE.png"
+                                  src="/TH-TYC_logoWhitesmall.png"
                                   alt="Logo"
-                                  width={100}
+                                  width={150}
                                   height={50}
                                   className="object-contain"
                                 />
@@ -304,7 +330,11 @@ export default function NavbarDynamic() {
                           {[
                             { label: "Home", href: "/" },
                             { label: "Products", href: "/Products" },
-                            { label: "News", href: "/News" },
+                            // { label: "News", href: "/News" },
+                            { label: "Article", href: "/News" },
+                            { label: "New Product", href: "/NewProduct" },
+
+
                             { label: "About Us", href: "/AboutUs" },
                             { label: "Contact Us", href: "/ContactUs" },
                           ].map((item) => (
@@ -330,7 +360,7 @@ export default function NavbarDynamic() {
                                   : "bg-transparent text-black hover:bg-blue-500 hover:text-white"
                               }`}
                             >
-                              Cart (Items)
+                              Cart ( {Object.keys(cartBucket.data).length} Items)
                             </Button>
                           </DrawerClose>
                         </div>

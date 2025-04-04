@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 import { Form } from "antd";
+import { addGeneralInquiry } from "@/app/(Home)/ContactUs/contactdata";
 
 
 export default function ContactUsContent1() {
@@ -51,6 +52,24 @@ export default function ContactUsContent1() {
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Messages:</strong>${message}</p>`,
       });
+
+
+
+       // หลังจากส่งอีเมลสำเร็จให้เพิ่มข้อมูล inquiry ไปยัง Supabase
+       const contactData = [{
+        name: name,
+        email: email,
+        phone: phone,
+        subject: subject,
+        message: message,
+      }];
+
+      await addGeneralInquiry(contactData);  // ทำการเพิ่มข้อมูล Inquiry
+
+
+
+
+      
       // localStorage.removeItem("cart");
       // router.refresh();
       form.setFieldsValue({

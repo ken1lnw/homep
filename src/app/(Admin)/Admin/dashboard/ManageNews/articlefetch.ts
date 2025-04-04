@@ -18,10 +18,11 @@ export async function fetchNews(
     .or(
       `news_title.ilike.%${searchQuery}%,news_description.ilike.%${searchQuery}%`
     )
-    .order("id", { ascending: true });
+    .order("id", { ascending: false });
 
+    // console.log(data);
   if (error) {
-    console.error("Error fetching news:", error);
+    // console.error("Error fetching news:", error);
     throw new Error("Failed to fetch news articles.");
   }
 

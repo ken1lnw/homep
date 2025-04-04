@@ -3,14 +3,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import {
   // Button,
-  Card,
+
   ConfigProvider,
-  Descriptions,
   Input,
-  message,
   Select,
-  Upload,
-  UploadProps,
 } from "antd";
 import {
   Pagination,
@@ -22,17 +18,10 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import {
-  SearchOutlined,
-  ShoppingCartOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
+import { useQuery } from "@tanstack/react-query";
 import { ProductionType, ProductionImageType } from "./ProductionType";
 // import { Button } from "../atom/buttom";
 import { toast } from "sonner";
-import DeleteModal from "../ui/deletemodal";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
@@ -44,32 +33,11 @@ import {
 } from "@/app/(Home)/Products/productdatafetch";
 import { useBucket } from "@/store/bucket";
 
-// const ProductTypeOptions = [
-//   { label: "ALL PRODUCTS", value: "allproducts" },
-//   { label: "CAR LIGHT", value: "carlight" },
-// ];
-
 export default function Prodcuts() {
-  const queryClient = useQueryClient();
-  const store = useBucket()
+  const store = useBucket();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 5;
-  const [itemSearch, setItemSearch] = useState<string>("");
-
-  // const [productType, setProductType] = useState<string>(""); // Make sure this is undefined initially
-  const [carMaker, setCarMaker] = useState<string>("");
-  const [carModel, setCarModel] = useState<string>("");
-  const [tycNo, setTycNo] = useState<string>("");
-  const [oemNo, setOemNo] = useState<string>("");
-  const [yearFrom, setYearFrom] = useState<string>("");
-  const [yearTo, setYearTo] = useState<string>("");
-  const [itemNumber, setItemNumber] = useState<string>("");
-  const [itemDescription, setItemDescription] = useState<string>("");
-  const [brand, setBrand] = useState<string>("");
-  const [model, setModel] = useState<string>("");
-  const [itemFile, setItemFile] = useState<File[] | null>(null); // Change to an array of File
-
   // const [oemNo, setOemNo] = useState<string>("");
   const [searchOemNo, setSearchOemNo] = useState<string | null>(null);
   const [searchTycNo, setSearchTycNo] = useState<string | null>(null);
@@ -83,9 +51,8 @@ export default function Prodcuts() {
   const [searchProductBrand, setSearchProductBrand] = useState<string | null>(
     null
   );
-  const [searchProductType, setSearchProductType] = useState<string | null>(
-    null
-  );
+  const [searchProductType, setSearchProductType] = useState<string[]>([]);
+
   const [searchYearFrom, setSearchYearFrom] = useState<string | null>(null);
   const [searchYearTo, setSearchYearTo] = useState<string | null>(null);
 
@@ -97,34 +64,31 @@ export default function Prodcuts() {
     setSearchVehicleModel(""); // ล้างค่า Vehicle Model
     setSearchSide("");
     setSearchProductBrand("");
-    setSearchProductType("");
+    setSearchProductType([]);
     setSearchYearFrom("");
     setSearchYearTo("");
   };
 
-  // Handle search when "Search" button is clicked
-  const handleSearch = () => {
-    setCurrentPage(1); // Reset to first page on new search
-  };
+ 
 
   const { data: alldata, isLoading: isLoadingAllProduct } = useQuery({
     queryKey: [
       "product_type",
+      currentPage,
       searchOemNo,
       searchTycNo,
       searchVehicleBrand,
       searchVehicleModel,
       searchSide,
       searchProductBrand,
-      searchProductType,
-      currentPage,
+      searchProductType, 
       searchYearFrom,
       searchYearTo,
     ],
     queryFn: async () => {
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize - 1;
-      
+
       return await fetchAllProduct(start, end, {
         searchOemNo: searchOemNo ?? undefined,
         searchTycNo: searchTycNo ?? undefined,
@@ -132,12 +96,12 @@ export default function Prodcuts() {
         searchVehicleModel: searchVehicleModel ?? undefined,
         searchSide: searchSide ?? undefined,
         searchProductBrand: searchProductBrand ?? undefined,
-        searchProductType: searchProductType ?? undefined,
+        searchProductType: searchProductType ??  undefined, 
         searchYearFrom: searchYearFrom ?? undefined,
         searchYearTo: searchYearTo ?? undefined,
       });
     },
-    staleTime: 10 * 60 * 1000, // 10 นาที
+    // staleTime: 10 * 60 * 1000,
   });
 
   const { data: productType, isLoading: isLoadingProductType } = useQuery({
@@ -184,9 +148,9 @@ export default function Prodcuts() {
     queryKey: ["vehicle_models", searchVehicleBrand],
     queryFn: async () => {
       if (!searchVehicleBrand) return [];
-  
+
       const fetchvmodel = await fetchVehicleModel(searchVehicleBrand); // ส่งเข้าไปตรงนี้
-  
+
       const uniqueVehicleModels = Array.from(
         new Set(fetchvmodel.map((item) => item.vehicle_model_full))
       )
@@ -199,33 +163,25 @@ export default function Prodcuts() {
           label: model,
           value: model,
         }));
-  
+
       return uniqueVehicleModels;
     },
     enabled: !!searchVehicleBrand,
     staleTime: 10 * 60 * 1000,
   });
-  
 
   const handleAddToCart = (productId: string) => {
-    
     // store.setData(+productId, 1)
 
-
-// เช็คว่ามีสินค้าในตะกร้าหรือไม่
-if (store.data[+productId]) {
-  // ถ้ามีสินค้าในตะกร้าแล้ว ให้แสดง toast error
-  toast.info("Product is already in the cart.");
-} else {
-  // ถ้ายังไม่มีสินค้าในตะกร้า ให้เพิ่มสินค้าใหม่
-  store.setData(+productId, 1);  // เพิ่มสินค้าใหม่ไปยัง store
-  toast.success("Product added to cart!");
-}
-
-
-
-
-
+    // เช็คว่ามีสินค้าในตะกร้าหรือไม่
+    if (store.data[+productId]) {
+      // ถ้ามีสินค้าในตะกร้าแล้ว ให้แสดง toast error
+      toast.info("Product is already in the cart.");
+    } else {
+      // ถ้ายังไม่มีสินค้าในตะกร้า ให้เพิ่มสินค้าใหม่
+      store.setData(+productId, 1); // เพิ่มสินค้าใหม่ไปยัง store
+      toast.success("Product added to cart!");
+    }
 
     // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
     // let cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -245,7 +201,8 @@ if (store.data[+productId]) {
 
   const totalPages = Math.ceil((alldata?.total || 0) / pageSize);
   const pageLimit = 5;
-
+  console.log("Filtered total:", alldata?.total);
+  console.log("Filtered data:", alldata?.data);
   // Calculate the range of pages to display
   const getPageRange = () => {
     const startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
@@ -256,8 +213,6 @@ if (store.data[+productId]) {
       (_, index) => startPage + index
     );
   };
-
-
 
   return (
     <>
@@ -306,13 +261,15 @@ if (store.data[+productId]) {
               }}
             >
               <Select
+                mode="multiple"
                 showSearch
                 placeholder="Product Type"
                 style={{ width: "100%" }}
                 options={productType || []} // ใช้ข้อมูลที่ดึงมา หรือ [] ถ้ายังโหลดไม่เสร็จ
                 loading={isLoadingProductType} // แสดงสถานะโหลด
                 allowClear
-                value={searchProductType == "" ? null : searchProductType}
+                // value={searchProductType == "" ? null : searchProductType}
+                value={searchProductType} // Make sure it's an array for multiple selection
                 onChange={(value) => {
                   setSearchProductType(value); // อัปเดต state ค้นหา
                   // setSearchVehicleBrand("");
@@ -512,8 +469,6 @@ if (store.data[+productId]) {
                     </div>
                   </div>
                 </div>
-
-
 
                 <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 lg:ml-5">
                   <Button

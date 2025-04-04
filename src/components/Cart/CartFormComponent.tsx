@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   // Button,
   Cascader,
@@ -128,6 +128,38 @@ export default function CartFormComponent() {
     }
   };
 
+
+
+
+
+
+
+  const [countries, setCountries] = useState<{ code: string; name: string }[]>([]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch("https://restcountries.com/v3.1/all");
+        const data = await response.json();
+
+        const countryList = data
+          .map((country: { cca2: any; name: { common: any; }; }) => ({
+            code: country.cca2,
+            name: country.name.common,
+          }))
+          .sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name)); 
+
+        setCountries(countryList);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
+
+
   return (
     <>
 
@@ -185,11 +217,13 @@ export default function CartFormComponent() {
                 { required: true, message: "Please select your country" },
               ]}
             >
-              <Select placeholder="Select Country">
-                <Select.Option value="us">United States</Select.Option>
-                <Select.Option value="uk">United Kingdom</Select.Option>
-                <Select.Option value="th">Thailand</Select.Option>
-              </Select>
+                <Select placeholder="Select Country" allowClear showSearch>
+              {countries.map((country) => (
+                <Select.Option key={country.code} value={country.name}>
+                  {country.name} {/* แสดงชื่อประเทศ */}
+                </Select.Option>
+              ))}
+            </Select> 
             </Form.Item>
 
             {/* Mobile */}

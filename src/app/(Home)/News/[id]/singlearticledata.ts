@@ -6,9 +6,7 @@ import { NewsType } from "@/components/ManageNews/NewsType";
 
 
 
-export async function fetchSingleArticle(id:  string | number): Promise<NewsType[]> {
-    // console.log("Fetching type products...");
-  
+export async function fetchSingleArticle(id:  string | number): Promise<NewsType> {  
    const { data, error } = await supabase
                  .from("news_article")
                  .select("*,news_image(*)")
@@ -18,8 +16,8 @@ export async function fetchSingleArticle(id:  string | number): Promise<NewsType
       console.error("Error fetching type products:", error.message);
       throw new Error(error.message);
     }
-    // console.log("fetched type data");
-    return data as NewsType[];
+    console.log(data);
+    return data as NewsType;
   }
   
   

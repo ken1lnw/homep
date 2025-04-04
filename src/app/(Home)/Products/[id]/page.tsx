@@ -171,9 +171,10 @@ const store = useBucket()
           {product?.oem_no || product?.tyc_no || "No data available"}
         </p>
 
-        <div className="my-2 text-blue-500 text-2xl">
-          <LeftOutlined className="" onClick={() => router.back()} />
-        </div>
+        <div className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer" onClick={() => router.back()}>
+        <LeftOutlined className="" /> Back
+      </div>
+
 
         <div className="flex flex-col lg:flex-row gap-10 my-10 mx-2">
           <div className="lg:w-1/2">

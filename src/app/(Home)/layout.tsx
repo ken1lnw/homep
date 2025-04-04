@@ -3,7 +3,7 @@ import Navbar2 from "./navbar2";
 import Footer from "./footer";
 import "@ant-design/v5-patch-for-react-19";
 import { getLocale } from "next-intl/server";
-import { Montserrat, Noto_Sans_Thai_Looped } from "next/font/google";
+import { IBM_Plex_Sans_Thai, Mitr, Montserrat, Noto_Sans_Thai_Looped, Pridi, Prompt } from "next/font/google";
 const NotoFont = Noto_Sans_Thai_Looped({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
@@ -15,10 +15,39 @@ const TYCFont = Montserrat({
   subsets: ["latin"],
   weight: "500",
 });
+
+
+
+const PridiFont = Pridi ({
+  // variable: "--font-slabo-13px",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const PromptFont = Prompt ({
+  // variable: "--font-slabo-13px",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const MitrFont = Mitr ({
+  // variable: "--font-slabo-13px",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const IBMFont = IBM_Plex_Sans_Thai ({
+  // variable: "--font-slabo-13px",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+
+
 const Layout = async ({ children }: { children: ReactNode }) => {
   const locale = await getLocale();
   const currentClassName =
-    locale === "th" ? NotoFont.className : TYCFont.className;
+    locale === "th" ? PromptFont.className : TYCFont.className;
   return (
     <section className={currentClassName}>
       <div className="flex flex-col min-h-screen">

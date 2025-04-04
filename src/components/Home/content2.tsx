@@ -60,19 +60,19 @@ const Content2page1 = () => {
       src: "https://www.genera.com/_images/Headlight.png",
       name: "AUTOMOTIVE LAMP",
     },
-    { src: "https://genera.com/_images/Alternator.png", name: "HAVC" },
+    { src: "slide1/Alternator.png", name: "HAVC" },
     {
-      src: "https://genera.com/_images/Mirror.png",
+      src: "slide1/Mirror.png",
       name: "STARTING & CHARGING",
     },
-    { src: "https://genera.com/_images/Window_Regulator.png", name: "MIRRORS" },
+    { src: "slide1/Window_Regulator.png", name: "MIRRORS" },
     {
-      src: "https://genera.com/_images/Fuel_Pump.png",
+      src: "slide1/Fuel_Pump.png",
       name: "WINDOW REGULATORS",
     },
-    { src: "https://genera.com/_images/TOC.png", name: "FUEL PUMPS" },
+    { src: "slide1/TOC.png", name: "FUEL PUMPS" },
     {
-      src: "https://genera.com/_images/CAC.png",
+      src: "slide1/CAC.png",
       name: "TRANSMISSION OIL COOLERS",
     },
   ];
