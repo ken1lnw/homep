@@ -23,35 +23,33 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
-import Image from "next/image";
 import { Input } from "../ui/input";
-import {
-  deleteNews,
-  fetchNews,
-} from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
-import { deleteGI, fetchGi } from "@/app/(Admin)/Admin/dashboard/ManageGeneralInquiry/generalinquiryfetch";
-import { ViewGeneralInquiryModal } from "./ViewGeneralInquiryModal";
 
-export default function ManageGeneralInquiryTable() {
+import { deletePI, fetchPi } from "@/app/(Admin)/Admin/dashboard/ManageProductInquiry/productinquiryfetch";
+import { ViewProductInquiryModal } from "./ViewProductInquiryModal";
+
+// import { ViewGeneralInquiryModal } from "./ViewGeneralInquiryModal";
+
+export default function ManageProductInquiryTable() {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 10;
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["inquiry_general", currentPage, searchQuery],
-    queryFn: () => fetchGi(currentPage, pageSize, searchQuery),
+    queryKey: ["inquiry_product", currentPage, searchQuery],
+    queryFn: () => fetchPi(currentPage, pageSize, searchQuery),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (giId: string) => deleteGI(giId),
+    mutationFn: (giId: string) => deletePI(giId),
     onSuccess: () => {
-      toast.success("General Inquiry deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["inquiry_general"] });
+      toast.success("Product Inquiry deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["inquiry_product"] });
     },
     onError: (error: any) => {
       // console.error("Error deleting news:", error);
-      toast.error("Failed to delete General Inquiry.");
+      toast.error("Failed to delete Product Inquiry.");
     },
   });
 
@@ -86,34 +84,59 @@ export default function ManageGeneralInquiryTable() {
         <TableCaption>Total Items : {data?.total}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-1">No.</TableHead>
+            <TableHead className="w-1">ID</TableHead>
             <TableHead className="w-1">Date</TableHead>
-
+            <TableHead className="w-16">Comapny</TableHead>
+            <TableHead className="w-16">Country</TableHead>
             <TableHead className="w-16">Name</TableHead>
             <TableHead className="w-10">Email</TableHead>
-            <TableHead className="w-5">Phone</TableHead>
-            <TableHead className="w-10">Subject</TableHead>
-            <TableHead className="w-10">Message</TableHead>
+            <TableHead className="w-5">Mobile</TableHead>
+            {/* <TableHead className="w-5">Phone</TableHead> */}
+            {/* <TableHead className="w-5">Fax</TableHead> */}
+            {/* <TableHead className="w-16">Address</TableHead> */}
+            <TableHead className="w-16">Inquiry</TableHead>
+            {/* <TableHead className="w-16">Product Detail</TableHead> */}
             <TableHead className="w-10 text-right">Manage</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.gi.map((xx) => (
+          {data?.pi.map((xx) => (
             <TableRow key={xx.id}>
               <TableCell className="w-1">{xx.id}</TableCell>
+
               <TableCell className="w-1">
                 {new Date(xx.created_at).toLocaleDateString()}
               </TableCell>
+
+              <TableCell className="w-16">{xx.company}</TableCell>
+
+              <TableCell className="w-10">{xx.country}</TableCell>
+
               <TableCell className="w-16">{xx.name}</TableCell>
+
               <TableCell className="w-10">{xx.email}</TableCell>
-              <TableCell className="w-5">{xx.phone}</TableCell>
-              <TableCell className="max-w-20 truncate">{xx.subject}</TableCell>
-              <TableCell className="max-w-20 truncate">
-                {xx.message}
+
+              <TableCell className="w-5">{xx.mobile}</TableCell>
+
+              {/* <TableCell className="w-5">{xx.phone}</TableCell> */}
+
+              {/* <TableCell className="w-5">{xx.fax}</TableCell> */}
+
+              {/* <TableCell className="w-16 max-w-[200px] truncate">
+                {xx.address}
+              </TableCell> */}
+
+              <TableCell className="w-16 max-w-[200px] truncate">
+                {xx.inquiry}
               </TableCell>
-              <TableCell className="w-20 text-right space-x-1">
-                <ViewGeneralInquiryModal gi={xx}/>
-                {/* <EditNewsModal news={xx} /> */}
+
+              {/* <TableCell className="w-16 max-w-[200px] truncate">
+                {xx.product_detail}
+              </TableCell> */}
+
+              <TableCell className="w-10 text-right space-x-1">
+                <ViewProductInquiryModal pi={xx} />
+                {/* หรือถ้ามีปุ่มแก้ไขก็ใส่ตรงนี้ */}
                 <DeleteModal
                   onDelete={() => deleteMutation.mutate(xx.id.toString())}
                 />

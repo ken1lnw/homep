@@ -49,7 +49,7 @@ const data = {
               url: "/Admin/dashboard/ManageNews",
             },
             {
-              title: "Product Manage",
+              title: "New Product Manage",
               url: "/Admin/dashboard/ManageNewsProducts",
             },
           ],
@@ -66,7 +66,7 @@ const data = {
             },
             {
               title: "Product Inquiry",
-              url: "/Admin/dashboard/ProductInquiry",
+              url: "/Admin/dashboard/ManageProductInquiry",
             },
           ],
         },

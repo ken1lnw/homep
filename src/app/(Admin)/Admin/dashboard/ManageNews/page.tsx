@@ -11,7 +11,7 @@ export default function ManageNews() {
     <div className="">
       <div className="">
         <div className="flex">
-          <h1 className="text-4xl font-bold">News List</h1>
+          <h1 className="text-4xl font-bold">Articles List</h1>
         </div>
 
         {/* <div className="flex justify-between items-center mt-4">

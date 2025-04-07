@@ -18,7 +18,9 @@
 
     if (hasFilter) {
       query = query.or(
-        `oem_no.ilike.%${filters}%,tyc_no.ilike.%${filters}%,vehicle_brand_full.ilike.%${filters}%,vehicle_model_full.ilike.%${filters}%,full_specifications.ilike.%${filters}%`
+        `oem_no.ilike.%${filters}%,tyc_no.ilike.%${filters}%,vehicle_brand_full.ilike.%${filters}%,vehicle_model_full.ilike.%${filters}%,full_specifications.ilike.%${filters}%,vehicle_year.ilike.%${filters}%
+        ,vehicle_brand.ilike.%${filters}%.ilike.%${filters}%,vehicle_model.ilike.%${filters}%
+        `
       );
     }
 

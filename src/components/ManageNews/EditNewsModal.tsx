@@ -154,7 +154,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
       filePaths.push(publicURL); // เก็บ public URL ของแต่ละไฟล์
 
       toast.success("Upload successful!");
-      console.log("File uploaded:", data);
+      // console.log("File uploaded:", data);
     }
 
     return filePaths; // คืนค่า array ของ paths

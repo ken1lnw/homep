@@ -93,7 +93,7 @@ export async function uploadNewsFile(file: File): Promise<string | null> {
 
 
 
-export async function fetchAllNewsProducts(
+export async function   fetchAllNewsProducts(
   start: number,
   end: number,
   filters?: string
@@ -105,7 +105,7 @@ export async function fetchAllNewsProducts(
     .range(start, end); 
 
   const { data, error, count } = await query;
-  console.log(data);
+  // console.log(data);
   if (error) {
     console.error("Error fetching all news products:", error.message);
     throw new Error(error.message);

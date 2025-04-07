@@ -357,7 +357,8 @@ export default function CartComponent() {
                     <img
                       src={
                         xx.item_image[0]?.path ||
-                        "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        // "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        "/TH-TYC_logoWhite.jpg"
                       }
                       alt={xx.tyc_no}
                       width={150}

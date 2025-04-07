@@ -94,7 +94,7 @@ export default function NavbarDynamic() {
       label: t("News"),
       key: "News",
       children: [
-        { label: "Article", key: "News" },
+        { label: "Article", key: "/" },
         { label: "New Prdocut", key: "NewProduct" },
       ],
     },

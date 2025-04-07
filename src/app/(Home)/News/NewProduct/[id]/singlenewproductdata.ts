@@ -15,7 +15,7 @@ export async function fetchSingleNewProduct(id:number): Promise<NewsProductsType
     //   console.error("Error fetching type :", error.message);
       throw new Error(error.message);
     }
-    console.log(data);
+    // console.log(data);
     return data as NewsProductsType;
   }
   

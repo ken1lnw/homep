@@ -7,10 +7,10 @@ import { ProductionType } from "@/components/Production/ProductionType";
 export async function fetchCartItems(
   cartItems: number[]
 ): Promise<ProductionType[]> {
-  console.log("Fetching cart items on the server...");
+  // console.log("Fetching cart items on the server...");
 
   if (cartItems.length === 0) {
-    console.log("No items in the cart.");
+    // console.log("No items in the cart.");
     return []; // ถ้าไม่มีสินค้าในตะกร้าให้คืนค่าว่าง
   }
 
@@ -20,17 +20,17 @@ export async function fetchCartItems(
     .in("id", cartItems);
 
   if (error) {
-    console.error("Error fetching data:", error.message);
+    // console.error("Error fetching data:", error.message);
     throw new Error(error.message);
   }
 
-  console.log("Fetched data:", data);
+  // console.log("Fetched data:", data);
   return data as ProductionType[];
 }
 
 // ฟังก์ชันดึงข้อมูลสินค้าล่าสุด
 export async function fetchRecentProducts(): Promise<ProductionType[]> {
-  console.log("Fetching recent products...");
+  // console.log("Fetching recent products...");
 
   const { data, error } = await supabase
     .from("item_product")
@@ -43,7 +43,7 @@ export async function fetchRecentProducts(): Promise<ProductionType[]> {
     throw new Error(error.message);
   }
   //   console.log("Recent Prodcut data:", data);
-  console.log("fetched data");
+  // console.log("fetched data");
   return data as ProductionType[];
 }
 
@@ -73,10 +73,10 @@ export async function fetchRecentProducts(): Promise<ProductionType[]> {
 export async function fetchProductId(
   id: number
 ): Promise<ProductionType | null> {
-  console.log("Fetching product item on the server...");
+  // console.log("Fetching product item on the server...");
 
   if (!id) {
-    console.log("No item id provided.");
+    // console.log("No item id provided.");
     return null; // ถ้าไม่มี id ให้คืนค่า null
   }
 
@@ -91,6 +91,6 @@ export async function fetchProductId(
     throw new Error(error.message);
   }
 
-  console.log("Fetched data:", data);
+  // console.log("Fetched data:", data);
   return data as ProductionType;
 }

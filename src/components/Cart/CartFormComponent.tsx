@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 
 import { useCart } from "@/hook/useCart";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCartItems } from "@/app/(Home)/Cart/cartdata";
+import { addProductInquiry, fetchCartItems } from "@/app/(Home)/Cart/cartdata";
 import { ProductionType } from "../Production/ProductionType";
 import { useBucket } from "@/store/bucket";
 
@@ -44,10 +44,10 @@ export default function CartFormComponent() {
     },
   });
 
-  console.log(cartItems);
+  // console.log(cartItems);
 
-  console.log(cartItems.data);
-  console.log(data);
+  // console.log(cartItems.data);
+  // console.log(data);
 
   const handleButtonClick = () => {
     form.submit(); // Manually trigger form submission when the custom button is clicked
@@ -88,32 +88,57 @@ export default function CartFormComponent() {
           // If a match is found, get the quantity (qty) from cartItems.data
           const qty = matchedItem ? matchedItem[1] : 1; // matchedItem[1] will be the qty
 
-          return `Product ID: ${item.id}, OEM No.: ${item.oem_no}, TYC No.: ${item.tyc_no}, Cart Quantity: ${qty}<br/>`;
-        })
-        .join("\n"); // Join the details into a string
+          return `Product ID: ${item.id} \n OEM No.: ${item.oem_no} \n TYC No.: ${item.tyc_no} \n Full Specifications.: ${item.full_specifications} \n Cart Quantity: ${qty}`;
+        });
+        // .join("\n"); // Join the details into a string
 
-        await sendMail({
-          email: email,
-          // sendTo: "your-receiver-email@example.com", // You can set the receiver email or use the SITE_MAIL_RECIEVER
-          subject: `New Inquiry from ${company || ""}`,
-          text: `You have a new inquiry from ${company || ""} (${name || ""}).\n
+      // สำหรับบันทึกลงฐานข้อมูลหรือจัดเก็บในรูปแบบที่มี \n
+      const productDetailsForDB = productDetails.join("\n");
+
+      // สำหรับแสดงผลในอีเมลให้แทน \n ด้วย <br/>
+      const productDetailsForEmail = productDetails .join("<br/>");
+
+      await sendMail({
+        email: email,
+        // sendTo: "your-receiver-email@example.com", // You can set the receiver email or use the SITE_MAIL_RECIEVER
+        subject: `New Inquiry from ${company || ""}`,
+        text: `You have a new inquiry from ${company || ""} (${name || ""}).\n
           Country/Region: ${country || ""}\n
           Mobile: ${mobile || ""}\n
           Phone: ${phone || ""}\n
           Fax: ${fax || ""}\n
           Address: ${address || ""}\n
           Inquiry: ${inquiry || ""}\n
-          Product Details: ${productDetails || ""}\n
+          Product Details: ${productDetails.join("\n") || ""}\n
           `,
-          html: `<p>You have a new inquiry from <strong>${company || ""}</strong> (${name || ""}).</p>
+        html: `<p>You have a new inquiry from <strong>${
+          company || ""
+        }</strong> (${name || ""}).</p>
           <p><strong>Country/Region:</strong> ${country || ""}</p>
           <p><strong>Mobile:</strong> ${mobile || ""}</p>
           <p><strong>Phone:</strong> ${phone || ""}</p>
           <p><strong>Fax:</strong> ${fax || ""}</p>
           <p><strong>Address:</strong> ${address || ""}</p>
           <p><strong>Inquiry:</strong><br/>${inquiry || ""}</p>
-          <p><strong>Product Details:</strong><br/>${productDetails || ""}</p>`,
-        });
+          <p><strong>Product Details:</strong><br/>${productDetailsForEmail || ""}<br/></p>`,
+      });
+
+      const cartData = [
+        {
+          name: name,
+          company: company,
+          email: email,
+          mobile: mobile || "",
+          phone: phone,
+          fax: fax || "",
+          address: address,
+          inquiry: inquiry || "",
+          product_detail: productDetailsForDB,
+          country: country,
+        },
+      ];
+
+      await addProductInquiry(cartData);
       // localStorage.removeItem("cart");
       // router.refresh();
       cartItems.clearData();
@@ -128,13 +153,9 @@ export default function CartFormComponent() {
     }
   };
 
-
-
-
-
-
-
-  const [countries, setCountries] = useState<{ code: string; name: string }[]>([]);
+  const [countries, setCountries] = useState<{ code: string; name: string }[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -143,11 +164,13 @@ export default function CartFormComponent() {
         const data = await response.json();
 
         const countryList = data
-          .map((country: { cca2: any; name: { common: any; }; }) => ({
+          .map((country: { cca2: any; name: { common: any } }) => ({
             code: country.cca2,
             name: country.name.common,
           }))
-          .sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name)); 
+          .sort((a: { name: string }, b: { name: any }) =>
+            a.name.localeCompare(b.name)
+          );
 
         setCountries(countryList);
       } catch (error) {
@@ -158,158 +181,160 @@ export default function CartFormComponent() {
     fetchCountries();
   }, []);
 
-
-
   return (
     <>
+      {cartLength < 1 ? (
+        <></>
+      ) : (
+        <div className="container mx-auto mb-10 px-2 lg:px-0">
+          {loading && (
+            <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center z-50">
+              <LoadingSpinner />
+            </div>
+          )}
 
-    {cartLength < 1 ? (<></>):(
-      <div className="container mx-auto mb-10 px-2 lg:px-0">
-        {loading && (
-          <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center z-50">
-            <LoadingSpinner />
-          </div>
-        )}
+          <h1 className="text-4xl font-bold mt-12 mb-5">Contact Information</h1>
 
-        <h1 className="text-4xl font-bold mt-12 mb-5">Contact Information</h1>
+          <Form
+            form={form}
+            onFinish={handleSubmit}
+            layout="vertical"
+            style={{ fontSize: "18px" }}
+          >
+            <div className="grid grid-cols-3 gap-6 items-center">
+              {/* Company */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                <span className="text-red-500 mr-1">*</span>Company
+              </label>
+              <Form.Item
+                name="company"
+                className="col-span-3 lg:col-span-2"
+                rules={[
+                  { required: true, message: "Please enter your company name" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-        <Form
-          form={form}
-          onFinish={handleSubmit}
-          layout="vertical"
-          style={{ fontSize: "18px" }}
-        >
-          <div className="grid grid-cols-3 gap-6 items-center">
-            {/* Company */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              <span className="text-red-500 mr-1">*</span>Company
-            </label>
-            <Form.Item
-              name="company"
-              className="col-span-3 lg:col-span-2"
-              rules={[
-                { required: true, message: "Please enter your company name" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+              {/* Name */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                <span className="text-red-500 mr-1">*</span>Name
+              </label>
+              <Form.Item
+                name="name"
+                className="col-span-3 lg:col-span-2"
+                rules={[{ required: true, message: "Please enter your name" }]}
+              >
+                <Input />
+              </Form.Item>
 
-            {/* Name */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              <span className="text-red-500 mr-1">*</span>Name
-            </label>
-            <Form.Item
-              name="name"
-              className="col-span-3 lg:col-span-2"
-              rules={[{ required: true, message: "Please enter your name" }]}
-            >
-              <Input />
-            </Form.Item>
-
-            {/* Country / Region */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              <span className="text-red-500 mr-1">*</span>Country / Region
-            </label>
-            <Form.Item
-              name="country"
-              className="col-span-3 lg:col-span-2"
-              rules={[
-                { required: true, message: "Please select your country" },
-              ]}
-            >
+              {/* Country / Region */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                <span className="text-red-500 mr-1">*</span>Country / Region
+              </label>
+              <Form.Item
+                name="country"
+                className="col-span-3 lg:col-span-2"
+                rules={[
+                  { required: true, message: "Please select your country" },
+                ]}
+              >
                 <Select placeholder="Select Country" allowClear showSearch>
-              {countries.map((country) => (
-                <Select.Option key={country.code} value={country.name}>
-                  {country.name} {/* แสดงชื่อประเทศ */}
-                </Select.Option>
-              ))}
-            </Select> 
-            </Form.Item>
+                  {countries.map((country) => (
+                    <Select.Option key={country.code} value={country.name}>
+                      {country.name} {/* แสดงชื่อประเทศ */}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-            {/* Mobile */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              Mobile
-            </label>
-            <Form.Item name="mobile" className="col-span-3 lg:col-span-2">
-              <Input />
-            </Form.Item>
+              {/* Mobile */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                Mobile
+              </label>
+              <Form.Item name="mobile" className="col-span-3 lg:col-span-2">
+                <Input />
+              </Form.Item>
 
-            {/* Phone No. */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              <span className="text-red-500 mr-1">*</span>Phone No.
-            </label>
-            <Form.Item
-              name="phone"
-              className="col-span-3 lg:col-span-2"
-              rules={[
-                { required: true, message: "Please enter your phone number" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+              {/* Phone No. */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                <span className="text-red-500 mr-1">*</span>Phone No.
+              </label>
+              <Form.Item
+                name="phone"
+                className="col-span-3 lg:col-span-2"
+                rules={[
+                  { required: true, message: "Please enter your phone number" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            {/* Fax */}
-            <label className="col-span-1 text-gray-700 font-medium">Fax</label>
-            <Form.Item name="fax" className="col-span-3 lg:col-span-2">
-              <Input />
-            </Form.Item>
+              {/* Fax */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                Fax
+              </label>
+              <Form.Item name="fax" className="col-span-3 lg:col-span-2">
+                <Input />
+              </Form.Item>
 
-            {/* Address */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              <span className="text-red-500 mr-1">*</span>Address
-            </label>
-            <Form.Item
-              name="address"
-              className="col-span-3 lg:col-span-2"
-              rules={[{ required: true, message: "Please enter your address" }]}
-            >
-              <Input />
-            </Form.Item>
+              {/* Address */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                <span className="text-red-500 mr-1">*</span>Address
+              </label>
+              <Form.Item
+                name="address"
+                className="col-span-3 lg:col-span-2"
+                rules={[
+                  { required: true, message: "Please enter your address" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            {/* Email */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              <span className="text-red-500 mr-1">*</span>Email
-            </label>
-            <Form.Item
-              name="email"
-              className="col-span-3 lg:col-span-2"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: "Please enter a valid email",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+              {/* Email */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                <span className="text-red-500 mr-1">*</span>Email
+              </label>
+              <Form.Item
+                name="email"
+                className="col-span-3 lg:col-span-2"
+                rules={[
+                  {
+                    required: true,
+                    type: "email",
+                    message: "Please enter a valid email",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            {/* Inquiry */}
-            <label className="col-span-1 text-gray-700 font-medium">
-              Inquiry
-            </label>
-            <Form.Item name="inquiry" className="col-span-3 lg:col-span-2">
-              <Input.TextArea rows={4} />
-            </Form.Item>
+              {/* Inquiry */}
+              <label className="col-span-1 text-gray-700 font-medium">
+                Inquiry
+              </label>
+              <Form.Item name="inquiry" className="col-span-3 lg:col-span-2">
+                <Input.TextArea rows={4} />
+              </Form.Item>
 
-            {/* Submit Button */}
-            <div className="col-span-3 flex justify-center">
-              {/* <Button type="primary" htmlType="submit">
+              {/* Submit Button */}
+              <div className="col-span-3 flex justify-center">
+                {/* <Button type="primary" htmlType="submit">
                 Submit
               </Button> */}
 
-              <Button
-                className="bg-blue-500 hover:bg-pink-500 w-56 h-14 text-2xl"
-                onClick={handleButtonClick}
-              >
-                Submit
-              </Button>
+                <Button
+                  className="bg-blue-500 hover:bg-pink-500 w-56 h-14 text-2xl"
+                  onClick={handleButtonClick}
+                >
+                  Submit
+                </Button>
+              </div>
             </div>
-          </div>
-        </Form>
-      </div>
-
-)}
+          </Form>
+        </div>
+      )}
     </>
   );
 }

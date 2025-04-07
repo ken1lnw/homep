@@ -22,10 +22,6 @@ import {
 } from "@/components/ui/pagination";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
-import { ProductionType } from "@/components/Production/ProductionType";
-import { Button } from "../ui/button";
-import { EditFilled } from "@ant-design/icons";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
 import Image from "next/image";

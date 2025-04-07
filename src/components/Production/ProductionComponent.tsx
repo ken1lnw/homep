@@ -201,8 +201,8 @@ export default function Prodcuts() {
 
   const totalPages = Math.ceil((alldata?.total || 0) / pageSize);
   const pageLimit = 5;
-  console.log("Filtered total:", alldata?.total);
-  console.log("Filtered data:", alldata?.data);
+  // console.log("Filtered total:", alldata?.total);
+  // console.log("Filtered data:", alldata?.data);
   // Calculate the range of pages to display
   const getPageRange = () => {
     const startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
@@ -332,10 +332,11 @@ export default function Prodcuts() {
               />
             </ConfigProvider>
           </div>
-          <div className="flex justify-end mt-4 gap-4">
+          <div className="flex justify-end mt-4 gap-4 items-center">
             {/* <Button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Search
             </Button> */}
+          <div>Total Items: {alldata?.total}</div>
 
             <Button
               onClick={handleClear}
@@ -409,7 +410,8 @@ export default function Prodcuts() {
                     <img
                       src={
                         allproducts.item_image[0]?.path ||
-                        "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        // "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        "/TH-TYC_logoWhite.jpg"
                       }
                       alt={allproducts.tyc_no}
                       width={150}
@@ -418,56 +420,59 @@ export default function Prodcuts() {
                     />
                   </div>
                   <div className="flex-1 h-full w-full">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 h-full  items-stretch">
                       <div className="grid grid-cols-2">
-                        <div className="bg-gray-100 flex items-center p-4 rounded-tl-md border border-gray-300">
+                        <div className="bg-gray-100 flex items-center p-4 rounded-tl-md border border-gray-300 h-full">
                           OEM No.
                         </div>
-                        <div className="flex items-center p-4 border-r  rounded-tr lg:rounded-tr-none border-t border-b border-gray-300">
+                        <div className="flex items-center p-4 border-r  rounded-tr lg:rounded-tr-none border-t border-b border-gray-300 h-full">
                           {allproducts.oem_no}
                         </div>
 
-                        <div className="bg-gray-100 flex items-center p-4 lg:rounded-bl-md rounded-none border-l  border-b border-r border-gray-300">
+                        <div className="bg-gray-100 flex items-center p-4 lg:rounded-bl-md rounded-none border-l  border-b border-r border-gray-300 h-full">
                           TYC No.
                         </div>
-                        <div className="flex items-center p-4  border-gray-300 border-r border-b ">
+                        <div className="flex items-center p-4  border-gray-300 border-r border-b h-full">
                           {allproducts.tyc_no}
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2">
-                        <div className="bg-gray-100 flex items-center p-4 lg: border-l lg:border-l-0 border-r border-b lg:border-t border-gray-300">
+                        <div className="bg-gray-100 flex items-center p-4 lg: border-l lg:border-l-0 border-r border-b lg:border-t border-gray-300 h-full">
                           Vehicle Brand
                         </div>
-                        <div className="flex items-center p-4 border-r lg:border-r-0 lg:border-t border-b border-gray-300">
+                        <div className="flex items-center p-4 border-r lg:border-r-0 lg:border-t border-b border-gray-300 h-full">
                           {allproducts.vehicle_brand}
                         </div>
 
-                        <div className="bg-gray-100 flex items-center p-4 border-b border-l lg:border-l-0  border-r border-gray-300">
+                        <div className="bg-gray-100 flex items-center p-4 border-b border-l lg:border-l-0  border-r border-gray-300 h-full">
                           Vehicle Model
                         </div>
-                        <div className="flex items-center p-4 border-r border-b lg:border-r-0 border-gray-300">
+                        <div className="flex items-center p-4 border-r border-b lg:border-r-0 border-gray-300 h-full">
                           {allproducts.vehicle_model}
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2">
-                        <div className="bg-gray-100 flex items-center p-4 lg:border border-l border-r border-b border-gray-300">
+                        <div className="bg-gray-100 flex items-center p-4 lg:border border-l border-r border-b border-gray-300 h-full">
                           Product Brand
                         </div>
-                        <div className="flex items-center p-4 lg:rounded-tr-md lg:border-t border-b border-r border-gray-300">
+                        <div className="flex items-center p-4 lg:rounded-tr-md lg:border-t border-b border-r border-gray-300 h-full">
                           {allproducts.product_brand}
                         </div>
 
-                        <div className="bg-gray-100 flex items-center p-4 border-l border-b border-r border-gray-300 rounded-bl-md lg:rounded-bl-none">
+                        <div className="bg-gray-100 flex items-center p-4 border-l border-b border-r border-gray-300 rounded-bl-md lg:rounded-bl-none h-full">
                           Vehicle Year
                         </div>
-                        <div className="flex items-center p-4 rounded-br-md rounded-none border-b border-r border-gray-300">
+                        <div className="flex items-center p-4 rounded-br-md rounded-none border-b border-r border-gray-300 h-full">
                           {allproducts.vehicle_year}
                         </div>
                       </div>
                     </div>
                   </div>
+
+
+                  
                 </div>
 
                 <div className="flex flex-col justify-center gap-5 items-center my-4 md:my-0 lg:ml-5">
@@ -485,6 +490,7 @@ export default function Prodcuts() {
                     Detail
                   </Button>
                 </div>
+                
               </div>
             ))}
         </div>

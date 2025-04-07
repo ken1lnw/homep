@@ -48,7 +48,7 @@ export default function ProdcutsDetail({
   const { id } = use(params);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-const store = useBucket()
+  const store = useBucket();
   // const {
   //   data: product,
   //   isLoading,
@@ -123,19 +123,14 @@ const store = useBucket()
     //   toast.warning("Product is already in the cart.");
     // }
 
-
     if (store.data[+productId]) {
       // ถ้ามีสินค้าในตะกร้าแล้ว ให้แสดง toast error
       toast.info("Product is already in the cart.");
     } else {
       // ถ้ายังไม่มีสินค้าในตะกร้า ให้เพิ่มสินค้าใหม่
-      store.setData(+productId, 1);  // เพิ่มสินค้าใหม่ไปยัง store
+      store.setData(+productId, 1); // เพิ่มสินค้าใหม่ไปยัง store
       toast.success("Product added to cart!");
     }
-    
-    
-    
-
 
     router.refresh();
   };
@@ -171,14 +166,16 @@ const store = useBucket()
           {product?.oem_no || product?.tyc_no || "No data available"}
         </p>
 
-        <div className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer" onClick={() => router.back()}>
-        <LeftOutlined className="" /> Back
-      </div>
-
+        <div
+          className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <LeftOutlined className="" /> Back
+        </div>
 
         <div className="flex flex-col lg:flex-row gap-10 my-10 mx-2">
           <div className="lg:w-1/2">
-            <Swiper
+            {/* <Swiper
               //   spaceBetween={50}
               //   slidesPerView={1}
               //   onSlideChange={() => console.log("slide change")}
@@ -268,6 +265,62 @@ const store = useBucket()
                   alt=""
                 />
               </SwiperSlide>
+            </Swiper> */}
+
+            {/* Swiper สำหรับแสดงรูปหลัก */}
+            <Swiper
+              loop={true}
+              spaceBetween={10}
+              navigation={true}
+              thumbs={{ swiper: thumbsSwiper }}
+              modules={[FreeMode, Navigation, Thumbs]}
+              className="mySwiper2"
+            >
+              {product &&
+              product.item_image &&
+              product.item_image.length > 0 ? (
+                product.item_image.map((img) => (
+                  <SwiperSlide key={img.id}>
+                    <img src={img.path} alt={`Product Image ${img.id}`} />
+                  </SwiperSlide>
+                ))
+              ) : (
+                <SwiperSlide>
+                  <img
+                    src="/TH-TYC_logoWhite.jpg"
+                    alt="Default Product Image"
+                  />
+                </SwiperSlide>
+              )}
+            </Swiper>
+
+            {/* Swiper สำหรับแสดงรูป thumbnail */}
+            <Swiper
+              onSwiper={setThumbsSwiper}
+              loop={true}
+              spaceBetween={10}
+              slidesPerView={"auto"}
+              freeMode={true}
+              watchSlidesProgress={true}
+              modules={[FreeMode, Navigation, Thumbs]}
+              className="mySwiper"
+            >
+              {product &&
+              product.item_image &&
+              product.item_image.length > 0 ? (
+                product.item_image.map((img) => (
+                  <SwiperSlide key={img.id}>
+                    <img src={img.path} alt={`Product Thumbnail ${img.id}`} />
+                  </SwiperSlide>
+                ))
+              ) : (
+                <SwiperSlide>
+                  <img
+                    src="/TH-TYC_logoWhite.jpg"
+                    alt="Default Thumbnail Image"
+                  />
+                </SwiperSlide>
+              )}
             </Swiper>
           </div>
 
@@ -377,12 +430,14 @@ const store = useBucket()
                       className=""
                       src={
                         product.item_image[0]?.path ||
-                        "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        // "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
+                        "/TH-TYC_logoWhite.jpg"
                       } // ใช้ URL ของภาพที่ได้จาก API
                       alt={product.oem_no || product.tyc_no || "Product Image"} // ใช้ชื่อสินค้าหรือข้อมูลที่เหมาะสม
                     />
                     <div className="absolute h-full items-end flex">
-                    {`OEM.NO : ${product.oem_no}` || `TYC.NO : ${product.tyc_no}`}
+                      {`OEM.NO : ${product.oem_no}` ||
+                        `TYC.NO : ${product.tyc_no}`}
                     </div>
                     <div
                       className="absolute top-0  h-full w-full flex flex-col items-center justify-center bg-black/80  
@@ -401,7 +456,6 @@ const store = useBucket()
                       </div>
                     </div>
                   </div>
-                  
                 </SwiperSlide>
               ))
             ) : (
