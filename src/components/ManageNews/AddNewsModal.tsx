@@ -68,16 +68,16 @@ export function AddNewsModal() {
     >
       <DialogTrigger asChild>
         <Button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-          <PlusSquareFilled /> Add News
+          <PlusSquareFilled /> Add Article
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
-            Add News
+            Add Article
           </DialogTitle>
           <DialogDescription>
-            Add News to News Page here. Click Add News when you're done.
+            Add Article to Article Page here. Click Add Article when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -95,11 +95,11 @@ export function AddNewsModal() {
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="newstitle" className="col-span-4">
-              News Title
+            Article Title
             </Label>
             <Input
               id="newstitle"
-              placeholder="News Title"
+              placeholder="Article Title"
               value={newsTitle}
               onChange={(e) => setNewsTitle(e.target.value)}
               className="col-span-4"
@@ -120,7 +120,7 @@ export function AddNewsModal() {
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="newsdes" className="text-left col-span-4">
-              News Description
+            Article Description
             </Label>
             {/* <Input
               id="model"
@@ -131,7 +131,7 @@ export function AddNewsModal() {
 
             <Textarea 
             id='newsdes'
-            placeholder="Type your news description here." 
+            placeholder="Type your Article description here." 
             className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
             onChange={(e) => setNewsDescription(e.target.value)}
             rows={2}
@@ -178,7 +178,7 @@ export function AddNewsModal() {
             }}
             disabled={isPending} // Disable button when mutation is in progress
           >
-            {isPending ? "Adding News..." : "Add News"}{" "}
+            {isPending ? "Adding Article..." : "Add Article"}{" "}
             {/* Loading text */}
           </Button>
         </DialogFooter>

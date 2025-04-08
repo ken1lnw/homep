@@ -15,7 +15,7 @@ const fadeUpVariant = {
 };
 
 export default function AboutUsContent5() {
-  const t = useTranslations("Content1");
+  const t = useTranslations("AboutUs");
   return (
     <>
       <div className="w-full  grid lg:grid-cols-2 xl:p-5">
@@ -28,7 +28,8 @@ export default function AboutUsContent5() {
 
             className="text-5xl lg:text-4xl xl:text-6xl font-semibold text-blue-500"
           >
-            QUALITY ASSURANCE
+            {/* QUALITY ASSURANCE */}
+            {t("qa")}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, x: -200 }}
@@ -36,15 +37,16 @@ export default function AboutUsContent5() {
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
             viewport={{ once: true }}
 
-            className=""
-          >
-            Our top priorities are quality automotive products, exceptional
+            className="text-sm md:text-base whitespace-pre-line"
+            >
+            {/* Our top priorities are quality automotive products, exceptional
             customer service, and on-time delivery. These priorities make
             quality assurance one of the most important aspects of our
             operations. The automotive products we sell must meet or exceed our
             customers' expectations, from purchasing quality raw materials
             through design and engineering, to production and delivery through
-            (most importantly) customer-oriented after-sales service.
+            (most importantly) customer-oriented after-sales service. */}
+            {t("qades")}
           </motion.p>
         </div>
 

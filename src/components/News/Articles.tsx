@@ -18,8 +18,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { fetchArticleData, PrefetchReadMore } from "./ArticlesData";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
+import { useTranslations } from "next-intl";
 
 export default function Articles() {
+  const t = useTranslations("Article");
+
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -80,7 +83,8 @@ export default function Articles() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-4xl font-bold text-center mb-6 text-blue-500">
-        Latest Articles
+        {/* Latest Articles */}
+        {t("subtitle")}
       </h1>
 
       {isLoading && (
@@ -97,7 +101,7 @@ export default function Articles() {
             {/* รูปภาพข่าว */}
             {/* {article.news_image?.length > 0 && ( */}
             <div className="relative w-full h-52">
-              <Image
+              {/* <Image
                 src={
                   article.news_image?.[0]?.path ||
                   "/TH-TYC_logo(Global Brand Guideline)_rgb-24.jpg"
@@ -105,6 +109,15 @@ export default function Articles() {
                 alt={article.news_title}
                 layout="fill"
                 objectFit="cover "
+              /> */}
+
+              <img
+                src={
+                  article.news_image?.[0]?.path ||
+                  "/TH-TYC_logo(Global Brand Guideline)_rgb-24.jpg"
+                }
+                alt={article.news_title}
+                className="w-full h-full object-cover"
               />
             </div>
             {/* )} */}
@@ -126,7 +139,8 @@ export default function Articles() {
                 // onClick={() => router.push(`/News/${article.id}`)}
                 onClick={() => handleReadMore(article)}
               >
-                Read More
+                {/* Read More */}
+                {t("read")}
               </button>
             </div>
           </div>

@@ -98,16 +98,46 @@ export async function   fetchAllNewsProducts(
   end: number,
   filters?: string
 ): Promise<{ data: NewsProductsType[]; total: number }> {
-  let query = supabase
+  // let query = supabase
+  //   .from("news_product")
+  //   .select("*", { count: "exact" })
+  //   .order("created_at", { ascending: false })
+  //   .range(start, end); 
+
+  // const { data, error, count } = await query;
+let query
+  if (filters) {
+    query = supabase
+      .rpc(
+        "get_filtered_new_product",
+        {
+          searchnewp: filters || null,
+        },
+        { count: "exact" }
+      ).range(start, end)
+      .order("id", { ascending: false });
+      console.log({start,end});
+      
+      
+        
+  }else{
+    query = supabase
     .from("news_product")
     .select("*", { count: "exact" })
     .order("created_at", { ascending: false })
     .range(start, end); 
+  }
 
   const { data, error, count } = await query;
+
+  console.log({start,end});
+  
+
+
+
   // console.log(data);
   if (error) {
-    console.error("Error fetching all news products:", error.message);
+    // console.error("Error fetching all news products:", error.message);
     throw new Error(error.message);
   }
 
@@ -125,11 +155,11 @@ export async function addNewsProduct(newNews: { newp_title: string; created_at: 
     .eq("newp_title", newNews.newp_title);
 
   if (fetchError) {
-    throw new Error("Error checking news product title!");
+    throw new Error("Error checking new product title!");
   }
 
   if (existingItem && existingItem.length > 0) {
-    throw new Error(`News Product Title ${newNews.newp_title} already exists!`);
+    throw new Error(`New Product Title ${newNews.newp_title} already exists!`);
   }
 
   let filePath = "default-path";  
@@ -157,7 +187,7 @@ export async function addNewsProduct(newNews: { newp_title: string; created_at: 
 
   if (error) {
     // console.error("Error inserting news product:", error);
-    throw new Error("Failed to add news product.");
+    throw new Error("Failed to add new product.");
   }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -29,55 +29,45 @@ import { EditProductModal } from "./EditProductModal";
 import { AddProductModal } from "./AddProductModal";
 import { Input } from "../ui/input";
 import { fetchAllProduct,deleteProduct } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
+import debounce from "lodash.debounce";
 
 export default function ManageProductsTable() {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 10;
   const [searchQuery, setSearchQuery] = useState(""); // สร้างสถานะเก็บคำค้นหา
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery); 
 
+
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedSearchQuery(searchQuery); 
+    }, 500); 
+
+    handler(); 
+
+    return () => {
+      handler.cancel(); 
+    };
+  }, [searchQuery]);
 
   const { data : allData, error, isLoading } = useQuery({
-    queryKey: ["item_product", currentPage , searchQuery],
+    queryKey: ["item_product", currentPage , debouncedSearchQuery],
     queryFn: async () => {
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize - 1;
 
-      const fetchAllItem = await fetchAllProduct(start,end,searchQuery);
-      return { products: fetchAllItem.data, total: fetchAllItem.total };//       const { data, error, count } = await supabase
-//         .from("item_product")
-//         .select("*,item_image(*)", { count: "exact" })
-//         .range(start, end)
-//         .or(
-//           `item_number.ilike.%${searchQuery}%,item_description.ilike.%${searchQuery}%,brand.ilike.%${searchQuery}%,model.ilike.%${searchQuery}%`
-//         )
-//         .order("id", { ascending: true })
-// ;
-
-      // if (error) throw error;
-
-      // return { products: data as ProductionType[], total: count || 0 };
+      const fetchAllItem = await fetchAllProduct(start,end,debouncedSearchQuery);
+      return { products: fetchAllItem.data, total: fetchAllItem.total };
     },
   });
 
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>Error loading products</div>;
+
 
   async function CalldeleteProduct(productId: number) {
 
-
-    
-    // const { error: deleteProductError } = await supabase
-    //   .from("item_product")
-    //   .delete()
-    //   .eq("id", productId);
     const deleteFromDB = await deleteProduct(productId);
 
-    // if (deleteFromDB.error) {
-    //   console.error("Error deleting product:", deleteFromDB.error);
-    //   toast.error("Failed to delete product.");
-    //   return;
-    // }
 
     toast.success("Product and associated images deleted successfully!");
     await queryClient.invalidateQueries({ queryKey: ["item_product"] });

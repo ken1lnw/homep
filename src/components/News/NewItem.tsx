@@ -118,16 +118,21 @@ export default function NewItems() {
             <div className="bg-blue-500 h-full w-full flex items-center text-white px-5 md:w-36">
               {formatDate(item.created_at)} {/* แสดงเดือนและปีจาก created_at */}
             </div>
-            <div className="text-black truncate pl-2 md:pl-0">
+            <div className="text-black truncate overflow-hidden pl-2 md:pl-0 md:max-w-[400px] lg:max-w-[500px] xl:max-w-[800px] 2xl:max-w-[1000px]">
               {item.newp_title}
             </div>{" "}
-            {/* แสดงชื่อผลิตภัณฑ์ */}
-            <Button
+
+<div className="md:ml-auto p-2">
+
+<Button
               className="bg-gray-500 text-white text-xl rounded-md md:w-32 hover:bg-pink-500 md:ml-auto mr-4 w-full"
               onClick={() => router.push(`/News/NewProduct/${item.id}`)} // เปลี่ยนเป็นส่ง id ไปใน URL
             >
               Detail
             </Button>
+
+</div>
+          
           </div>
         ))}
       </div>

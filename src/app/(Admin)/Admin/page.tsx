@@ -1,7 +1,19 @@
-import { redirect } from "next/navigation";
+'use client'
+import { redirect, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 
 export default function Page() {
-  redirect("/Admin/Login"); // เปลี่ยนเส้นทางไปยังหน้า Login
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/Admin/dashboard/ManageNewsProducts");
+  }, [router]);
+
+  return null; 
 }
+
+
+
+

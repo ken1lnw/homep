@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/hook/supabase";
 import { NewsType } from "@/components/ManageNews/NewsType";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { LeftOutlined } from "@ant-design/icons";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -23,15 +23,26 @@ export default function NewsDetail({
   params: Promise<{ id: number }>;
 }) {
   const router = useRouter();
-  const { id } = use(params);
+  const [id, setId] = useState<number | null>(null);
 
-const {
+  useEffect(() => {
+    const getId = async () => {
+      const resolvedParams = await params;
+      setId(resolvedParams.id);
+    };
+    getId();
+  }, [params]);
+
+  const {
     data: article,
     isLoading,
     error,
   } = useQuery({
     queryKey: ["news_article", id],
     queryFn: async () => {
+      if (id === null) {
+        throw new Error("ID is null");
+      }
       const fetchsinglenew = await fetchSingleNewProduct(id);
       return fetchsinglenew;
 
@@ -42,17 +53,14 @@ const {
     enabled: !!id, // ใช้ query ก็ต่อเมื่อมี id
   });
 
-
   return (
     <>
-
-{isLoading && (
+      {isLoading && (
         <div className="w-full h-full fixed top-0 left-0 bg-white bg-opacity-50 z-50 flex justify-center items-center">
-              <LoadingSpinner />
-            </div>
-          )}
+          <LoadingSpinner />
+        </div>
+      )}
 
-            
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[200px]  bg-black opacity-20" />
 
@@ -74,17 +82,14 @@ const {
         </div>
       </div>
       <div className="container mx-auto my-5">
+        <div
+          className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <LeftOutlined className="" /> Back
+        </div>
 
-      <div className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer" onClick={() => router.back()}>
-        <LeftOutlined className="" /> Back
-      </div>
-
-
-        <iframe
-          src={`${article?.path}`}
-          width="100%"
-          height="800px"
-        />
+        <iframe src={`${article?.path}`} width="100%" height="800px" />
       </div>
     </>
   );

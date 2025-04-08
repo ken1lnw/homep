@@ -88,7 +88,7 @@ export default function CartFormComponent() {
           // If a match is found, get the quantity (qty) from cartItems.data
           const qty = matchedItem ? matchedItem[1] : 1; // matchedItem[1] will be the qty
 
-          return `Product ID: ${item.id} \n OEM No.: ${item.oem_no} \n TYC No.: ${item.tyc_no} \n Full Specifications.: ${item.full_specifications} \n Cart Quantity: ${qty}`;
+          return `Product ID: ${item.id} \n OEM No.: ${item.oem_no} \n TYC No.: ${item.tyc_no} \n Full Specifications.: ${item.full_specifications} \n Cart Quantity: ${qty}\n `;
         });
         // .join("\n"); // Join the details into a string
 

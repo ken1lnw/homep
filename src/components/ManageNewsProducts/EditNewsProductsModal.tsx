@@ -47,10 +47,12 @@ export function EditNewsProductModal({ news }: EditNewsModalProps) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (updateNews: any) => {
+      if(!date)
+        throw new Error('date req')
       let updatedData: any = {
         id: news.id,
         newp_title: newsProductTitle,
-        created_at: date,
+        created_at: format(date, 'y-LL-dd'),
       };
       
 
@@ -117,16 +119,16 @@ export function EditNewsProductModal({ news }: EditNewsModalProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
-            Edit News
+            Edit New Product
           </DialogTitle>
           <DialogDescription>
-            Edit News to News Page here. Click Edit News when you're done.
+            Edit New Product to New Product Page here. Click Edit New Product when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="newstitle" className="text-right col-span-4">
-              News Product Title
+              New Product Title
             </Label>
             <Input
               id="newstitle"
@@ -221,7 +223,7 @@ export function EditNewsProductModal({ news }: EditNewsModalProps) {
             onClick={mutate}
             disabled={isPending}
           >
-            {isPending ? "Editing News..." : "Edit News"}
+            {isPending ? "Editing News..." : "Edit New Product"}
           </Button>
         </DialogFooter>
       </DialogContent>

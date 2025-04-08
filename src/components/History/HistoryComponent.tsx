@@ -6,39 +6,36 @@ import { FaDotCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function HistoryComponent() {
+  const [timelineMode, setTimelineMode] = useState<
+    "left" | "alternate" | "right"
+  >("left");
 
-  const [timelineMode, setTimelineMode] = useState<'left' | 'alternate' | 'right'>('left');
+  // // Function to check screen size and set the appropriate mode
+  // const handleResize = () => {
+  //   if (window.innerWidth >= 1024) { // 1024px is the 'lg' breakpoint in Tailwind
+  //     setTimelineMode('alternate');
+  //   } else {
+  //     setTimelineMode('left');
+  //   }
+  // };
 
-  // Function to check screen size and set the appropriate mode
-  const handleResize = () => {
-    if (window.innerWidth >= 1024) { // 1024px is the 'lg' breakpoint in Tailwind
-      setTimelineMode('alternate');
-    } else {
-      setTimelineMode('left');
-    }
-  };
+  // // Set initial mode and add resize listener
+  // useEffect(() => {
+  //   handleResize(); // Set initial mode based on screen size
+  //   window.addEventListener('resize', handleResize);
 
-  // Set initial mode and add resize listener
-  useEffect(() => {
-    handleResize(); // Set initial mode based on screen size
-    window.addEventListener('resize', handleResize);
-    
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  //   // Clean up event listener on component unmount
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
 
-  
   const raw = [
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1986</h1>
@@ -52,24 +49,21 @@ export default function HistoryComponent() {
             Happiness, Convenience, Hope & Encouragement to others.
           </p>
 
-          <div className="flex md:justify-end"> 
+          <div className="flex md:justify-end">
             <img
               src="https://www.tyc.com.tw/assets/uploads/about/history/year1434523994.png"
               alt=""
             />
           </div>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1991</h1>
@@ -79,18 +73,15 @@ export default function HistoryComponent() {
             CORPORATION (formerly TYC Industrial Co., USA) located in
             California.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1995</h1>
@@ -104,35 +95,29 @@ export default function HistoryComponent() {
             Established GENERA CORPORATION’s second U.S. Sales & Distribution
             Center (formerly Land Force Corp.) in New Jersey.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1997</h1>
 
           <p>Initial Public Offering listed in Taiwan Securities Exchange.</p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1998</h1>
@@ -140,29 +125,25 @@ export default function HistoryComponent() {
             In 1998 the new sun rays design shows a clear and neat conveying
             TYC‘s goal of Lighting up the world!
           </p>
-          <div className="flex md:justify-end"> 
-
-          <img
-            src="https://www.tyc.com.tw/assets/uploads/about/history/year1432807349.png"
-            alt=""
-          />
-</div>
+          <div className="flex md:justify-end">
+            <img
+              src="https://www.tyc.com.tw/assets/uploads/about/history/year1432807349.png"
+              alt=""
+            />
+          </div>
           <p>
             Established third U.S. Sales & Distribution Center of GENERA
             CORPORATION in Texas.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1999</h1>
@@ -175,18 +156,15 @@ export default function HistoryComponent() {
             Established fourth U.S. Sales& Distribution Center of GENERA
             CORPORATION in Illinois.{" "}
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2001</h1>
@@ -199,18 +177,15 @@ export default function HistoryComponent() {
             Established fifth U.S. Sales & Distribution Center of GENERA
             CORPORATION in Georgia.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2002</h1>
@@ -223,18 +198,15 @@ export default function HistoryComponent() {
             Established CHANGZHOU TAMOU PRECISION INDUSTRIAL CO. LTD., for
             plastic tooling design, development and manufacturing in China.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2003</h1>
@@ -247,18 +219,15 @@ export default function HistoryComponent() {
             Established Europe Central Sales & Distribution Warehouse called TYC
             EUROPE B.V. in Almere, the Netherlands.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2004</h1>
@@ -266,18 +235,15 @@ export default function HistoryComponent() {
             Entered into a JV cooperation with China FIRST AUTO WORKS and formed
             CHANGCHUN E-CHI SHI HUAN.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2005</h1>
@@ -285,18 +251,15 @@ export default function HistoryComponent() {
             Visteon Corporation USA purchased shares in CHANGZHOU TAMAU AUTO
             LAMPS which is then renamed VISTEON TYC AUTO LAMPS CO., LTD.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2009</h1>
@@ -304,18 +267,15 @@ export default function HistoryComponent() {
             Increased share holding of CHANG CHUN E CHI SHI HUAN to 100% and
             renamed it CHANG CHUN SPARX AUTO LAMPS CO., LTD.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5 "
         >
           <h1 className="text-3xl font-bold text-blue-500">2010</h1>
@@ -323,18 +283,15 @@ export default function HistoryComponent() {
             Established KUN SHAN TYC HIGH PERFORMANCE LIGHTING TECH CO., LTD in
             China.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5 mb-20"
         >
           <h1 className="text-3xl font-bold text-blue-500">2011</h1>
@@ -349,34 +306,28 @@ export default function HistoryComponent() {
             // className="float-right ml-5 w-1/3 " // This will align the image to the right
             className="ml-5 w-1/3"
           />
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2012</h1>
           <p>Started Phase 2 Tainan Tech Park Warehouse operation. </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2013</h1>
@@ -384,18 +335,15 @@ export default function HistoryComponent() {
             Changed the name of VISTEON TYC AUTO LAMPS CO. to VARROC TYC AUTO
             LAMPS CO. after Varroc Group India purchased Visteon’s shareholding.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2014</h1>
@@ -403,39 +351,33 @@ export default function HistoryComponent() {
             Opening of second manufacturing plant of VARROC TYC AUTO LAMPS CO.
             in Chonqing, China.
           </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: -200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2015</h1>
           <p>Started Phase 3 Tainan Tech Park Assembly Plant Operation. </p>
-        </motion.div>
+        </div>
       ),
     },
 
     {
       dot: <FaDotCircle className="text-pink-500" />,
       children: (
-        <motion.div
-          initial={{ opacity: 0, x: 200 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-          viewport={{ once: true }}
+        <div
+         
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2020</h1>
           <p>Established TYC VIETNAM INDUSTRIAL CO.,LTD. in Vietnam.</p>
-        </motion.div>
+        </div>
       ),
     },
   ];
@@ -453,19 +395,32 @@ export default function HistoryComponent() {
           </h1>
         </div>
 
-        <div className="p-2">
-        <Timeline
-          mode={timelineMode}
-          items={raw.reverse().map((xx, index) => {
-            return {
-              children: xx.children,
-              dot: xx.dot,
-              position: index % 2 == 0 ? "right" : "left",
-            };
-          })}
-        />
+        <div className="p-2 hidden lg:flex">
+          <Timeline
+            mode={'alternate'}
+            items={raw.reverse().map((xx, index) => {
+              return {
+                children: xx.children,
+                dot: xx.dot,
+                position: index % 2 == 0 ? "right" : "left",
+              };
+            })}
+          />
+        </div>
 
-</div>
+        <div className="p-2 lg:hidden">
+          <Timeline
+            mode={'left'}
+            items={raw.reverse().map((xx, index) => {
+              return {
+                children: xx.children,
+                dot: xx.dot,
+                position: index % 2 == 0 ? "right" : "left",
+              };
+            })}
+          />
+        </div>
+
       </div>
     </>
   );

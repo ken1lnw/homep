@@ -12,7 +12,6 @@ import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
 import { ProductionType } from "./Production/ProductionType";
 import {
   Drawer,
@@ -26,12 +25,7 @@ import {
 } from "@/components/ui/drawer";
 import { GlobalOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Button } from "./ui/button";
-import {
-  Geist,
-  Geist_Mono,
-  Merriweather_Sans,
-  Slabo_13px,
-} from "next/font/google";
+import debounce from "lodash.debounce";
 import { motion } from "framer-motion";
 import { fetchNavbarData } from "@/app/(Home)/navsearch";
 import { useBucket } from "@/store/bucket";
@@ -94,8 +88,8 @@ export default function NavbarDynamic() {
       label: t("News"),
       key: "News",
       children: [
-        { label: "Article", key: "/" },
-        { label: "New Prdocut", key: "NewProduct" },
+        { label: t("Article"), key: "/" },
+        { label: t("New Product"), key: "NewProduct" },
       ],
     },
     { label: t("About Us"), key: "AboutUs" },
@@ -118,6 +112,12 @@ export default function NavbarDynamic() {
 
   const fontFamily =
     currentLang === "th" ? "IBM Plex Sans Thai " : "Montserrat";
+
+
+    const handleSearch = debounce((value) => {
+      setSearchQuery(value);
+
+    }, 500); 
 
   return (
     <>
@@ -227,7 +227,8 @@ export default function NavbarDynamic() {
                       allowClear
                       showSearch
                       placeholder="Search..."
-                      onSearch={(value) => setSearchQuery(value)}
+                      // onSearch={(value) => setSearchQuery(value)}
+                      onSearch={handleSearch} 
                       onChange={(value) => {
                         // Find the selected item based on the selected value (oem_no)
                         const selectedItem = data?.find(
@@ -328,15 +329,14 @@ export default function NavbarDynamic() {
                         </DrawerHeader>
                         <div>
                           {[
-                            { label: "Home", href: "/" },
-                            { label: "Products", href: "/Products" },
+                            { label:  t("Home"), href: "/" },
+                            { label:  t("Products"), href: "/Products" },
                             // { label: "News", href: "/News" },
-                            { label: "Article", href: "/News" },
-                            { label: "New Product", href: "/NewProduct" },
+                            { label: t("News"), href: "/News" },
+                            { label: t("New Product"), href: "/News/NewProduct" },
 
-
-                            { label: "About Us", href: "/AboutUs" },
-                            { label: "Contact Us", href: "/ContactUs" },
+                            { label: t("About Us"), href: "/AboutUs" },
+                            { label: t("Contact Us"), href: "/ContactUs" },
                           ].map((item) => (
                             <DrawerClose asChild key={item.href}>
                               <Button
@@ -360,15 +360,17 @@ export default function NavbarDynamic() {
                                   : "bg-transparent text-black hover:bg-blue-500 hover:text-white"
                               }`}
                             >
-                              Cart ( {Object.keys(cartBucket.data).length} Items)
+                              {t("Cart")} ( {Object.keys(cartBucket.data).length}
+                              {t("Items")})
                             </Button>
                           </DrawerClose>
                         </div>
                       </div>
-                      <DrawerFooter>
-                        <DrawerClose asChild>
+                      <DrawerFooter className="hover:bg-blue-500">
+                        <DrawerClose asChild className="hover:text-white">
                           <Button className="w-full h-10 text-xl rounded-none shadow-none hover:bg-transparent bg-transparent text-black">
-                            Close
+                            {/* Close */}
+                             {t("close")}
                           </Button>
                         </DrawerClose>
                       </DrawerFooter>

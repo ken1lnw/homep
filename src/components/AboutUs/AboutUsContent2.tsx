@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 export default function AboutUsContent2() {
-  const t = useTranslations("Content1");
+  const t = useTranslations("AboutUs");
   return (
     <>
       {/* <div className="hidden w-full  lg:grid lg:grid-cols-2 xl:p-5 bg-gray-100">
@@ -102,21 +102,22 @@ export default function AboutUsContent2() {
               <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold text-pink-500 ">
                 {/* OEM */}
 
-                PREMIUM AUTOMOTIVE LIGHTING PRODUCTS
-
-
+                {/* PREMIUM AUTOMOTIVE LIGHTING PRODUCTS */}
+                {t("pre")}
               </h1>
             </motion.div>
             <motion.p
               initial={{ opacity: 0, x: 200 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-              className="text-sm md:text-md my-2 "
+              className="text-sm md:text-base my-2 whitespace-pre-line"
             >
-              TYC started its OEM business in 1992 with Ford of South Africa,
+              {/* TYC started its OEM business in 1992 with Ford of South Africa,
               formerly known as SAMCOR. With more than two decades of working
               closely with global OE Manufacturers, from design to manufacturing
-              and supply, TYC has rapidly expanded it's OEM customer list.
+              and supply, TYC has rapidly expanded it's OEM customer list. */}
+
+              {t("despre")}
             </motion.p>
           </div>
         </div>

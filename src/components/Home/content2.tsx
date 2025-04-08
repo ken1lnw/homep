@@ -60,20 +60,20 @@ const Content2page1 = () => {
       src: "https://www.genera.com/_images/Headlight.png",
       name: "AUTOMOTIVE LAMP",
     },
-    { src: "slide1/Alternator.png", name: "HAVC" },
+    { src: "slide1/Alternator.png", name: "STARTING & CHARGING" },
     {
       src: "slide1/Mirror.png",
-      name: "STARTING & CHARGING",
+      name: "MIRRORS",
     },
-    { src: "slide1/Window_Regulator.png", name: "MIRRORS" },
+    { src: "slide1/Window_Regulator.png", name: "WINDOW REGULATORS" },
     {
       src: "slide1/Fuel_Pump.png",
-      name: "WINDOW REGULATORS",
+      name: "FUEL PUMPS",
     },
-    { src: "slide1/TOC.png", name: "FUEL PUMPS" },
+    { src: "slide1/TOC.png", name: "TRANSMISSION OIL COOLERS" },
     {
       src: "slide1/CAC.png",
-      name: "TRANSMISSION OIL COOLERS",
+      name: "CAC",
     },
   ];
 

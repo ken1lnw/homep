@@ -451,6 +451,7 @@ export default function CartComponent() {
                   </Button>
                 </div>
               </div>
+              
             ))}
         </div>
       </div>

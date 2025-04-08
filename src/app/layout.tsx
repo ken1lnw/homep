@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Merriweather_Sans , Slabo_13px ,
-  Pridi , Prompt , Mitr , 
+import {
+  Geist,
+  Geist_Mono,
+  Merriweather_Sans,
+  Slabo_13px,
+  Pridi,
+  Prompt,
+  Mitr,
   IBM_Plex_Sans_Thai,
   Noto_Sans_Thai_Looped,
-  Montserrat
+  Montserrat,
 } from "next/font/google";
 import "./globals.css";
 
@@ -15,8 +21,9 @@ import { getLocale, getMessages } from "next-intl/server";
 import { CustomQueryClientProvider } from "@/hook/QueryClientProvider";
 import { App } from "antd";
 // import "@/style/swiper-button-home1.css"
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 import ReooilProvider from "@/hook/RecoilRoot";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -40,38 +47,37 @@ import ReooilProvider from "@/hook/RecoilRoot";
 //   weight: "400",
 // });
 
-const PridiFont = Pridi ({
+const PridiFont = Pridi({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
   weight: "400",
 });
 
-const PromptFont = Prompt ({
+const PromptFont = Prompt({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
   weight: "400",
 });
 
-const MitrFont = Mitr ({
+const MitrFont = Mitr({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
   weight: "400",
 });
 
-const IBMFont = IBM_Plex_Sans_Thai ({
+const IBMFont = IBM_Plex_Sans_Thai({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
   weight: "400",
 });
 
-const NotoFont = Noto_Sans_Thai_Looped ({
+const NotoFont = Noto_Sans_Thai_Looped({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
   weight: "400",
 });
 
-
-const TYCFont = Montserrat ({
+const TYCFont = Montserrat({
   // variable: "--font-slabo-13px",
   subsets: ["latin"],
   weight: "500",
@@ -96,20 +102,21 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        // className={`${TYCFont.className}`}
-        // className={MitrFont.className}
-        // className={IBMFont.className}
-        // className={NotoFont.className}
-        // className={currentClassName} 
-
+      // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      // className={`${TYCFont.className}`}
+      // className={MitrFont.className}
+      // className={IBMFont.className}
+      // className={NotoFont.className}
+      // className={currentClassName}
       >
         <CustomQueryClientProvider>
           <ReooilProvider>
-          <NextIntlClientProvider messages={messages}>
-              {children}
-              <Toaster richColors position="top-center" />
-          </NextIntlClientProvider>
+            <NextIntlClientProvider messages={messages}>
+              <TooltipProvider>
+                {children}
+                <Toaster richColors position="top-center" />
+              </TooltipProvider>
+            </NextIntlClientProvider>
           </ReooilProvider>
         </CustomQueryClientProvider>
       </body>

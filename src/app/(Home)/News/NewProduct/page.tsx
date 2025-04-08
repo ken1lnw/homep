@@ -1,6 +1,9 @@
 import NewItems from "@/components/News/NewItem";
+import { useTranslations } from "next-intl";
 
 export default function LastProduct() {
+  const t = useTranslations("Article");
+
   return (
     <div>
       <div className="relative">
@@ -13,9 +16,14 @@ export default function LastProduct() {
         />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 text-center text-white z-10">
-          <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">New Product</h1>
+          <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">
+            {/* New Product */}
+            {t("title")}
+            </h1>
           <p className="text-sm md:text-md lg:text-xl font-bold">
-          Quality Automotive Parts With Road Safety Assurance
+
+          {/* Quality Automotive Parts With Road Safety Assurance */}
+          {t("des")}
 
 
           </p>

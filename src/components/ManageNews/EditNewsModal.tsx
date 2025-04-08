@@ -222,20 +222,20 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-blue-500 font-bold">
-            Edit News
+            Edit Article
           </DialogTitle>
           <DialogDescription>
-            Edit News to News Page here. Click Edit News when you're done.
+            Edit Article to Article Page here. Click Edit Article when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="newstitle" className="text-right col-span-4">
-              News Title
+            Article Title
             </Label>
             <Input
               id="newstitle"
-              placeholder="News Title"
+              placeholder="Article Title"
               value={newsTilte}
               onChange={(e) => setNewsTitle(e.target.value)}
               className="col-span-4"
@@ -248,11 +248,13 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
             </Label>
             <Textarea
               id="newsdes"
-              placeholder="Type your news description here."
+              placeholder="Type your Article description here."
               value={newsDescription}
               onChange={(e) => setNewsDescription(e.target.value)}
-              rows={2}
-              className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
+              // rows={2}
+              // className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
+              className="col-span-4 "
+
             />
           </div>
 
@@ -283,7 +285,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
           {/* Display Item Images */}
           {/* {product.item_image && product.item_image.length > 0 && ( */}
           <div className="py-4">
-            <h3 className="font-bold text-lg mb-5">News Images</h3>
+            <h3 className="font-bold text-lg mb-5">Article Images</h3>
             <div className="grid grid-cols-3 gap-4">
               {news.news_image.map((img, index) => (
                 <div
@@ -350,7 +352,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
             onClick={handleSubmit}
             disabled={isPending}
           >
-            {isPending ? "Editing News..." : "Edit News"}
+            {isPending ? "Editing Article..." : "Edit Article"}
           </Button>
         </DialogFooter>
       </DialogContent>

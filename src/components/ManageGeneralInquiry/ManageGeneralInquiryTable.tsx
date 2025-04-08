@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -29,8 +29,18 @@ import {
   deleteNews,
   fetchNews,
 } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
-import { deleteGI, fetchGi } from "@/app/(Admin)/Admin/dashboard/ManageGeneralInquiry/generalinquiryfetch";
+import {
+  deleteGI,
+  fetchGi,
+} from "@/app/(Admin)/Admin/dashboard/ManageGeneralInquiry/generalinquiryfetch";
 import { ViewGeneralInquiryModal } from "./ViewGeneralInquiryModal";
+import debounce from "lodash.debounce";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ManageGeneralInquiryTable() {
   const queryClient = useQueryClient();
@@ -38,9 +48,23 @@ export default function ManageGeneralInquiryTable() {
   const pageSize = 10;
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
+
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    handler();
+
+    return () => {
+      handler.cancel();
+    };
+  }, [searchQuery]);
+
   const { data, error, isLoading } = useQuery({
-    queryKey: ["inquiry_general", currentPage, searchQuery],
-    queryFn: () => fetchGi(currentPage, pageSize, searchQuery),
+    queryKey: ["inquiry_general", currentPage, debouncedSearchQuery],
+    queryFn: () => fetchGi(currentPage, pageSize, debouncedSearchQuery),
   });
 
   const deleteMutation = useMutation({
@@ -86,33 +110,69 @@ export default function ManageGeneralInquiryTable() {
         <TableCaption>Total Items : {data?.total}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-1">No.</TableHead>
-            <TableHead className="w-1">Date</TableHead>
+            <TableHead className="">No.</TableHead>
+            <TableHead className="">Date</TableHead>
 
-            <TableHead className="w-16">Name</TableHead>
-            <TableHead className="w-10">Email</TableHead>
-            <TableHead className="w-5">Phone</TableHead>
-            <TableHead className="w-10">Subject</TableHead>
-            <TableHead className="w-10">Message</TableHead>
+            <TableHead className="">Name</TableHead>
+            <TableHead className="">Email</TableHead>
+            <TableHead className="">Phone</TableHead>
+            <TableHead className="">Subject</TableHead>
+            <TableHead className="">Message</TableHead>
             <TableHead className="w-10 text-right">Manage</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data?.gi.map((xx) => (
             <TableRow key={xx.id}>
-              <TableCell className="w-1">{xx.id}</TableCell>
-              <TableCell className="w-1">
+              <TableCell className="max-w-[100px] truncate">{xx.id}</TableCell>
+              <TableCell className="max-w-[100px] truncate">
                 {new Date(xx.created_at).toLocaleDateString()}
               </TableCell>
-              <TableCell className="w-16">{xx.name}</TableCell>
-              <TableCell className="w-10">{xx.email}</TableCell>
-              <TableCell className="w-5">{xx.phone}</TableCell>
-              <TableCell className="max-w-20 truncate">{xx.subject}</TableCell>
-              <TableCell className="max-w-20 truncate">
-                {xx.message}
+              <TableCell className="max-w-[120px] truncate">
+                <Tooltip>
+                  <TooltipTrigger>{xx.name}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>{xx.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TableCell>
+              <TableCell className="max-w-[120px] truncate">
+                <Tooltip>
+                  <TooltipTrigger>{xx.email}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>{xx.email}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TableCell>
+              <TableCell className="max-w-[100px] truncate">
+                <Tooltip>
+                  <TooltipTrigger>{xx.phone}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>{xx.phone}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TableCell>
+              <TableCell className="max-w-[120px] truncate">
+                <Tooltip>
+                  <TooltipTrigger> {xx.subject}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>{xx.subject}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TableCell>
+
+              <TableCell className="max-w-[120px] truncate">
+              <Tooltip>
+                  <TooltipTrigger> {xx.message}</TooltipTrigger>
+                  <TooltipContent>
+                    <p> {xx.message}</p>
+                  </TooltipContent>
+                </Tooltip>
+                
+               
               </TableCell>
               <TableCell className="w-20 text-right space-x-1">
-                <ViewGeneralInquiryModal gi={xx}/>
+                <ViewGeneralInquiryModal gi={xx} />
                 {/* <EditNewsModal news={xx} /> */}
                 <DeleteModal
                   onDelete={() => deleteMutation.mutate(xx.id.toString())}

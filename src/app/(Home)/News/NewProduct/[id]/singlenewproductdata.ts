@@ -12,7 +12,7 @@ export async function fetchSingleNewProduct(id:number): Promise<NewsProductsType
                  .eq("id", id)
                  .single();
     if (error) {
-    //   console.error("Error fetching type :", error.message);
+      console.error(error);
       throw new Error(error.message);
     }
     // console.log(data);

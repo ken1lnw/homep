@@ -6,9 +6,12 @@ import {
   MailOutlined,
   YoutubeOutlined,
 } from "@ant-design/icons";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 const Footer = () => {
+    const t = useTranslations("footer");
+  
   return (
     <>
       <div className="w-full py-4 bg-[#22242D] px-8 grid md:grid-cols-2  space-y-10 md:space-y-0">
@@ -27,22 +30,32 @@ const Footer = () => {
 
 
         <div className="flex flex-col md:items-end space-y-4 lg:space-y-0  justify-center">
-          <div className="flex flex-col space-y-2 space-x-4 md:flex-row">
-            <a href="" className="text-xl text-white hover:text-blue-500">
-              Products
-            </a>
-            <a href="" className="text-xl text-white hover:text-blue-500">
-              News
-            </a>
-            <a href="" className="text-xl text-white hover:text-blue-500">
-              About Us
-            </a>
-            <a href="" className="text-xl text-white hover:text-blue-500">
-              Contact Us
-            </a>
+          <div className="flex flex-col space-y-2 space-x-4 xl:flex-row cursor-pointer">
+            <div className="text-xl text-white hover:text-blue-500">
+              {t("Products")}
+              {/* Products */}
+            </div>
+            <div className="text-xl text-white hover:text-blue-500">
+              {/* Article */}
+              {t("Article")}
+
+            </div>
+            <div className="text-xl text-white hover:text-blue-500">
+              {/* New Product */}
+              {t("New Product")}
+
+            </div>
+            <div  className="text-xl text-white hover:text-blue-500">
+              {/* About Us */}
+              {t("About Us")}
+            </div>
+            <div className="text-xl text-white hover:text-blue-500">
+              {/* Contact Us */}
+              {t("Contact Us")}
+            </div>
           </div>
 
-          <div className="text-3xl flex space-x-4 items-center mt-2 md:mt-0">
+          <div className="text-3xl flex space-x-4 items-center mt-2 lg:mt-0">
             <div className="hover:text-blue-500 text-white">
               <YoutubeOutlined className="text-4xl" />
             </div>

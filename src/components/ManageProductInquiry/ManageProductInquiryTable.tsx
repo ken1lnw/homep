@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -27,6 +27,8 @@ import { Input } from "../ui/input";
 
 import { deletePI, fetchPi } from "@/app/(Admin)/Admin/dashboard/ManageProductInquiry/productinquiryfetch";
 import { ViewProductInquiryModal } from "./ViewProductInquiryModal";
+import debounce from "lodash.debounce";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 // import { ViewGeneralInquiryModal } from "./ViewGeneralInquiryModal";
 
@@ -36,9 +38,25 @@ export default function ManageProductInquiryTable() {
   const pageSize = 10;
   const [searchQuery, setSearchQuery] = useState("");
 
+   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery); 
+  
+  
+   useEffect(() => {
+        const handler = debounce(() => {
+          setDebouncedSearchQuery(searchQuery); 
+        }, 500); 
+    
+        handler(); 
+    
+        return () => {
+          handler.cancel(); 
+        };
+      }, [searchQuery]);
+  
+
   const { data, error, isLoading } = useQuery({
-    queryKey: ["inquiry_product", currentPage, searchQuery],
-    queryFn: () => fetchPi(currentPage, pageSize, searchQuery),
+    queryKey: ["inquiry_product", currentPage, debouncedSearchQuery],
+    queryFn: () => fetchPi(currentPage, pageSize, debouncedSearchQuery),
   });
 
   const deleteMutation = useMutation({
@@ -84,17 +102,17 @@ export default function ManageProductInquiryTable() {
         <TableCaption>Total Items : {data?.total}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-1">ID</TableHead>
-            <TableHead className="w-1">Date</TableHead>
-            <TableHead className="w-16">Comapny</TableHead>
-            <TableHead className="w-16">Country</TableHead>
-            <TableHead className="w-16">Name</TableHead>
-            <TableHead className="w-10">Email</TableHead>
-            <TableHead className="w-5">Mobile</TableHead>
+            <TableHead className="">ID</TableHead>
+            <TableHead className="">Date</TableHead>
+            <TableHead className="">Comapny</TableHead>
+            <TableHead className="">Country</TableHead>
+            <TableHead className="">Name</TableHead>
+            <TableHead className="">Email</TableHead>
+            <TableHead className="">Mobile</TableHead>
             {/* <TableHead className="w-5">Phone</TableHead> */}
             {/* <TableHead className="w-5">Fax</TableHead> */}
             {/* <TableHead className="w-16">Address</TableHead> */}
-            <TableHead className="w-16">Inquiry</TableHead>
+            <TableHead className="">Inquiry</TableHead>
             {/* <TableHead className="w-16">Product Detail</TableHead> */}
             <TableHead className="w-10 text-right">Manage</TableHead>
           </TableRow>
@@ -102,21 +120,62 @@ export default function ManageProductInquiryTable() {
         <TableBody>
           {data?.pi.map((xx) => (
             <TableRow key={xx.id}>
-              <TableCell className="w-1">{xx.id}</TableCell>
+              <TableCell className="max-w-[100px] truncate">{xx.id}</TableCell>
 
-              <TableCell className="w-1">
+              <TableCell className="max-w-[100px] truncate">
                 {new Date(xx.created_at).toLocaleDateString()}
               </TableCell>
 
-              <TableCell className="w-16">{xx.company}</TableCell>
+              <TableCell className="max-w-[150px] truncate">
 
-              <TableCell className="w-10">{xx.country}</TableCell>
+              <Tooltip>
+                  <TooltipTrigger> {xx.company}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>   {xx.company}</p>
+                  </TooltipContent>
+                </Tooltip>
+             
+                
+                
+                </TableCell>
 
-              <TableCell className="w-16">{xx.name}</TableCell>
+              <TableCell className="max-w-[100px] truncate">{xx.country}</TableCell>
 
-              <TableCell className="w-10">{xx.email}</TableCell>
+              <TableCell className="max-w-[150px] truncate">
 
-              <TableCell className="w-5">{xx.mobile}</TableCell>
+
+              <Tooltip>
+                  <TooltipTrigger> {xx.name}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>   {xx.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+             
+                
+              </TableCell>
+
+              <TableCell className="max-w-[150px] truncate">
+              <Tooltip>
+                  <TooltipTrigger> {xx.email}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>   {xx.email}</p>
+                  </TooltipContent>
+                </Tooltip>
+             
+
+
+              </TableCell>
+
+              <TableCell className="max-w-[100px] truncate">
+                
+              <Tooltip>
+                  <TooltipTrigger> {xx.mobile}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>   {xx.mobile}</p>
+                  </TooltipContent>
+                </Tooltip>
+                
+              </TableCell>
 
               {/* <TableCell className="w-5">{xx.phone}</TableCell> */}
 
@@ -126,8 +185,17 @@ export default function ManageProductInquiryTable() {
                 {xx.address}
               </TableCell> */}
 
-              <TableCell className="w-16 max-w-[200px] truncate">
-                {xx.inquiry}
+              <TableCell className="max-w-[200px] truncate">
+
+
+                <Tooltip>
+                  <TooltipTrigger> {xx.inquiry}</TooltipTrigger>
+                  <TooltipContent>
+                    <p>   {xx.inquiry}</p>
+                  </TooltipContent>
+                </Tooltip>
+
+
               </TableCell>
 
               {/* <TableCell className="w-16 max-w-[200px] truncate">

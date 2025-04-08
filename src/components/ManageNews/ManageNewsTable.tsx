@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -28,7 +28,12 @@ import Image from "next/image";
 import { AddNewsModal } from "./AddNewsModal";
 import { Input } from "../ui/input";
 import { EditNewsModal } from "./EditNewsModal";
-import { deleteNews, fetchNews } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
+import {
+  deleteNews,
+  fetchNews,
+} from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
+import debounce from "lodash.debounce";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export default function ManageNewsTable() {
   const queryClient = useQueryClient();
@@ -36,10 +41,24 @@ export default function ManageNewsTable() {
   const pageSize = 10;
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
+
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    handler();
+
+    return () => {
+      handler.cancel();
+    };
+  }, [searchQuery]);
+
   // Fetch news articles
   const { data, error, isLoading } = useQuery({
-    queryKey: ["news_article", currentPage, searchQuery],
-    queryFn: () => fetchNews(currentPage, pageSize, searchQuery),
+    queryKey: ["news_article", currentPage, debouncedSearchQuery],
+    queryFn: () => fetchNews(currentPage, pageSize, debouncedSearchQuery),
   });
 
   // Delete news article
@@ -86,10 +105,10 @@ export default function ManageNewsTable() {
         <TableCaption>Total Items : {data?.total}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">News No.</TableHead>
-            <TableHead>News Title</TableHead>
-            <TableHead>News Description</TableHead>
-            <TableHead>News Date</TableHead>
+            <TableHead className="">Article No.</TableHead>
+            <TableHead>Article Title</TableHead>
+            <TableHead>Article Description</TableHead>
+            <TableHead>Article Date</TableHead>
             <TableHead>Image</TableHead>
             <TableHead className="text-right">Manage</TableHead>
           </TableRow>
@@ -97,18 +116,29 @@ export default function ManageNewsTable() {
         <TableBody>
           {data?.news.map((xx) => (
             <TableRow key={xx.id}>
-              <TableCell>{xx.id}</TableCell>
-              <TableCell className="font-medium">{xx.news_title}</TableCell>
-              <TableCell
-                className="max-w-5 truncate"
-                title={xx.news_description}
-              >
-                {xx.news_description}
+              <TableCell className="max-w-[100px] truncate">{xx.id}</TableCell>
+              <TableCell className="max-w-[200px] truncate">
+                <Tooltip>
+                  <TooltipTrigger> {xx.news_title}</TooltipTrigger>
+                  <TooltipContent>
+                    <p> {xx.news_title}</p>
+                  </TooltipContent>
+                </Tooltip>
               </TableCell>
-              <TableCell>
+              <TableCell className="max-w-[200px] truncate">
+
+              <Tooltip>
+                  <TooltipTrigger> {xx.news_description}</TooltipTrigger>
+                  <TooltipContent>
+                    <p> {xx.news_description}</p>
+                  </TooltipContent>
+                </Tooltip>
+                
+              </TableCell>
+              <TableCell className="max-w-[100px] truncate">
                 {new Date(xx.created_at).toLocaleDateString()}
               </TableCell>
-              <TableCell>
+              <TableCell className="max-w-[100px] truncate">
                 {xx.news_image.length > 0 && xx.news_image[0].path && (
                   <Image
                     src={xx.news_image[0].path}

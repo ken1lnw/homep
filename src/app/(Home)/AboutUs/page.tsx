@@ -7,8 +7,10 @@ import AboutUsContent4 from "@/components/AboutUs/AboutUsContent4";
 import AboutUsContent5 from "@/components/AboutUs/AboutUsContent5";
 import AboutUsContent6 from "@/components/AboutUs/AboutUsContent6";
 import HistoryComponent from "@/components/History/HistoryComponent";
+import { useTranslations } from "next-intl";
 
 export default function AboutUs() {
+  const t = useTranslations("AboutUs");
   return (
     <div>
       <div className="relative">
@@ -22,10 +24,12 @@ export default function AboutUs() {
 
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-10">
           <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">
-            About Us
+          {t("title")}
+            {/* About Us */}
           </h1>
           <p className="text-md md:text-xl font-bold">
-            Expect more , Expect TYC.
+          {t("des")}
+            {/* Expect more , Expect TYC. */}
           </p>
         </div>
       </div>

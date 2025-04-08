@@ -20,7 +20,7 @@ const fadeUpVariant = {
 };
 
 export default function AboutUsContent4() {
-  const t = useTranslations("Content1");
+  const t = useTranslations("AboutUs");
 
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
@@ -97,11 +97,13 @@ export default function AboutUsContent4() {
         <div className="items-center flex xl:justify-end">
           <div className=" h-full my-5  flex flex-col p-4 gap-4 justify-center items-start px-5 xl:my-0 ">
             <h1 className="text-6xl font-semibold text-blue-500">
-              Certificate
+              {/* Certificate */}
+              {t("cer")}
             </h1>
             <p className="">
-              TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1
-              and AEO certified.
+              {/* TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1
+              and AEO certified. */}
+              {t("descer")}
             </p>
           </div>
         </div>

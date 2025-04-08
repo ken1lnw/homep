@@ -41,13 +41,13 @@ export function AddNewsProductModal() {
       await addNewsProduct(newNews);
     },
     onSuccess: async () => {
-      toast.success("News added successfully!");
+      toast.success("New Product added successfully!");
       await queryClient.invalidateQueries({ queryKey: ["news_product"] });
       setIsOpen(false);
       resetState();
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to add news product.");
+      toast.error(error.message || "Failed to add new product.");
     },
   });
 
@@ -69,7 +69,7 @@ export function AddNewsProductModal() {
     >
       <DialogTrigger asChild>
         <Button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-          <PlusSquareFilled /> Add News Product
+          <PlusSquareFilled /> Add New Product
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -78,7 +78,7 @@ export function AddNewsProductModal() {
             Add News Product
           </DialogTitle>
           <DialogDescription>
-            Add News Product to News Product Page here. Click Add News when
+            Add New Product to New Product Page here. Click Add New Product when
             you're done.
           </DialogDescription>
         </DialogHeader>
@@ -97,7 +97,7 @@ export function AddNewsProductModal() {
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="newstitle" className="">
-              News Product Title
+              New Product Title
             </Label>
             <Input
               id="newstitle"
@@ -164,7 +164,7 @@ export function AddNewsProductModal() {
               if (itemFile && itemFile.length > 0) {
                 mutate({
                   newp_title: newsProductTitle,
-                  created_at: date.toISOString(),
+                  created_at: format(date, 'y-LL-dd').toString(),
                   file: itemFile, // ส่งไฟล์ที่เลือก
                 });
               } else {
@@ -174,7 +174,7 @@ export function AddNewsProductModal() {
             }}
             disabled={isPending} // Disable button when mutation is in progress
           >
-            {isPending ? "Adding News Product..." : "Add News Product"} {/* Loading text */}
+            {isPending ? "Adding New Product..." : "Add New Product"} {/* Loading text */}
           </Button>
         </DialogFooter>
       </DialogContent>

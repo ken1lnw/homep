@@ -8,7 +8,22 @@
     "News": "News",
     "About Us": "About Us",
     "Join Us": "Join Us",
-    "Contact Us": "Contact Us"
+    "Contact Us": "Contact Us",
+    "Article": "Articles",
+    "New Product": "New Product",
+    "Cart": "Cart",
+    "Items": "Items",
+    "close": "Close"
+  },
+  "footer": {
+    "Home": "Home",
+    "Products": "Products",
+    "News": "News",
+    "About Us": "About Us",
+    "Join Us": "Join Us",
+    "Contact Us": "Contact Us",
+    "Article": "Articles",
+    "New Product": "New Product"
   },
   "Content1": {
     "Products": "Products"
@@ -38,13 +53,58 @@
     "sust": "Sustainability",
     "sust2": "Meeting current and future demands of global customer without environmental compromise."
   },
-  "QualityA":{
+  "QualityA": {
     "qua": "QUALITY AUTOMOTIVE PARTS WITH",
     "qua2": "ROAD SAFETY ASSURANCE",
-    "qua3":"For Replacement Aftermarket Automotive Spare Parts , With our comprehensive selection of aftermarket spare parts,",
-    "qua4":"we provide a one-stop-shop premium service to our customers."
+    "qua3": "For Replacement Aftermarket Automotive Spare Parts , With our comprehensive selection of aftermarket spare parts,",
+    "qua4": "we provide a one-stop-shop premium service to our customers."
   },
-  "OurC":{
-    "our":"Our Customers"
+  "OurC": {
+    "our": "Our Customers"
+  },
+  "Product": {
+    "title": "Products",
+    "des": "Our Innovations , Our Products",
+    "search": "Search Product",
+    "total": "Total Items : "
+  },
+  "Article": {
+    "title": "News",
+    "des": "Discover how the TYC Smart Manufacturing Platform empowers your production process to achieve excellence, regardless of what you're creating",
+    "subtitle": "Latest Articles",
+    "read": "Read More"
+  },
+  "NewProduct": {
+    "title": "New Product",
+    "des": "Quality Automotive Parts With Road Safety Assurance"
+  },
+  "ContactUs": {
+    "title": "Contact Us",
+    "des": "We'd like to hear from you",
+    "general": "General Inquiry",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "subject": "Subject",
+    "message": "Message",
+    "submit": "Submit",
+    "cname": "T.I.T. INTERNATIONAL CO., LTD.",
+    "caddress": "119 Moo 3, Bankhai-Nonglalok Rd. Nong Lalok, \nBan Khai District, Rayong 21120, Thailand",
+    "cphone": "Phone : (+66) 38-892-298",
+    "cfax": "Fax : (+66) 38-892-419"
+  },
+  "AboutUs": {
+    "title": "About Us",
+    "des": "Expect more , Expect TYC.",
+    "weare": "We are the light experts",
+    "desweare": "Built on decades of experience and technological advancements, we have become a beacon of light in the night. Bringing safety and a smile to people is what has driven us all these years, and is what continues to motivate us daily. Hence, at TYC, we put a lot of focus and devotion on each one of our products in the dream that TYC will shine on every corner of the world.\nBy exceeding all expectations, we are blazing forward as the company that knows, understands and delivers light.",
+    "pre": "PREMIUM AUTOMOTIVE LIGHTING PRODUCTS",
+    "despre": "TYC started its OEM business in 1992 with Ford of South Africa, formerly known as SAMCOR. With more than two decades of working closely with global OE Manufacturers, from design to manufacturing and supply, TYC has rapidly expanded it's OEM customer list.",
+    "qa": "QUALITY ASSURANCE",
+    "qades": "Our top priorities are quality automotive products, exceptional customer service, and on-time delivery. These priorities make quality assurance one of the most important aspects of our operations. The automotive products we sell must meet or exceed our customers' expectations, from purchasing quality raw materials through design and engineering, to production and delivery through (most importantly) customer-oriented after-sales service.",
+    "award": "Awards",
+    "desaward": "Our passion for, and devotion to, the innovative design of lighting products has gained recognition and merits among our peers.",
+    "cer": "Certificate",
+    "descer": "TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1 and AEO certified."
   }
 }

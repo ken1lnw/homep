@@ -13,7 +13,7 @@ import { addGeneralInquiry } from "@/app/(Home)/ContactUs/contactdata";
 
 
 export default function ContactUsContent1() {
-  const t = useTranslations("Content1");
+  const t = useTranslations("ContactUs");
   const [form] = Form.useForm();
 
    const [loading, setLoading] = useState(false); // Loading state
@@ -105,17 +105,27 @@ export default function ContactUsContent1() {
         {/* Information Section */}
         <div className="col-span-1">
           <div>
-            <h1 className="font-bold text-2xl">T.I.T. INTERNATIONAL CO., LTD.</h1>
+            <h1 className="font-bold text-2xl">
+              {/* T.I.T. INTERNATIONAL CO., LTD. */}
+              {t("cname")}
+
+
+            </h1>
             <div className="text-xl">
-              <p>
-                119 Moo 3, Bankhai-Nonglalok Rd. Nong Lalok, <br />
-                Ban Khai District, Rayong 21120, Thailand
+              <p className="whitespace-pre">
+                {/* 119 Moo 3, Bankhai-Nonglalok Rd. Nong Lalok, <br /> */}
+                {/* Ban Khai District, Rayong 21120, Thailand */}
+                {t("caddress")}
               </p>
               <span>
-                Phone : (+66) 38-892-298
+                {/* Phone : (+66) 38-892-298 */}
+                {t("cphone")}
                 <br />
               </span>
-              <span>Fax : (+66) 38-892-419</span>
+              <span>
+                {/* Fax : (+66) 38-892-419 */}
+                {t("cfax")}
+                </span>
             </div>
           </div>
 
@@ -131,7 +141,11 @@ export default function ContactUsContent1() {
 
         {/* Contact Form Section */}
         <div className="col-span-1">
-          <h1 className="text-xl font-bold mb-5">GENERAL INQUIRIES</h1>
+          <h1 className="text-xl font-bold mb-5">
+            
+            {/* GENERAL INQUIRIES */}
+            {t("general")}
+            </h1>
 
           <Form
             layout="vertical"
@@ -142,7 +156,9 @@ export default function ContactUsContent1() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 xl:max-w-2/3 text-xl">
               <div>
                 <label htmlFor="name">
-                  Name <span className="text-pink-500">*</span>
+                  {/* Name  */}
+                  {t("name")}
+                  <span className="text-pink-500">*</span>
                 </label>
                 <Form.Item
                   name="name"
@@ -163,7 +179,9 @@ export default function ContactUsContent1() {
 
               <div>
                 <label htmlFor="email">
-                  Email Address <span className="text-pink-500">*</span>
+                  {/* Email Address */}
+                  {t("email")}
+                   <span className="text-pink-500">*</span>
                 </label>
                 <Form.Item
                   name="email"
@@ -185,7 +203,9 @@ export default function ContactUsContent1() {
 
               <div>
                 <label htmlFor="phone">
-                  Phone Number <span className="text-pink-500">*</span>
+                  {/* Phone Number  */}
+                  {t("phone")}
+                  <span className="text-pink-500">*</span>
                 </label>
                 <Form.Item
                   name="phone"
@@ -206,7 +226,9 @@ export default function ContactUsContent1() {
 
               <div>
                 <label htmlFor="subject">
-                  Subject <span className="text-pink-500">*</span>
+                  {/* Subject  */}
+                  {t("subject")}
+                  <span className="text-pink-500">*</span>
                 </label>
                 <Form.Item
                   name="subject"
@@ -227,7 +249,9 @@ export default function ContactUsContent1() {
 
               <div className="lg:col-span-2">
                 <label htmlFor="message">
-                  Message <span className="text-pink-500">*</span>
+                  {/* Message  */}
+                  {t("message")}
+                  <span className="text-pink-500">*</span>
                 </label>
                 <Form.Item
                   name="message"
@@ -248,10 +272,12 @@ export default function ContactUsContent1() {
 
               <div className="lg:col-span-2">
                 <Button
-                  className="bg-blue-500 hover:bg-pink-500 text-xl h-10"
+                  className="bg-blue-500 hover:bg-pink-500 text-xl h-10 w-36"
                   onClick={handleButtonClick}
                 >
-                  Submit
+                  {/* Submit */}
+                  {t("submit")}
+
                 </Button>
               </div>
             </div>

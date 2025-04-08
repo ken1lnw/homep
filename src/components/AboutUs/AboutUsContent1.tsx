@@ -15,7 +15,7 @@ const fadeUpVariant = {
 };
 
 export default function AboutUsContent1() {
-  const t = useTranslations("Content1");
+  const t = useTranslations("AboutUs");
   return (
     <>
       {/* <div className="w-full  grid lg:grid-cols-2 px-5"> */}
@@ -76,20 +76,22 @@ export default function AboutUsContent1() {
               transition={{ duration: 1, delay: 0, ease: "easeOut" }}
             >
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-blue-500">
-                We are the light experts
+                {/* We are the light experts */}
+                {t("weare")}
               </h1>
             </motion.div>
             <motion.p
               initial={{ opacity: 0, x: -200 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-              className="text-sm md:text-md md:w-1/2 my-2"
+              className="text-sm md:text-base md:w-1/2 my-2 whitespace-pre-line"
             >
               {/* TYC, built on decades of experience and technological
               advancements, strives to bring safety and happiness to people
               worldwide. With a strong focus and dedication to each product, we
               hope to become a beacon of light in every corner of the world. */}
-              Built on decades of experience and technological advancements, we
+
+              {/* Built on decades of experience and technological advancements, we
               have become a beacon of light in the night. Bringing safety and a
               smile to people is what has driven us all these years, and is what
               continues to motivate us daily. Hence, at TYC, we put a lot of
@@ -98,7 +100,9 @@ export default function AboutUsContent1() {
               <br/><br/>
               By exceeding all
               expectations, we are blazing forward as the company that knows,
-              understands and delivers light.
+              understands and delivers light. */}
+
+              {t("desweare")}
             </motion.p>
           </div>
         </div>
