@@ -130,7 +130,6 @@ let query
 
   const { data, error, count } = await query;
 
-  console.log({start,end});
   
 
 
@@ -138,6 +137,7 @@ let query
   // console.log(data);
   if (error) {
     // console.error("Error fetching all news products:", error.message);
+    console.log(error);
     throw new Error(error.message);
   }
 

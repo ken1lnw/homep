@@ -57,7 +57,8 @@ const Content2page1 = () => {
   // สร้าง Array สำหรับข้อมูลสินค้า
   const products = [
     {
-      src: "https://www.genera.com/_images/Headlight.png",
+      // src: "https://www.genera.com/_images/Headlight.png",
+      src: "slide1/head light.png",
       name: "AUTOMOTIVE LAMP",
     },
     { src: "slide1/Alternator.png", name: "STARTING & CHARGING" },

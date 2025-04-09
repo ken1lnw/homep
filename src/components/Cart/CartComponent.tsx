@@ -22,8 +22,11 @@ import { fetchCartItems } from "@/app/(Home)/Cart/cartdata";
 
 import { InputNumber } from "antd";
 import { useBucket } from "@/store/bucket";
+import { useTranslations } from "next-intl";
 
 export default function CartComponent() {
+    const t = useTranslations("Cart");
+  
   const router = useRouter();
   const store = useBucket();
   const items = Object.keys(store.data).map(Number);
@@ -164,9 +167,13 @@ export default function CartComponent() {
 
           <div className="absolute inset-0 flex flex-col items-center justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 text-center text-white z-10">
             <h1 className=" text-4xl lg:text-5xl xl:text-7xl font-bold">
-              Shopping Cart
+              {/* Shopping Cart */}
+              {t("title")}
             </h1>
-            <p className="text-xl font-bold mt-2">Pick your choice</p>
+            <p className="text-xl font-bold mt-2">
+              {/* Pick your choice */}
+              {t("des")}
+              </p>
           </div>
         </div>
       </div>
@@ -174,9 +181,16 @@ export default function CartComponent() {
       <div className="container mx-auto mb-5 px-2 lg:px-0">
         <div className="flex justify-between items-center text-2xl md:text-4xl mt-5">
           <div className="flex gap-2 font-bold">
-            <h1>Total Items :</h1>
+            <h1>
+              {/* Total Items : */}
+              {t("total")}
+
+            </h1>
             <h2 className="text-blue-500">{cartLength}</h2>
-            <h2>items</h2>
+            <h2>
+              {/* items */}
+              {t("items")}
+              </h2>
           </div>
 
           {cartLength < 1 ? (
@@ -194,7 +208,9 @@ export default function CartComponent() {
               className="hover:bg-red-500"
             >
               <span>
-                <DeleteOutlined className="" /> Clear All
+                <DeleteOutlined className="" /> 
+                {/* Clear All */}
+                {t("clearall")}
               </span>
             </Button>
           )}
@@ -436,7 +452,8 @@ export default function CartComponent() {
                     className="bg-gray-500 hover:bg-gray-400 w-full"
                     onClick={() => router.push(`/Products/${xx.id}`)}
                   >
-                    Detail
+                    {/* Detail */}
+                    {t("detail")}
                   </Button>
 
                   <Button
@@ -446,7 +463,8 @@ export default function CartComponent() {
                   >
                     <span>
                       <DeleteOutlined className="mr-2" />
-                      Remove
+                      {/* Remove */}
+                      {t("remove")}
                     </span>
                   </Button>
                 </div>

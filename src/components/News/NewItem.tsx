@@ -19,10 +19,11 @@ import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 import { Button } from "../atom/buttom";
 import { fetchAllNewsProducts } from "@/app/(Admin)/Admin/dashboard/ManageNewsProducts/newsproductsdatafetch";
 import { NewsProductsType } from "../ManageNewsProducts/NewsProductsType";
+import { useTranslations } from "next-intl";
 
 export default function NewItems() {
+  const t = useTranslations("NewProduct");
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 5;
@@ -121,18 +122,16 @@ export default function NewItems() {
             <div className="text-black truncate overflow-hidden pl-2 md:pl-0 md:max-w-[400px] lg:max-w-[500px] xl:max-w-[800px] 2xl:max-w-[1000px]">
               {item.newp_title}
             </div>{" "}
-
-<div className="md:ml-auto p-2">
-
-<Button
-              className="bg-gray-500 text-white text-xl rounded-md md:w-32 hover:bg-pink-500 md:ml-auto mr-4 w-full"
-              onClick={() => router.push(`/News/NewProduct/${item.id}`)} // เปลี่ยนเป็นส่ง id ไปใน URL
-            >
-              Detail
-            </Button>
-
-</div>
-          
+            <div className="md:ml-auto p-2">
+              <Button
+                className="bg-gray-500 text-white text-base rounded-md md:w-32 hover:bg-pink-500 md:ml-auto mr-4 w-full"
+                // onClick={() => router.push(`/News/NewProduct/${item.id}`)} // เปลี่ยนเป็นส่ง id ไปใน URL
+                onClick={() => router.push(`/News/NewProduct/${item.id}`)}
+              >
+                {/* Detail */}
+                {t("detail")}
+              </Button>
+            </div>
           </div>
         ))}
       </div>

@@ -22,7 +22,6 @@ import { CustomQueryClientProvider } from "@/hook/QueryClientProvider";
 import { App } from "antd";
 // import "@/style/swiper-button-home1.css"
 import { Toaster } from "@/components/ui/sonner";
-import ReooilProvider from "@/hook/RecoilRoot";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 // const geistSans = Geist({
@@ -110,14 +109,14 @@ export default async function RootLayout({
       // className={currentClassName}
       >
         <CustomQueryClientProvider>
-          <ReooilProvider>
+          {/* <ReooilProvider> */}
             <NextIntlClientProvider messages={messages}>
               <TooltipProvider>
                 {children}
                 <Toaster richColors position="top-center" />
               </TooltipProvider>
             </NextIntlClientProvider>
-          </ReooilProvider>
+          {/* </ReooilProvider> */}
         </CustomQueryClientProvider>
       </body>
     </html>

@@ -16,12 +16,14 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
 import { fetchSingleArticle } from "./singlearticledata";
 import { LoadingSpinner } from "../../Products/[id]/spinload";
+import { useTranslations } from "next-intl";
 
 export default function NewsDetail({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = useTranslations("Article");
   const router = useRouter();
   const { id } = use(params); // ใช้ use() เพื่อดึงค่า params.id โดยไม่ต้องใช้ useEffect
 
@@ -68,7 +70,9 @@ export default function NewsDetail({
       </p>
 
       <div className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer" onClick={() => router.back()}>
-        <LeftOutlined className="" /> Back
+        <LeftOutlined className="" /> 
+        {/* Back */}
+        {t("back")}
       </div>
 
       <div className="flex justify-center">

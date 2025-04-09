@@ -404,7 +404,8 @@ export default function Prodcuts() {
               onClick={handleClear}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
-              Clear
+              {/* Clear */}
+              {t("clear")}
             </Button>
           </div>
         </div>
@@ -612,14 +613,16 @@ export default function Prodcuts() {
                       className="bg-[#E81F76] hover:bg-blue-400  transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 w-full md:w-auto"
                       onClick={() => handleAddToCart(allproducts.id.toString())}
                     >
-                      Add to Cart
+                      {/* Add to Cart */}
+                      {t("add")}
                     </Button>
 
                     <Button
                       className="bg-gray-500 hover:bg-gray-400 w-full md:w-auto"
                       onClick={() => router.push(`/Products/${allproducts.id}`)}
                     >
-                      Detail
+                      {/* Detail */}
+                      {t("detail")}
                     </Button>
                   </div>
                 </div>

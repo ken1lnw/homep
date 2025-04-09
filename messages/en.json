@@ -13,7 +13,8 @@
     "New Product": "New Product",
     "Cart": "Cart",
     "Items": "Items",
-    "close": "Close"
+    "close": "Close",
+    "search": "Search..."
   },
   "footer": {
     "Home": "Home",
@@ -66,17 +67,27 @@
     "title": "Products",
     "des": "Our Innovations , Our Products",
     "search": "Search Product",
-    "total": "Total Items : "
+    "total": "Total Items : ",
+    "clear": "Clear",
+    "add":"Add to Cart",
+    "detail":"Detail",
+    "pdetail":"Product Details",
+    "back":"Back",
+    "recentp":"Recent Products"
   },
   "Article": {
     "title": "News",
     "des": "Discover how the TYC Smart Manufacturing Platform empowers your production process to achieve excellence, regardless of what you're creating",
     "subtitle": "Latest Articles",
-    "read": "Read More"
+    "read": "Read More",
+    "back":"Back"
+
   },
   "NewProduct": {
     "title": "New Product",
-    "des": "Quality Automotive Parts With Road Safety Assurance"
+    "des": "Quality Automotive Parts With Road Safety Assurance",
+    "detail":"Detail",
+    "back":"Back"
   },
   "ContactUs": {
     "title": "Contact Us",
@@ -105,6 +116,29 @@
     "award": "Awards",
     "desaward": "Our passion for, and devotion to, the innovative design of lighting products has gained recognition and merits among our peers.",
     "cer": "Certificate",
-    "descer": "TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1 and AEO certified."
+    "descer": "TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1 and AEO certified.",
+    "history":"History",
+    "historydes":"PROGRESS THROUGH TIME"
+  },
+    "Cart":{
+    "title":"Shopping Cart",
+    "des":"Pick your choice",
+    "total":"Total Items : ",
+    "items":"items",
+    "contact":"Contact Information",
+    "company":"Company",
+    "name":"Name",
+    "country":"Country / Region",
+    "mobile":"Mobile",
+    "phone":"Phone No.",
+    "fax":"Fax",
+    "address":"Address",
+    "email":"Email",
+    "inquiry":"Inquiry",
+    "submit":"Submit",
+    "clearall":"Clear All",
+    "detail":"Detail",
+    "remove":"Remove",
+    "selectc":"Select Country"
   }
 }

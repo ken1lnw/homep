@@ -226,7 +226,7 @@ export default function NavbarDynamic() {
                     <Select
                       allowClear
                       showSearch
-                      placeholder="Search..."
+                      placeholder={t("search")}
                       // onSearch={(value) => setSearchQuery(value)}
                       onSearch={handleSearch} 
                       onChange={(value) => {

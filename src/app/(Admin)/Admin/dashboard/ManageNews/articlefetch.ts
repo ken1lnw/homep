@@ -11,14 +11,38 @@ export async function fetchNews(
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize - 1;
 
-  const { data, error, count } = await supabase
-    .from("news_article")
+
+
+
+
+    let query
+      if (searchQuery) {
+        query = supabase
+          .rpc(
+            "get_filtered_article_admin",
+            {
+              searcharticle: searchQuery || null,
+            },
+            { count: "exact" }
+          ).range(start, end)
+          .order("id", { ascending: false });
+          console.log({start,end});
+          
+          
+            
+      }else{
+        query = supabase
+        .from("news_article")
     .select("*,news_image(*)", { count: "exact" })
-    .range(start, end)
-    .or(
-      `news_title.ilike.%${searchQuery}%,news_description.ilike.%${searchQuery}%`
-    )
-    .order("id", { ascending: false });
+    .order("id", { ascending: false })
+    .range(start, end);
+        
+  
+      }
+    
+      const { data, error, count } = await query;
+
+
 
     // console.log(data);
   if (error) {

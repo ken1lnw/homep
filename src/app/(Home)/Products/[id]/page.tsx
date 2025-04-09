@@ -38,12 +38,14 @@ import {
   fetchRecentProducts,
 } from "@/app/(Home)/Products/[id]/productidfetch";
 import { useBucket } from "@/store/bucket";
+import { useTranslations } from "next-intl";
 
 export default function ProdcutsDetail({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = useTranslations("Product");
   const router = useRouter();
   const { id } = use(params);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
@@ -160,7 +162,11 @@ export default function ProdcutsDetail({
           </Breadcrumb>
         </div> */}
 
-        <h1 className="text-4xl font-bold text-blue-500">Product Details</h1>
+        <h1 className="text-4xl font-bold text-blue-500">
+          {/* Product Details */}
+          {t("pdetail")}
+          
+          </h1>
         <div className="bg-blue-300 h-0.5 my-2"></div>
         <p className="text-md text-gray-500">
           {product?.oem_no || product?.tyc_no || "No data available"}
@@ -170,7 +176,9 @@ export default function ProdcutsDetail({
           className="my-2 text-blue-500 hover:text-pink-500 text-2xl flex items-center cursor-pointer"
           onClick={() => router.back()}
         >
-          <LeftOutlined className="" /> Back
+          <LeftOutlined className="" /> 
+          {/* Back */}
+          {t("back")}
         </div>
 
         <div className="flex flex-col lg:flex-row gap-10 my-10 mx-2">
@@ -380,14 +388,16 @@ export default function ProdcutsDetail({
                 className="bg-[#E81F76] hover:bg-blue-400 w-full md:w-auto h-16 text-2xl  "
                 onClick={() => handleAddToCart(id.toString())}
               >
-                Add to Cart
+                {/* Add to Cart */}
+                {t("add")}
               </Button>
             </div>
           </div>
         </div>
 
         <h1 className="text-4xl font-bold text-blue-500 mt-20">
-          Recent Products
+          {/* Recent Products */}
+          {t("recentp")}
         </h1>
         <div className="bg-blue-300 h-0.5 my-2 mb-10"></div>
 

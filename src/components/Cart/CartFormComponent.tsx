@@ -23,8 +23,10 @@ import { useQuery } from "@tanstack/react-query";
 import { addProductInquiry, fetchCartItems } from "@/app/(Home)/Cart/cartdata";
 import { ProductionType } from "../Production/ProductionType";
 import { useBucket } from "@/store/bucket";
+import { useTranslations } from "next-intl";
 
 export default function CartFormComponent() {
+  const t = useTranslations("Cart");
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false); // Loading state
   // const { cartItems, qty } = useCart(); // ดึงข้อมูลจาก custom hook useCart
@@ -78,31 +80,32 @@ export default function CartFormComponent() {
     try {
       setLoading(true);
 
-      const productDetails = data
-        .map((item: any) => {
-          // Find the corresponding item in cartItems.data by matching item.id
-          const matchedItem = Object.entries(cartItems.data).find(
-            ([key, value]) => Number(key) === item.id
-          ); // Check if the key matches the item.id
+      const productDetails = data.map((item: any) => {
+        // Find the corresponding item in cartItems.data by matching item.id
+        const matchedItem = Object.entries(cartItems.data).find(
+          ([key, value]) => Number(key) === item.id
+        ); // Check if the key matches the item.id
 
-          // If a match is found, get the quantity (qty) from cartItems.data
-          const qty = matchedItem ? matchedItem[1] : 1; // matchedItem[1] will be the qty
+        // If a match is found, get the quantity (qty) from cartItems.data
+        const qty = matchedItem ? matchedItem[1] : 1; // matchedItem[1] will be the qty
 
-          return `Product ID: ${item.id} \n OEM No.: ${item.oem_no} \n TYC No.: ${item.tyc_no} \n Full Specifications.: ${item.full_specifications} \n Cart Quantity: ${qty}\n `;
-        });
-        // .join("\n"); // Join the details into a string
+        return `Product ID: ${item.id} \n OEM No.: ${item.oem_no} \n TYC No.: ${item.tyc_no} \n Full Specifications.: ${item.full_specifications} \n Cart Quantity: ${qty}\n `;
+      });
+      // .join("\n"); // Join the details into a string
 
       // สำหรับบันทึกลงฐานข้อมูลหรือจัดเก็บในรูปแบบที่มี \n
       const productDetailsForDB = productDetails.join("\n");
 
       // สำหรับแสดงผลในอีเมลให้แทน \n ด้วย <br/>
-      const productDetailsForEmail = productDetails .join("<br/>");
+      const productDetailsForEmail = productDetails.join("<br/>");
 
       await sendMail({
         email: email,
         // sendTo: "your-receiver-email@example.com", // You can set the receiver email or use the SITE_MAIL_RECIEVER
-        subject: `New Inquiry from ${company || ""}`,
-        text: `You have a new inquiry from ${company || ""} (${name || ""}).\n
+        subject: `Product Inquiry from ${company || ""}`,
+        text: `Product inquiry\n
+          Company:  ${company || ""}\n
+          Name: ${name || ""})\n
           Country/Region: ${country || ""}\n
           Mobile: ${mobile || ""}\n
           Phone: ${phone || ""}\n
@@ -111,16 +114,19 @@ export default function CartFormComponent() {
           Inquiry: ${inquiry || ""}\n
           Product Details: ${productDetails.join("\n") || ""}\n
           `,
-        html: `<p>You have a new inquiry from <strong>${
-          company || ""
-        }</strong> (${name || ""}).</p>
+        html: `
+          <p><strong>Product Inquiry</strong></p>
+          <p><strong>Company:</strong> ${company || ""}</p>
+          <p><strong>Nmae:</strong> ${name || ""}</p>
           <p><strong>Country/Region:</strong> ${country || ""}</p>
           <p><strong>Mobile:</strong> ${mobile || ""}</p>
           <p><strong>Phone:</strong> ${phone || ""}</p>
           <p><strong>Fax:</strong> ${fax || ""}</p>
           <p><strong>Address:</strong> ${address || ""}</p>
           <p><strong>Inquiry:</strong><br/>${inquiry || ""}</p>
-          <p><strong>Product Details:</strong><br/>${productDetailsForEmail || ""}<br/></p>`,
+          <p><strong>Product Details:</strong><br/>${
+            productDetailsForEmail || ""
+          }<br/></p>`,
       });
 
       const cartData = [
@@ -193,7 +199,10 @@ export default function CartFormComponent() {
             </div>
           )}
 
-          <h1 className="text-4xl font-bold mt-12 mb-5">Contact Information</h1>
+          <h1 className="text-4xl font-bold mt-12 mb-5">
+            {/* Contact Information */}
+            {t("contact")}
+          </h1>
 
           <Form
             form={form}
@@ -204,7 +213,9 @@ export default function CartFormComponent() {
             <div className="grid grid-cols-3 gap-6 items-center">
               {/* Company */}
               <label className="col-span-1 text-gray-700 font-medium">
-                <span className="text-red-500 mr-1">*</span>Company
+                <span className="text-red-500 mr-1">*</span>
+                {/* Company */}
+                {t("company")}
               </label>
               <Form.Item
                 name="company"
@@ -218,7 +229,9 @@ export default function CartFormComponent() {
 
               {/* Name */}
               <label className="col-span-1 text-gray-700 font-medium">
-                <span className="text-red-500 mr-1">*</span>Name
+                <span className="text-red-500 mr-1">*</span>
+                {/* Name */}
+                {t("name")}
               </label>
               <Form.Item
                 name="name"
@@ -230,7 +243,9 @@ export default function CartFormComponent() {
 
               {/* Country / Region */}
               <label className="col-span-1 text-gray-700 font-medium">
-                <span className="text-red-500 mr-1">*</span>Country / Region
+                <span className="text-red-500 mr-1">*</span>
+                {/* Country / Region */}
+                {t("country")}
               </label>
               <Form.Item
                 name="country"
@@ -239,7 +254,7 @@ export default function CartFormComponent() {
                   { required: true, message: "Please select your country" },
                 ]}
               >
-                <Select placeholder="Select Country" allowClear showSearch>
+                <Select placeholder={t("selectc")} allowClear showSearch>
                   {countries.map((country) => (
                     <Select.Option key={country.code} value={country.name}>
                       {country.name} {/* แสดงชื่อประเทศ */}
@@ -250,7 +265,8 @@ export default function CartFormComponent() {
 
               {/* Mobile */}
               <label className="col-span-1 text-gray-700 font-medium">
-                Mobile
+                {/* Mobile */}
+                {t("mobile")}
               </label>
               <Form.Item name="mobile" className="col-span-3 lg:col-span-2">
                 <Input />
@@ -258,7 +274,9 @@ export default function CartFormComponent() {
 
               {/* Phone No. */}
               <label className="col-span-1 text-gray-700 font-medium">
-                <span className="text-red-500 mr-1">*</span>Phone No.
+                <span className="text-red-500 mr-1">*</span>
+                {/* Phone No. */}
+                {t("phone")}
               </label>
               <Form.Item
                 name="phone"
@@ -272,7 +290,8 @@ export default function CartFormComponent() {
 
               {/* Fax */}
               <label className="col-span-1 text-gray-700 font-medium">
-                Fax
+                {/* Fax */}
+                {t("fax")}
               </label>
               <Form.Item name="fax" className="col-span-3 lg:col-span-2">
                 <Input />
@@ -280,7 +299,9 @@ export default function CartFormComponent() {
 
               {/* Address */}
               <label className="col-span-1 text-gray-700 font-medium">
-                <span className="text-red-500 mr-1">*</span>Address
+                <span className="text-red-500 mr-1">*</span>
+                {/* Address */}
+                {t("address")}
               </label>
               <Form.Item
                 name="address"
@@ -294,7 +315,9 @@ export default function CartFormComponent() {
 
               {/* Email */}
               <label className="col-span-1 text-gray-700 font-medium">
-                <span className="text-red-500 mr-1">*</span>Email
+                <span className="text-red-500 mr-1">*</span>
+                {/* Email */}
+                {t("email")}
               </label>
               <Form.Item
                 name="email"
@@ -312,7 +335,8 @@ export default function CartFormComponent() {
 
               {/* Inquiry */}
               <label className="col-span-1 text-gray-700 font-medium">
-                Inquiry
+                {/* Inquiry */}
+                {t("inquiry")}
               </label>
               <Form.Item name="inquiry" className="col-span-3 lg:col-span-2">
                 <Input.TextArea rows={4} />
@@ -328,7 +352,8 @@ export default function CartFormComponent() {
                   className="bg-blue-500 hover:bg-pink-500 w-56 h-14 text-2xl"
                   onClick={handleButtonClick}
                 >
-                  Submit
+                  {/* Submit */}
+                  {t("submit")}
                 </Button>
               </div>
             </div>

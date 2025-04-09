@@ -4,8 +4,11 @@ import { ClockCircleOutlined } from "@ant-design/icons";
 import { Timeline } from "antd";
 import { FaDotCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function HistoryComponent() {
+    const t = useTranslations("AboutUs");
+  
   const [timelineMode, setTimelineMode] = useState<
     "left" | "alternate" | "right"
   >("left");
@@ -387,11 +390,13 @@ export default function HistoryComponent() {
       <div className="container mx-auto my-10 lg:px-80">
         <div className="space-y-5">
           <h1 className="text-5xl lg:text-4xl xl:text-6xl font-bold text-pink-500  text-center">
-            TYC History
+            {/* TYC History */}
+            {t("history")}
           </h1>
 
           <h1 className="text-3xl font-bold text-center text-blue-500 mb-10">
-            PROGRESS THROUGH TIME
+            {/* PROGRESS THROUGH TIME */}
+            {t("historydes")}
           </h1>
         </div>
 

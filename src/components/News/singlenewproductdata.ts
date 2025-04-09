@@ -11,8 +11,11 @@ export async function fetchSingleNewProduct(id:number): Promise<NewsProductsType
                  .select("*")
                  .eq("id", id)
                  .single();
+
+                //  console.log({id});
+                 
     if (error) {
-      console.error(error);
+      // console.error(error);
       throw new Error(error.message);
     }
     // console.log(data);
