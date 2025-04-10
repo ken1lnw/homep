@@ -8,6 +8,8 @@ import { useTranslations } from "next-intl";
 
 export default function HistoryComponent() {
     const t = useTranslations("AboutUs");
+    const b = useTranslations("History");
+
   
   const [timelineMode, setTimelineMode] = useState<
     "left" | "alternate" | "right"
@@ -43,14 +45,15 @@ export default function HistoryComponent() {
         >
           <h1 className="text-3xl font-bold text-blue-500">1986</h1>
 
-          <p className="">Establishment of TYC BROTHER INDUSTRIAL CO., LTD.</p>
+          {/* <p className="">Establishment of TYC BROTHER INDUSTRIAL CO., LTD.</p>
 
           <p>
             The original TYC logo was comprised of a circular frame logo that
             symbolizes harmony within the industry as well as within the
             company’s corporate culture and attitude towards people.Bringing
             Happiness, Convenience, Hope & Encouragement to others.
-          </p>
+          </p> */}
+          <p>{b("1986")}</p>
 
           <div className="flex md:justify-end">
             <img
@@ -71,11 +74,13 @@ export default function HistoryComponent() {
         >
           <h1 className="text-3xl font-bold text-blue-500">1991</h1>
 
-          <p className="text-left">
+          {/* <p className="text-left">
             Established first U.S. Sales & Distribution Center GENERA
             CORPORATION (formerly TYC Industrial Co., USA) located in
             California.
-          </p>
+          </p> */}
+                    <p>{b("1991")}</p>
+
         </div>
       ),
     },
@@ -89,7 +94,7 @@ export default function HistoryComponent() {
         >
           <h1 className="text-3xl font-bold text-blue-500">1995</h1>
 
-          <p>
+          {/* <p>
             Established 1st manufacturing plant in China called CHANGZHOU TAMAU
             AUTO LAMP.
           </p>
@@ -97,7 +102,9 @@ export default function HistoryComponent() {
           <p>
             Established GENERA CORPORATION’s second U.S. Sales & Distribution
             Center (formerly Land Force Corp.) in New Jersey.
-          </p>
+          </p> */}
+                    <p>{b("1995")}</p>
+
         </div>
       ),
     },
@@ -111,7 +118,7 @@ export default function HistoryComponent() {
         >
           <h1 className="text-3xl font-bold text-blue-500">1997</h1>
 
-          <p>Initial Public Offering listed in Taiwan Securities Exchange.</p>
+          {/* <p>Initial Public Offering listed in Taiwan Securities Exchange.</p> */}
         </div>
       ),
     },
@@ -124,20 +131,22 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1998</h1>
-          <p>
+          {/* <p>
             In 1998 the new sun rays design shows a clear and neat conveying
             TYC‘s goal of Lighting up the world!
-          </p>
+          </p> */}
+          <p>{b("1998")}</p>
           <div className="flex md:justify-end">
             <img
               src="https://www.tyc.com.tw/assets/uploads/about/history/year1432807349.png"
               alt=""
             />
           </div>
-          <p>
+          {/* <p>
             Established third U.S. Sales & Distribution Center of GENERA
             CORPORATION in Texas.
-          </p>
+          </p> */}
+          <p>{b("1998-2")}</p>
         </div>
       ),
     },
@@ -150,7 +159,7 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1999</h1>
-          <p>
+          {/* <p>
             Acquired TAIWAN STANLEY INDUSTRIAL CO., LTD., now known as JUOKU
             TECHNOLOGY CO. LTD.
           </p>
@@ -158,7 +167,8 @@ export default function HistoryComponent() {
           <p>
             Established fourth U.S. Sales& Distribution Center of GENERA
             CORPORATION in Illinois.{" "}
-          </p>
+          </p> */}
+          <p>{b("1999")}</p>
         </div>
       ),
     },
@@ -171,7 +181,7 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2001</h1>
-          <p>
+          {/* <p>
             Established T.I.T. INTERNATIONAL CO., automotive lighting
             manufacturing plant in Rayong, Thailand.
           </p>
@@ -179,7 +189,8 @@ export default function HistoryComponent() {
           <p>
             Established fifth U.S. Sales & Distribution Center of GENERA
             CORPORATION in Georgia.
-          </p>
+          </p> */}
+          <p>{b("2001")}</p>
         </div>
       ),
     },
@@ -192,7 +203,7 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2002</h1>
-          <p>
+          {/* <p>
             Entered into JV cooperation with China HARBIN HAFEI INDUSTRY CO.,
             LTD. and formed HARBIN HAXING MOTOR COMPONENTS CO., LTD. in China.{" "}
           </p>
@@ -200,7 +211,8 @@ export default function HistoryComponent() {
           <p>
             Established CHANGZHOU TAMOU PRECISION INDUSTRIAL CO. LTD., for
             plastic tooling design, development and manufacturing in China.
-          </p>
+          </p> */}
+          <p>{b("2002")}</p>
         </div>
       ),
     },
@@ -213,7 +225,7 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2003</h1>
-          <p>
+          {/* <p>
             Built and moved manufacturing production plant facilities to Tainan
             Tech Park.
           </p>
@@ -221,7 +233,8 @@ export default function HistoryComponent() {
           <p>
             Established Europe Central Sales & Distribution Warehouse called TYC
             EUROPE B.V. in Almere, the Netherlands.
-          </p>
+          </p> */}
+          <p>{b("2003")}</p>
         </div>
       ),
     },
@@ -234,10 +247,11 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2004</h1>
-          <p>
+          {/* <p>
             Entered into a JV cooperation with China FIRST AUTO WORKS and formed
             CHANGCHUN E-CHI SHI HUAN.
-          </p>
+          </p> */}
+          <p>{b("2004")}</p>
         </div>
       ),
     },
@@ -250,10 +264,11 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2005</h1>
-          <p>
+          {/* <p>
             Visteon Corporation USA purchased shares in CHANGZHOU TAMAU AUTO
             LAMPS which is then renamed VISTEON TYC AUTO LAMPS CO., LTD.
-          </p>
+          </p> */}
+          <p>{b("2005")}</p>
         </div>
       ),
     },
@@ -266,10 +281,11 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2009</h1>
-          <p>
+          {/* <p>
             Increased share holding of CHANG CHUN E CHI SHI HUAN to 100% and
             renamed it CHANG CHUN SPARX AUTO LAMPS CO., LTD.
-          </p>
+          </p> */}
+          <p>{b("2009")}</p>
         </div>
       ),
     },
@@ -282,10 +298,10 @@ export default function HistoryComponent() {
           className="space-y-5 "
         >
           <h1 className="text-3xl font-bold text-blue-500">2010</h1>
-          <p>
+          {/* <p>
             Established KUN SHAN TYC HIGH PERFORMANCE LIGHTING TECH CO., LTD in
             China.
-          </p>
+          </p> */}<p>{b("2010")}</p>
         </div>
       ),
     },
@@ -298,10 +314,11 @@ export default function HistoryComponent() {
           className="space-y-5 mb-20"
         >
           <h1 className="text-3xl font-bold text-blue-500">2011</h1>
-          <p>
+          {/* <p>
             The evolution of the TYC logo into a single form with corporate Blue
             color, conveys the value of pursuing “Light, Precision and Safety”.
-          </p>
+          </p> */}
+          <p>{b("2011")}</p>
 
           <img
             src="https://www.tyc.com.tw/assets/uploads/about/history/year1432808026.png"
@@ -321,7 +338,8 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2012</h1>
-          <p>Started Phase 2 Tainan Tech Park Warehouse operation. </p>
+          {/* <p>Started Phase 2 Tainan Tech Park Warehouse operation. </p> */}
+          <p>{b("2012")}</p>
         </div>
       ),
     },
@@ -334,10 +352,11 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2013</h1>
-          <p>
+          {/* <p>
             Changed the name of VISTEON TYC AUTO LAMPS CO. to VARROC TYC AUTO
             LAMPS CO. after Varroc Group India purchased Visteon’s shareholding.
-          </p>
+          </p> */}
+          <p>{b("2013")}</p>
         </div>
       ),
     },
@@ -350,10 +369,11 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2014</h1>
-          <p>
+          {/* <p>
             Opening of second manufacturing plant of VARROC TYC AUTO LAMPS CO.
             in Chonqing, China.
-          </p>
+          </p> */}
+          <p>{b("2014")}</p>
         </div>
       ),
     },
@@ -366,7 +386,8 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2015</h1>
-          <p>Started Phase 3 Tainan Tech Park Assembly Plant Operation. </p>
+          {/* <p>Started Phase 3 Tainan Tech Park Assembly Plant Operation. </p> */}
+          <p>{b("2015")}</p>
         </div>
       ),
     },
@@ -379,7 +400,8 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">2020</h1>
-          <p>Established TYC VIETNAM INDUSTRIAL CO.,LTD. in Vietnam.</p>
+          {/* <p>Established TYC VIETNAM INDUSTRIAL CO.,LTD. in Vietnam.</p> */}
+          <p>{b("2020")}</p>
         </div>
       ),
     },

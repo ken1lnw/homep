@@ -18,6 +18,12 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { NewsType } from "./NewsType";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "../ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { EditNews } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
 
 interface EditNewsModalProps {
   news: NewsType;
@@ -31,6 +37,8 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
 
   const [newsTilte, setNewsTitle] = useState(news.news_title || "");
   const [newsDescription, setNewsDescription] = useState(news.news_title || "");
+  const [date, setDate] = useState<Date>();
+
 
   const [itemFile, setItemFile] = useState<File[]>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
@@ -39,71 +47,28 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
   useEffect(() => {
     setNewsTitle(news.news_title);
     setNewsDescription(news.news_description);
+    setDate(new Date(news.created_at)); 
   }, [news]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (updateNews: any) => {
       // Validate fields before updating
-      if (!updateNews.news_title || !updateNews.news_description) {
+      if (!updateNews.news_title || !updateNews.news_description || !updateNews.created_at) {
         toast.error("Please fill in all the required fields.");
         throw new Error("Missing required fields");
       }
 
-      const { data: existingItem, error: fetchError } = await supabase
-        .from("news_article")
-        .select("news_title")
-        .eq("news_title", updateNews.news_title)
-        .neq("id", news.id);
-
-      if (fetchError) {
-        toast.error("Error checking item number!");
-        throw fetchError;
-      }
-
-      // Check for duplicates
-      if (existingItem && existingItem.length > 0) {
-        const error = new Error(
-          `News title ${updateNews.news_title} already exists!`
-        );
-        throw error;
-      }
-
-      // If there are selected files, upload them
-      if (itemFile && itemFile.length > 0) {
-        const paths = await uploadFiles(itemFile); // Upload the selected files
-
-        if (!paths) return; // If the upload failed, stop the process
-
-        const imagePaths = paths.map((path) => ({
-          news_id: news.id, // Use the current product's ID
-          path,
-        }));
-
-        const { error: imageError } = await supabase
-          .from("news_image")
-          .insert(imagePaths);
-
-        if (imageError) {
-          toast.error("Error inserting image data!");
-          console.error("Image Insert Error:", imageError);
-          throw imageError;
-        }
-      }
-
-      // Proceed with the update if no duplicates found
-      const { data, error } = await supabase
-        .from("news_article")
-        .update({
-          news_title: updateNews.news_title,
-          news_description: updateNews.news_description,
-        })
-        .eq("id", news.id) // Use product ID to update
-        .select("id")
-        .single();
-
-      if (error) throw error;
-
-      return data;
+      await EditNews({
+        newsId: news.id,
+        newsTitle: updateNews.news_title,
+        newsDescription: updateNews.news_description,
+        createdAt: format(updateNews.created_at, 'y-LL-dd'),
+        files: itemFile,
+        selectedImages: selectedImages,
+      });
+      
+      setIsOpen(false);
+      resetState();
     },
     onSuccess: async () => {
       toast.success("News updated successfully!");
@@ -170,15 +135,6 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
     });
   };
 
-  const handleImageDelete = () => {
-    if (selectedImages.length > 0) {
-      Promise.all(
-        selectedImages.map(async (xx) => {
-          await supabase.from("news_image").delete().eq("id", xx);
-        })
-      );
-    }
-  };
 
   const handleSubmit = async () => {
     if (!newsTilte || !newsDescription) {
@@ -186,17 +142,18 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
       return;
     }
 
-    await handleImageDelete(); // Delete selected images
 
     mutate({
       news_title: newsTilte,
       news_description: newsDescription,
+      created_at: format(date ?? new Date(), 'y-LL-dd'),
     });
   };
 
   const resetState = () => {
     setNewsTitle(news.news_title || "");
     setNewsDescription(news.news_description || "");
+    setDate(new Date(news.created_at)); 
     setItemFile([]);
     setSelectedImages([]);
   };
@@ -241,6 +198,38 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
               className="col-span-4"
             />
           </div>
+
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="newstitle" className="text-right col-span-4">
+            Article Date
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[180px] md:w-[240px] justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate} // ทำการเลือกวันที่ใหม่
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+
+
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="newsdes" className="col-span-4">

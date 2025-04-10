@@ -69,25 +69,24 @@
     "search": "Search Product",
     "total": "Total Items : ",
     "clear": "Clear",
-    "add":"Add to Cart",
-    "detail":"Detail",
-    "pdetail":"Product Details",
-    "back":"Back",
-    "recentp":"Recent Products"
+    "add": "Add to Cart",
+    "detail": "Detail",
+    "pdetail": "Product Details",
+    "back": "Back",
+    "recentp": "Recent Products"
   },
   "Article": {
     "title": "News",
     "des": "Discover how the TYC Smart Manufacturing Platform empowers your production process to achieve excellence, regardless of what you're creating",
     "subtitle": "Latest Articles",
     "read": "Read More",
-    "back":"Back"
-
+    "back": "Back"
   },
   "NewProduct": {
     "title": "New Product",
     "des": "Quality Automotive Parts With Road Safety Assurance",
-    "detail":"Detail",
-    "back":"Back"
+    "detail": "Detail",
+    "back": "Back"
   },
   "ContactUs": {
     "title": "Contact Us",
@@ -117,28 +116,50 @@
     "desaward": "Our passion for, and devotion to, the innovative design of lighting products has gained recognition and merits among our peers.",
     "cer": "Certificate",
     "descer": "TYC is ISO26262, IATF16949, ISO9001, ISO45001, ISO14064, Ford Q1 and AEO certified.",
-    "history":"History",
-    "historydes":"PROGRESS THROUGH TIME"
+    "history": "History",
+    "historydes": "PROGRESS THROUGH TIME"
   },
-    "Cart":{
-    "title":"Shopping Cart",
-    "des":"Pick your choice",
-    "total":"Total Items : ",
-    "items":"items",
-    "contact":"Contact Information",
-    "company":"Company",
-    "name":"Name",
-    "country":"Country / Region",
-    "mobile":"Mobile",
-    "phone":"Phone No.",
-    "fax":"Fax",
-    "address":"Address",
-    "email":"Email",
-    "inquiry":"Inquiry",
-    "submit":"Submit",
-    "clearall":"Clear All",
-    "detail":"Detail",
-    "remove":"Remove",
-    "selectc":"Select Country"
+  "Cart": {
+    "title": "Shopping Cart",
+    "des": "Pick your choice",
+    "total": "Total Items : ",
+    "items": "items",
+    "contact": "Contact Information",
+    "company": "Company",
+    "name": "Name",
+    "country": "Country / Region",
+    "mobile": "Mobile",
+    "phone": "Phone No.",
+    "fax": "Fax",
+    "address": "Address",
+    "email": "Email",
+    "inquiry": "Inquiry",
+    "submit": "Submit",
+    "clearall": "Clear All",
+    "detail": "Detail",
+    "remove": "Remove",
+    "selectc": "Select Country"
+  },
+  "History": {
+    "1986": "Establishment of TYC BROTHER INDUSTRIAL CO., LTD.\nThe original TYC logo was comprised of a circular frame logo that symbolizes harmony within the industry as well as within the company’s corporate culture and attitude towards people.Bringing Happiness, Convenience, Hope & Encouragement to others.",
+    "1991": "Established first U.S. Sales & Distribution Center GENERA CORPORATION (formerly TYC Industrial Co., USA) located in California.",
+    "1995": "Established 1st manufacturing plant in China called CHANGZHOU TAMAU AUTO LAMP.\nEstablished GENERA CORPORATION’s second U.S. Sales & Distribution Center (formerly Land Force Corp.) in New Jersey",
+    "1997": "Initial Public Offering listed in Taiwan Securities Exchange.",
+    "1998": "In 1998 the new sun rays design shows a clear and neat conveying TYC‘s goal of Lighting up the world!",
+    "1998-2": "Established third U.S. Sales & Distribution Center of GENERA CORPORATION in Texas.",
+    "1999": "Acquired TAIWAN STANLEY INDUSTRIAL CO., LTD., now known as JUOKU TECHNOLOGY CO. LTD.\nEstablished fourth U.S. Sales& Distribution Center of GENERA CORPORATION in Illinois.",
+    "2001": "Established T.I.T. INTERNATIONAL CO., automotive lighting manufacturing plant in Rayong, Thailand.\nEstablished fifth U.S. Sales & Distribution Center of GENERA CORPORATION in Georgia.",
+    "2002": "Entered into JV cooperation with China HARBIN HAFEI INDUSTRY CO., LTD. and formed HARBIN HAXING MOTOR COMPONENTS CO., LTD. in China.\nEstablished CHANGZHOU TAMOU PRECISION INDUSTRIAL CO. LTD., for plastic tooling design, development and manufacturing in China.",
+    "2003": "Built and moved manufacturing production plant facilities to Tainan Tech Park.\nEstablished Europe Central Sales & Distribution Warehouse called TYC EUROPE B.V. in Almere, the Netherlands.",
+    "2004": "Entered into a JV cooperation with China FIRST AUTO WORKS and formed CHANGCHUN E-CHI SHI HUAN.",
+    "2005": "Visteon Corporation USA purchased shares in CHANGZHOU TAMAU AUTO LAMPS which is then renamed VISTEON TYC AUTO LAMPS CO., LTD.",
+    "2009": "Increased share holding of CHANG CHUN E CHI SHI HUAN to 100% and renamed it CHANG CHUN SPARX AUTO LAMPS CO., LTD.",
+    "2010": "Increased share holding of CHANG CHUN E CHI SHI HUAN to 100% and renamed it CHANG CHUN SPARX AUTO LAMPS CO., LTD.",
+    "2011": "The evolution of the TYC logo into a single form with corporate Blue color, conveys the value of pursuing “Light, Precision and Safety”.",
+    "2012": "Started Phase 2 Tainan Tech Park Warehouse operation",
+    "2013": "Changed the name of VISTEON TYC AUTO LAMPS CO. to VARROC TYC AUTO LAMPS CO. after Varroc Group India purchased Visteon’s shareholding.",
+    "2014": "Opening of second manufacturing plant of VARROC TYC AUTO LAMPS CO. in Chonqing, China.",
+    "2015": "Started Phase 3 Tainan Tech Park Assembly Plant Operation.",
+    "2020": "Established TYC VIETNAM INDUSTRIAL CO.,LTD. in Vietnam."
   }
 }

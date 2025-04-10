@@ -10,11 +10,6 @@ export async function fetchNews(
 ): Promise<{ news: NewsType[]; total: number }> {
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize - 1;
-
-
-
-
-
     let query
       if (searchQuery) {
         query = supabase
@@ -67,40 +62,39 @@ export async function deleteNews(newsId: string): Promise<void> {
 
 
 // Upload files to Supabase storage
-export async function uploadFiles(files: File[]): Promise<string[] | null> {
-    const filePaths: string[] = [];
-  
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-  
-      const { data, error } = await supabase.storage
-        .from("news_image")
-        .upload(filePath, file, {
-          contentType: "image/jpeg",
-          upsert: true,
-        });
-  
-      if (error) {
-        console.error("Upload error:", error);
-        return null;
-      }
-  
-      const publicURL = supabase.storage
-        .from("news_image")
-        .getPublicUrl(filePath).data.publicUrl;
-  
-      if (!publicURL) {
-        console.error("Failed to get public URL!");
-        return null;
-      }
-  
-      filePaths.push(publicURL);
+async function uploadFiles(files: File[]): Promise<string[]> {
+  const filePaths: string[] = [];
+
+  for (const file of files) {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error } = await supabase.storage
+      .from("news_image")
+      .upload(filePath, file, {
+        contentType: "image/jpeg",
+        upsert: true,
+      });
+
+    if (error) {
+      throw new Error("Upload failed!");
     }
-  
-    return filePaths;
+
+    const publicURL = supabase.storage
+      .from("news_image")
+      .getPublicUrl(filePath).data.publicUrl;
+
+    if (!publicURL) {
+      throw new Error("Failed to get public URL!");
+    }
+
+    filePaths.push(publicURL);
   }
+
+  return filePaths;
+}
+
   
   // Add a news article
   export async function addNews(newNews: {
@@ -161,3 +155,90 @@ export async function uploadFiles(files: File[]): Promise<string[] | null> {
       }
     }
   }
+
+  
+  
+export async function EditNews({
+  newsId,
+  newsTitle,
+  newsDescription,
+  createdAt,
+  files,
+  selectedImages,
+}: {
+  newsId: number;
+  newsTitle: string;
+  newsDescription: string;
+  createdAt: string;
+  files: File[];
+  selectedImages: string[];
+}) {
+  // Check for duplicates
+  const { data: existingItem, error: fetchError } = await supabase
+    .from("news_article")
+    .select("news_title")
+    .eq("news_title", newsTitle)
+    .neq("id", newsId);
+
+  if (fetchError) {
+    throw new Error("Error checking item number!");
+  }
+
+  if (existingItem && existingItem.length > 0) {
+    throw new Error(`News title ${newsTitle} already exists!`);
+  }
+
+  // Handle file upload if there are files
+  let uploadedFiles: string[] = [];
+  if (files && files.length > 0) {
+    uploadedFiles = await uploadFiles(files);
+  }
+
+  // Delete previously selected images
+  if (selectedImages.length > 0) {
+    await handleImageDelete(selectedImages);
+  }
+
+  // Proceed with the update
+  const { data, error } = await supabase
+    .from("news_article")
+    .update({
+      news_title: newsTitle,
+      news_description: newsDescription,
+      created_at: createdAt,
+    })
+    .eq("id", newsId)
+    .select("id")
+    .single();
+
+  if (error) {
+    throw new Error("Error updating news article!");
+  }
+
+  // Insert new images if any were uploaded
+  if (uploadedFiles.length > 0) {
+    const imagePaths = uploadedFiles.map((path) => ({
+      news_id: newsId,
+      path,
+    }));
+
+    const { error: imageError } = await supabase
+      .from("news_image")
+      .insert(imagePaths);
+
+    if (imageError) {
+      throw new Error("Error inserting image data!");
+    }
+  }
+
+  return data;
+}
+
+
+async function handleImageDelete(selectedImages: string[]) {
+  const deletePromises = selectedImages.map(async (imagePath) => {
+    await supabase.from("news_image").delete().eq("id", imagePath);
+  });
+
+  await Promise.all(deletePromises);
+}
