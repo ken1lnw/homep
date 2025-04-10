@@ -126,7 +126,7 @@ export default function ContactUsContent1() {
             <div className="mt-5">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.29415120872!2d101.25536009999999!3d12.824259!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102e3f660c4d3af%3A0x3300997cf2bf739d!2z4Lia4Lij4Li04Lip4Lix4LiXIOC4l-C4tS7guYTguK0u4LiX4Li1IOC4reC4tOC4meC5gOC4leC4reC4o-C5jOC5gOC4meC4iuC4seC5iOC4meC5geC4meC4pSDguIjguLPguIHguLHguJQgKCBUWUMgVEhBSUxBTkQgKQ!5e0!3m2!1sth!2sth!4v1741330556144!5m2!1sth!2sth"
-                className="border h-80 lg:w-96 w-full"
+                className="border h-80 lg:w-[600px] w-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />

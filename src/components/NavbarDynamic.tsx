@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Menu,
   ConfigProvider,
@@ -6,6 +6,7 @@ import {
   Select,
   // Button,
   Badge,
+  MenuProps,
 } from "antd";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -42,7 +43,7 @@ export default function NavbarDynamic() {
   const [searchQuery, setSearchQuery] = useState(""); // For server query trigger
   const [currentLang, setCurrentLang] = useState<string>("en");
   const cartBucket = useBucket();
-
+  type MenuItem = Required<MenuProps>['items'][number];
   React.useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -79,19 +80,39 @@ export default function NavbarDynamic() {
     router.refresh();
   };
 
-  const navItems = [
-    { label: t("Home"), key: "" },
-    { label: t("Products"), key: "Products" },
+  const navItems : MenuItem[] = [
+    { label: t("Home"), key: "", onClick: () => router.push('/') },
+    {
+      // label: <div onClick={() => router.push('/Products')}>{t("Products")}</div>,
+      label: t("Products"),
+      key: "Products",
+     
+      children: [
+        { label: t("ourp"), key: "OurProduct" ,onClick: () => router.push('/Products')},
+        {
+          label: (
+            <div
+              onClick={() => window.open("https://www.tyc.com.tw/ecatalog", "_blank", "noopener noreferrer")}
+              style={{ cursor: "pointer", color: "inherit" }}
+            >
+              {t("ecat")}
+            </div>
+          ),
+          key: "E-Catalog"
+        }
+        
+      ],
+    },
     {
       label: t("News"),
       key: "News",
       children: [
-        { label: t("Article"), key: "/" },
-        { label: t("New Product"), key: "NewProduct" },
+        { label: t("Article"), key: "/", onClick: () => router.push('/News') },
+        { label: t("New Product"), key: "NewProduct", onClick: () => router.push('/News/NewProduct') },
       ],
     },
-    { label: t("About Us"), key: "AboutUs" },
-    { label: t("Contact Us"), key: "ContactUs" },
+    { label: <div onClick={() => router.push('/AboutUs')}>{t("About Us")}</div>, key: "AboutUs" },
+    { label: <div onClick={() => router.push('/ContactUs')}>{t("Contact Us")}</div>, key: "ContactUs" },
   ];
 
   const activeKey = pathname.split("/")[1];
@@ -111,11 +132,9 @@ export default function NavbarDynamic() {
   const fontFamily =
     currentLang === "th" ? "IBM Plex Sans Thai " : "Montserrat";
 
-
-    const handleSearch = debounce((value) => {
-      setSearchQuery(value);
-
-    }, 500); 
+  const handleSearch = debounce((value) => {
+    setSearchQuery(value);
+  }, 500);
 
   return (
     <>
@@ -187,35 +206,8 @@ export default function NavbarDynamic() {
                 <Menu
                   mode="horizontal"
                   selectedKeys={[activeKey]}
-                  items={navItems.map((item) => {
-                    // Check if item has children
-                    if (item.children) {
-                      return {
-                        label: item.label,
-                        key: item.key,
-                        children: item.children.map((child) => ({
-                          label: child.label,
-                          key: child.key,
-                          onClick: () =>
-                            router.push(`/${item.key}/${child.key}`), // Navigate to the child route
-                        })),
-                      };
-                    } else {
-                      return {
-                        label: item.label,
-                        key: item.key,
-                        onClick: () => router.push(`/${item.key}`),
-                      };
-                    }
-                  })}
+                  items={navItems}
                   disabledOverflow={true}
-                  style={
-                    {
-                      // minWidth: 0,
-                      // position: "sticky",
-                      // background: "transparent",
-                    }
-                  }
                   className="hidden lg:flex font-medium"
                 />
 
@@ -226,7 +218,7 @@ export default function NavbarDynamic() {
                       showSearch
                       placeholder={t("search")}
                       // onSearch={(value) => setSearchQuery(value)}
-                      onSearch={handleSearch} 
+                      onSearch={handleSearch}
                       onChange={(value) => {
                         // Find the selected item based on the selected value (oem_no)
                         const selectedItem = data?.find(
@@ -327,11 +319,14 @@ export default function NavbarDynamic() {
                         </DrawerHeader>
                         <div>
                           {[
-                            { label:  t("Home"), href: "/" },
-                            { label:  t("Products"), href: "/Products" },
+                            { label: t("Home"), href: "/" },
+                            { label: t("Products"), href: "/Products" },
                             // { label: "News", href: "/News" },
                             { label: t("News"), href: "/News" },
-                            { label: t("New Product"), href: "/News/NewProduct" },
+                            {
+                              label: t("New Product"),
+                              href: "/News/NewProduct",
+                            },
 
                             { label: t("About Us"), href: "/AboutUs" },
                             { label: t("Contact Us"), href: "/ContactUs" },
@@ -358,7 +353,8 @@ export default function NavbarDynamic() {
                                   : "bg-transparent text-black hover:bg-blue-500 hover:text-white"
                               }`}
                             >
-                              {t("Cart")} ( {Object.keys(cartBucket.data).length}
+                              {t("Cart")} ({" "}
+                              {Object.keys(cartBucket.data).length}
                               {t("Items")})
                             </Button>
                           </DrawerClose>
@@ -368,7 +364,7 @@ export default function NavbarDynamic() {
                         <DrawerClose asChild className="hover:text-white">
                           <Button className="w-full h-10 text-xl rounded-none shadow-none hover:bg-transparent bg-transparent text-black">
                             {/* Close */}
-                             {t("close")}
+                            {t("close")}
                           </Button>
                         </DrawerClose>
                       </DrawerFooter>

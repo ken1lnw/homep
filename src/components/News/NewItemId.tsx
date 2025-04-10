@@ -41,7 +41,7 @@ export default function NewsDetail({ id }: { id: number }) {
       )}
 
       <div className="relative">
-        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[200px]  bg-black opacity-20" />
+        <div className="absolute top-0 left-0 w-full h-[200px] lg:h-[200px]  bg-black opacity-60" />
 
         <img
           src="/NewsBanner.png"

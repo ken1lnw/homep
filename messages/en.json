@@ -14,7 +14,9 @@
     "Cart": "Cart",
     "Items": "Items",
     "close": "Close",
-    "search": "Search..."
+    "search": "Search...",
+    "ourp":"Our Products",
+    "ecat": "E-Catalog"
   },
   "footer": {
     "Home": "Home",
@@ -98,7 +100,7 @@
     "subject": "Subject",
     "message": "Message",
     "submit": "Submit",
-    "cname": "T.I.T. INTERNATIONAL CO., LTD.",
+    "cname": "T.I.T. INTERNATIONAL CO., LTD. (TYC Thailand)",
     "caddress": "119 Moo 3, Bankhai-Nonglalok Rd. Nong Lalok, \nBan Khai District, Rayong 21120, Thailand",
     "cphone": "Phone : (+66) 38-892-298",
     "cfax": "Fax : (+66) 38-892-419"
