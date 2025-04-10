@@ -42,8 +42,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 
 export const metadata: Metadata = {
-  title: "TYC HomePage",
-  description: "TYC",
+  title: "TYC Thailand",
+  description: "Light Intelligence Safety",
 };
 
 export default async function RootLayout({
@@ -61,12 +61,6 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-      // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      // className={`${TYCFont.className}`}
-      // className={MitrFont.className}
-      // className={IBMFont.className}
-      // className={NotoFont.className}
-      // className={currentClassName}
       >
         <CustomQueryClientProvider>
           {/* <ReooilProvider> */}
