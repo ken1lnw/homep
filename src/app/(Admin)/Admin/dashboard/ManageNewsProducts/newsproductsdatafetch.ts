@@ -47,7 +47,7 @@ export async function uploadNewsFile(file: File): Promise<string | null> {
 
   try {
     // อัปโหลดไฟล์ไปยัง Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("news.product.ebook")
       .upload(filePath, file, { contentType: "application/pdf", upsert: true });
 
@@ -175,7 +175,7 @@ export async function addNewsProduct(newNews: { newp_title: string; created_at: 
   }
 
   // Insert new news product
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("news_product")
     .insert({
       newp_title: newNews.newp_title,
@@ -202,7 +202,7 @@ async function uploadFiles(files: File[]): Promise<string[] | null> {
     const filePath = `/${fileName}`; // Storage path should be more structured
 
     try {
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("news.product.ebook")
         .upload(filePath, file, { contentType: "application/pdf", upsert: true });
 

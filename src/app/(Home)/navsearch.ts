@@ -3,7 +3,7 @@ import { supabase } from "@/hook/supabase";
 import { ProductionType } from "@/components/Production/ProductionType";
 
 export async function fetchNavbarData(searchQuery: string): Promise<ProductionType[]> {
-   const { data, error, count } = await supabase
+   const { data, error } = await supabase
           .from("item_product")
           .select("*,item_image(*)", { count: "exact" })
           .or(

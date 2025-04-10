@@ -93,6 +93,7 @@ const ImgPreviewUpload: React.FC = () => {
             afterOpenChange: (visible) => !visible && setPreviewImage(''),
           }}
           src={previewImage}
+          alt='previewImage'
         />
       )}
     </>

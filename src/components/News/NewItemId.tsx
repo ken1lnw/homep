@@ -1,6 +1,6 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { LeftOutlined } from "@ant-design/icons";
 
 import { fetchSingleNewProduct } from "./singlenewproductdata";
@@ -14,7 +14,7 @@ export default function NewsDetail({ id }: { id: number }) {
   const {
     data: article,
     isLoading,
-    error,
+
   } = useQuery({
     queryKey: ["news_article", id],
     queryFn: async () => {

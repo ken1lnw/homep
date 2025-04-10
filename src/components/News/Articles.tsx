@@ -3,19 +3,17 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { NewsType } from "../ManageNews/NewsType";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import Image from "next/image";
 import { fetchArticleData, PrefetchReadMore } from "./ArticlesData";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 import { useTranslations } from "next-intl";

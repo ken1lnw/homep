@@ -1,25 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, EffectCoverflow } from "swiper/modules";
+import {  Pagination, EffectCoverflow } from "swiper/modules";
 import "swiper/css";
 // import "swiper/css/navigation";
 import "@/style/swiper-button-nav.css";
 import "swiper/css/pagination";
 import { Swiper as SwiperType } from "swiper";
 
-const fadeUpVariant = {
-  initial: { opacity: 0, y: 100 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-    },
-  },
-};
+
 
 const data = [
   {

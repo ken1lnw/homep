@@ -11,14 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  DeleteOutlined,
-  EditFilled,
   InfoCircleFilled,
 } from "@ant-design/icons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
+
 import { GeneralInquiryType } from "@/types/general-inquiry";
 import { Textarea } from "../ui/textarea";
 
@@ -27,7 +23,6 @@ interface ViewGIModalProps {
 }
 
 export function ViewGeneralInquiryModal({ gi }: ViewGIModalProps) {
-  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
 
   const [gId, setGId] = useState<number>(0);

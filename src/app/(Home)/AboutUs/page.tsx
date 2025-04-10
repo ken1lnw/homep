@@ -1,11 +1,9 @@
 import AboutUsAwards from "@/components/AboutUs/AboutUsAwards";
 import AboutUsContent1 from "@/components/AboutUs/AboutUsContent1";
 import AboutUsContent2 from "@/components/AboutUs/AboutUsContent2";
-import AboutUsContent3 from "@/components/AboutUs/AboutUsContent3";
-import AboutUsContent3Mobile from "@/components/AboutUs/AboutUsContent3Mobile";
+
 import AboutUsContent4 from "@/components/AboutUs/AboutUsContent4";
 import AboutUsContent5 from "@/components/AboutUs/AboutUsContent5";
-import AboutUsContent6 from "@/components/AboutUs/AboutUsContent6";
 import HistoryComponent from "@/components/History/HistoryComponent";
 import { useTranslations } from "next-intl";
 

@@ -1,4 +1,4 @@
-import React, { Children, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import {
   Menu,
   ConfigProvider,
@@ -12,7 +12,6 @@ import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useQuery } from "@tanstack/react-query";
-import { ProductionType } from "./Production/ProductionType";
 import {
   Drawer,
   DrawerClose,
@@ -29,6 +28,7 @@ import debounce from "lodash.debounce";
 import { motion } from "framer-motion";
 import { fetchNavbarData } from "@/app/(Home)/navsearch";
 import { useBucket } from "@/store/bucket";
+import Link from "next/link";
 
 const { Header } = Layout;
 
@@ -40,9 +40,7 @@ export default function NavbarDynamic() {
   const [lastScrollY, setLastScrollY] = useState(Number);
 
   const [searchQuery, setSearchQuery] = useState(""); // For server query trigger
-  const [selectedValue, setSelectedValue] = useState<string | undefined>(); // For user selection (if needed)
   const [currentLang, setCurrentLang] = useState<string>("en");
-  const cartCount = JSON.parse(localStorage.getItem("cart") || "[]").length;
   const cartBucket = useBucket();
 
   React.useEffect(() => {
@@ -98,7 +96,7 @@ export default function NavbarDynamic() {
 
   const activeKey = pathname.split("/")[1];
 
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["item_product", searchQuery],
     queryFn: async () => {
       // ดึงข้อมูลจาก fetchNavbarData
@@ -149,7 +147,7 @@ export default function NavbarDynamic() {
             className="relative flex justify-between"
           >
             <div className="flex items-center">
-              <a href="/">
+              <Link href="/">
                 <Image
                   src="/TYCTHlogoWhite.png"
                   alt="Logo"
@@ -157,7 +155,7 @@ export default function NavbarDynamic() {
                   height={0}
                   className="object-contain"
                 />
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -310,7 +308,7 @@ export default function NavbarDynamic() {
                         <DrawerHeader>
                           <DrawerTitle>
                             <div className="flex items-center justify-center">
-                              <a href="/">
+                              <Link href="/">
                                 <Image
                                   src="/TH-TYC_logoWhitesmall.png"
                                   alt="Logo"
@@ -318,7 +316,7 @@ export default function NavbarDynamic() {
                                   height={50}
                                   className="object-contain"
                                 />
-                              </a>
+                              </Link>
                             </div>
                           </DrawerTitle>
                           <div className="text-center">

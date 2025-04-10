@@ -10,10 +10,7 @@ export default function HistoryComponent() {
     const t = useTranslations("AboutUs");
     const b = useTranslations("History");
 
-  
-  const [timelineMode, setTimelineMode] = useState<
-    "left" | "alternate" | "right"
-  >("left");
+
 
   // // Function to check screen size and set the appropriate mode
   // const handleResize = () => {

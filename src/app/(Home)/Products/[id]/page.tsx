@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
-import { ProductionType } from "@/components/Production/ProductionType";
+
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -22,15 +21,6 @@ import { Button } from "@/components/ui/button";
 import { LeftOutlined } from "@ant-design/icons";
 import { LoadingSpinner } from "./spinload";
 
-import {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { toast } from "sonner";
 
 import {
@@ -48,7 +38,6 @@ export default function ProdcutsDetail({
   const t = useTranslations("Product");
   const router = useRouter();
   const { id } = use(params);
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const store = useBucket();
   // const {
@@ -77,7 +66,7 @@ export default function ProdcutsDetail({
   const {
     data: product,
     isLoading,
-    error,
+    
   } = useQuery({
     queryKey: ["item_product", id],
     queryFn: async () => {
@@ -431,10 +420,10 @@ export default function ProdcutsDetail({
           >
             {recentProducts && recentProducts.length > 0 ? (
               recentProducts.map((product) => (
-                <SwiperSlide>
+                <SwiperSlide key={product.id}>
                   <div
                     className="flex flex-col items-center relative group"
-                    key={product.id}
+                    // key={product.id}
                   >
                     <img
                       className=""

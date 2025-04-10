@@ -1,8 +1,5 @@
 import ManageNewsTable from "@/components/ManageNews/ManageNewsTable";
-import { AddProductModal } from "@/components/ManageProducts/AddProductModal";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PlusSquareFilled } from "@ant-design/icons";
+
 
 export default function ManageNews() {
   return (

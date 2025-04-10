@@ -18,11 +18,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { NewsProductsType } from "./NewsProductsType";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
-import Image from "next/image";
 import { Input } from "../ui/input";
 import { deleteProductNews, fetchAllNewsProducts } from "@/app/(Admin)/Admin/dashboard/ManageNewsProducts/newsproductsdatafetch";
 import { AddNewsProductModal } from "./AddNewsProductsModal";
@@ -53,13 +51,13 @@ export default function ManageNewsTable() {
 
 
   // Fetch news articles
-  const { data, error, isLoading } = useQuery({
+  const { data, } = useQuery({
     queryKey: ["news_product", currentPage, debouncedSearchQuery],
     queryFn: () => fetchAllNewsProducts(currentPage * pageSize, (currentPage + 1) * pageSize - 1, debouncedSearchQuery),
   });
 
   async function CalldeleteProduct(productId: number) {
-    const deleteFromDB = await deleteProductNews(productId);
+    await deleteProductNews(productId);
     toast.success("New Product and associated file deleted successfully!");
     await queryClient.invalidateQueries({ queryKey: ["news_product"] });
   }

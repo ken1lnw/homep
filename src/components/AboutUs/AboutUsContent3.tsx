@@ -3,38 +3,20 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 // import "swiper/css/navigation";
 import "@/style/swiper-button-nav.css";
 import "swiper/css/pagination";
 import { Swiper as SwiperType } from "swiper";
 
-const fadeUpVariant = {
-  initial: { opacity: 0, y: 100 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-    },
-  },
-};
+
 
 export default function AboutUsContent3() {
   const t = useTranslations("Content1");
 
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
-  // Function to handle next slide
-  const handleNext = () => {
-    if (swiperInstance) swiperInstance.slideNext();
-  };
-
-  // Function to handle previous slide
-  const handlePrev = () => {
-    if (swiperInstance) swiperInstance.slidePrev();
-  };
 
   return (
     <>
@@ -101,7 +83,7 @@ export default function AboutUsContent3() {
                 />
 
                 <div className="absolute top-0 w-44 h-full flex items-center justify-center bg-black/80 bg-opacity-50 text-blue-500 font-semibold p-1 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  KYMCO Supplier's Award 2014
+                  KYMCO Supplier&APOS;s Award 2014
                 </div>
               </div>
             </SwiperSlide>
@@ -165,7 +147,7 @@ export default function AboutUsContent3() {
                   alt=""
                 />
                 <div className="absolute top-0 w-44 h-full flex items-center justify-center bg-black/80 bg-opacity-50 text-blue-500 font-semibold p-1 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  DUCATI Supplier's Award 2013
+                  DUCATI Supplier&APOS;s Award 2013
                 </div>
               </div>
             </SwiperSlide>
@@ -213,7 +195,7 @@ export default function AboutUsContent3() {
                   alt=""
                 />
                 <div className="absolute top-0 w-44 h-full flex items-center justify-center bg-black/80 bg-opacity-50 text-blue-500 font-semibold p-1 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  DUCATI Supplier's Award 2009
+                  DUCATI Supplier&APOS;s Award 2009
                 </div>
               </div>
             </SwiperSlide>

@@ -20,7 +20,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { NewsType } from "./NewsType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
@@ -56,7 +55,7 @@ export default function ManageNewsTable() {
   }, [searchQuery]);
 
   // Fetch news articles
-  const { data, error, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["news_article", currentPage, debouncedSearchQuery],
     queryFn: () => fetchNews(currentPage, pageSize, debouncedSearchQuery),
   });

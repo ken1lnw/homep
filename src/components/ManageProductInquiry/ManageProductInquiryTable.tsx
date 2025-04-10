@@ -54,7 +54,7 @@ export default function ManageProductInquiryTable() {
       }, [searchQuery]);
   
 
-  const { data, error, isLoading } = useQuery({
+  const { data} = useQuery({
     queryKey: ["inquiry_product", currentPage, debouncedSearchQuery],
     queryFn: () => fetchPi(currentPage, pageSize, debouncedSearchQuery),
   });

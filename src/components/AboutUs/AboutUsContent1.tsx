@@ -3,17 +3,6 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
-const fadeUpVariant = {
-  initial: { opacity: 0, y: 100 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-    },
-  },
-};
-
 export default function AboutUsContent1() {
   const t = useTranslations("AboutUs");
   return (

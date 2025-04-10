@@ -1,13 +1,9 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";  
 
 export default function AboutUsContent6() {
-  const t = useTranslations("Content1");
   const router = useRouter();  
 
   return (

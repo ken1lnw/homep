@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { OTPInput, SlotProps } from "input-otp";
+import { SlotProps } from "input-otp";
 
 export function Slot(props: SlotProps) {
   return (

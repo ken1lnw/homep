@@ -1,17 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
-import { ProductionType } from "../Production/ProductionType";
+
 import { ConfigProvider, Descriptions, InputNumberProps } from "antd";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -31,7 +28,6 @@ export default function CartComponent() {
   const store = useBucket();
   const items = Object.keys(store.data).map(Number);
   const { data: qty } = store;
-  const [cartItems, setCartItems] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5; // จำนวนรายการต่อหน้า
   const cartLength = Object.keys(store.data).length;
@@ -102,7 +98,7 @@ export default function CartComponent() {
   //   },
   // });
 
-  const { data, isLoading, refetch, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["item_product", items],
     queryFn: async () => {
       // const items = Object.keys(store.data).map(Number)
@@ -144,7 +140,7 @@ export default function CartComponent() {
   const getPageRange = () => {
     const maxPagesToShow = 5;
     let start = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-    let end = Math.min(totalPages, start + maxPagesToShow - 1);
+    const end = Math.min(totalPages, start + maxPagesToShow - 1);
 
     if (end - start + 1 < maxPagesToShow) {
       start = Math.max(1, end - maxPagesToShow + 1);

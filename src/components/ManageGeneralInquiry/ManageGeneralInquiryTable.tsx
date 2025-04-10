@@ -23,12 +23,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import DeleteModal from "../ui/deletemodal";
-import Image from "next/image";
 import { Input } from "../ui/input";
-import {
-  deleteNews,
-  fetchNews,
-} from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
+
 import {
   deleteGI,
   fetchGi,
@@ -38,7 +34,6 @@ import debounce from "lodash.debounce";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 

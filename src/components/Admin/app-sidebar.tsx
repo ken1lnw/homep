@@ -83,7 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const handleMenuClick = (url: string) => {
     router.push(url); // ใช้ router.push เพื่อทำการเปลี่ยนเส้นทาง
   };
-  const { logout, isLoading } = useFlowManager();
+  const { logout } = useFlowManager();
 
   return (
     <Sidebar {...props}>

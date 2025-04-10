@@ -14,7 +14,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -51,7 +50,7 @@ export default function ManageProductsTable() {
     };
   }, [searchQuery]);
 
-  const { data : allData, error, isLoading } = useQuery({
+  const { data : allData} = useQuery({
     queryKey: ["item_product", currentPage , debouncedSearchQuery],
     queryFn: async () => {
       const start = (currentPage - 1) * pageSize;
@@ -66,7 +65,7 @@ export default function ManageProductsTable() {
 
   async function CalldeleteProduct(productId: number) {
 
-    const deleteFromDB = await deleteProduct(productId);
+   await deleteProduct(productId);
 
 
     toast.success("Product and associated images deleted successfully!");

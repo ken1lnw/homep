@@ -10,13 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { DeleteOutlined, EditFilled, PlusOutlined } from "@ant-design/icons";
+import {  EditFilled,  } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { NewsProductsType } from "./NewsProductsType";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { CalendarIcon } from "lucide-react";
@@ -49,7 +46,7 @@ export function EditNewsProductModal({ news }: EditNewsModalProps) {
     mutationFn: async (updateNews: any) => {
       if(!date)
         throw new Error('date req')
-      let updatedData: any = {
+      const updatedData: any = {
         id: news.id,
         newp_title: newsProductTitle,
         created_at: format(date, 'y-LL-dd'),
@@ -122,7 +119,7 @@ export function EditNewsProductModal({ news }: EditNewsModalProps) {
             Edit New Product
           </DialogTitle>
           <DialogDescription>
-            Edit New Product to New Product Page here. Click Edit New Product when you're done.
+            Edit New Product to New Product Page here. Click Edit New Product when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

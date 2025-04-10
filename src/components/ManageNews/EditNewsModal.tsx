@@ -84,46 +84,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
     },
   });
 
-  // Upload file using standard upload
-  async function uploadFiles(files: File[]) {
-    const filePaths: string[] = []; // เก็บ paths ของไฟล์ทั้งหมด
 
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`; // ตั้งชื่อไฟล์ที่ไม่ซ้ำ
-      const filePath = `${fileName}`;
-
-      const { data, error } = await supabase.storage
-        .from("news_image")
-        .upload(filePath, file, {
-          contentType: "image/jpeg",
-          upsert: true,
-        });
-
-      if (error) {
-        toast.error("Upload failed!");
-        console.error("Upload error:", error);
-        return null;
-      }
-
-      const publicURL = supabase.storage
-        .from("news_image")
-        .getPublicUrl(filePath).data.publicUrl;
-
-      if (!publicURL) {
-        toast.error("Failed to get public URL!");
-        console.error("URL error:", publicURL);
-        return null;
-      }
-
-      filePaths.push(publicURL); // เก็บ public URL ของแต่ละไฟล์
-
-      toast.success("Upload successful!");
-      // console.log("File uploaded:", data);
-    }
-
-    return filePaths; // คืนค่า array ของ paths
-  }
 
   const handleImageSelect = (imgPath: string) => {
     setSelectedImages((prevSelected) => {
@@ -182,7 +143,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
             Edit Article
           </DialogTitle>
           <DialogDescription>
-            Edit Article to Article Page here. Click Edit Article when you're done.
+            Edit Article to Article Page here. Click Edit Article when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

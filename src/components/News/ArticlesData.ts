@@ -1,6 +1,5 @@
 "use server"; 
 import { supabase } from "@/hook/supabase"; 
-import { ProductionType } from "@/components/Production/ProductionType";
 import { NewsType } from "../ManageNews/NewsType";
 
 

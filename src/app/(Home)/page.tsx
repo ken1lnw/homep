@@ -1,12 +1,10 @@
 "use client";
 
-import Content1page1 from "@/components/Home/content1";
 import Content2page1 from "@/components/Home/content2";
 import Content3page1 from "@/components/Home/content3";
 import Content4page1 from "@/components/Home/content4";
 import Content5page1 from "@/components/Home/content5";
 import Content6page1 from "@/components/Home/content6";
-import { useTranslations } from "next-intl";
 
 export default function Home() {
   // const t = useTranslations("HomePage");

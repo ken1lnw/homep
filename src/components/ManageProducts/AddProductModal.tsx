@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusSquareFilled } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
 import { AddProduct } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
@@ -22,11 +21,7 @@ export function AddProductModal() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false); // Control dialog visibility
 
-  // State for form fields
-  const [itemNumber, setItemNumber] = useState("");
-  const [itemDescription, setItemDescription] = useState("");
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
+
   const [itemFile, setItemFile] = useState<File[]>([]);
 
   const [oemNumber, setOemNumber] = useState("");
@@ -65,7 +60,7 @@ export function AddProductModal() {
           throw new Error("Please fill in all the required fields.");
         }
 
-        const { data } = await AddProduct({
+         await AddProduct({
           oemNumber: newProduct.oem_no,  // Change from oem_no to oemNumber
           tycNumber: newProduct.tyc_no,  // Change from tyc_no to tycNumber
           vehicleBrandShort: newProduct.vehicle_brand,  // Change from vehicle_brand to vehicleBrandShort
@@ -117,7 +112,7 @@ export function AddProductModal() {
             Add Product
           </DialogTitle>
           <DialogDescription>
-            Add Products to Product Page here. Click Add Product when you're
+            Add Products to Product Page here. Click Add Product when you&apos;re
             done.
           </DialogDescription>
         </DialogHeader>

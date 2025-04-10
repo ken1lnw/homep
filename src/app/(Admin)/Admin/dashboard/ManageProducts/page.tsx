@@ -1,8 +1,5 @@
-import { AddProductModal } from "@/components/ManageProducts/AddProductModal";
 import ManageProductsTable from "@/components/ManageProducts/ManageProductsTable";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PlusSquareFilled } from "@ant-design/icons";
+
 
 export default function ManageProducts() {
   return (

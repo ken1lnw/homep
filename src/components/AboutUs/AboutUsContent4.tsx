@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import "swiper/css";
 // import "swiper/css/navigation";
@@ -8,31 +7,12 @@ import "@/style/swiper-button-nav.css";
 import "swiper/css/pagination";
 import { Swiper as SwiperType } from "swiper";
 
-const fadeUpVariant = {
-  initial: { opacity: 0, y: 100 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-    },
-  },
-};
 
 export default function AboutUsContent4() {
   const t = useTranslations("AboutUs");
 
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
-  // Function to handle next slide
-  const handleNext = () => {
-    if (swiperInstance) swiperInstance.slideNext();
-  };
-
-  // Function to handle previous slide
-  const handlePrev = () => {
-    if (swiperInstance) swiperInstance.slidePrev();
-  };
 
   return (
     <>

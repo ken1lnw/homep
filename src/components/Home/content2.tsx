@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -14,7 +13,6 @@ import "swiper/css/pagination";
 
 // Import Swiper core type for typing the swiper instance
 import { Swiper as SwiperType } from "swiper";
-import Image from "next/image";
 
 // **Motion animation variant** (Parent)
 const parentVariant = {

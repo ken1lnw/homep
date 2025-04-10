@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import {
   // Button,
 
@@ -11,7 +10,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -19,7 +17,7 @@ import {
 } from "@/components/ui/pagination";
 
 import { useQuery } from "@tanstack/react-query";
-import { ProductionType, ProductionImageType } from "./ProductionType";
+import { ProductionType } from "./ProductionType";
 // import { Button } from "../atom/buttom";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";

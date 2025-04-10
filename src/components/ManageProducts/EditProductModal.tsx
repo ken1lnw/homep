@@ -12,13 +12,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DeleteOutlined, EditFilled, PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { ProductionType } from "../Production/ProductionType";
-import ImgPreviewUpload from "./ImgPreviewUpload";
 import Image from "next/image";
-import { updateProduct, uploadFiles, deleteImages } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
+import { updateProduct } from "@/app/(Admin)/Admin/dashboard/ManageProducts/productdatafetchadmin";
 
 interface EditProductModalProps {
   product: ProductionType;
@@ -222,7 +220,7 @@ const handleSubmit = () => {
             Edit Product
           </DialogTitle>
           <DialogDescription>
-            Edit Products to Product Page here. Click Edit Product when you're
+            Edit Products to Product Page here. Click Edit Product when you&apos;re
             done.
           </DialogDescription>
         </DialogHeader>

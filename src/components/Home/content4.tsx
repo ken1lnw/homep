@@ -1,18 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import {
-  BulbOutlined,
-  FieldTimeOutlined,
-  TeamOutlined,
-  VerifiedOutlined,
-} from "@ant-design/icons";
 import { MdVerified } from "react-icons/md";
 import { GiProcessor } from "react-icons/gi";
 import { FiGlobe } from "react-icons/fi";
 import { TbAutomaticGearbox } from "react-icons/tb";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
 
 // Motion animation variant

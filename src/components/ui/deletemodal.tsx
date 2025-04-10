@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { DeleteFilled, DeleteOutlined } from "@ant-design/icons";
+import { DeleteFilled, } from "@ant-design/icons";
 import { Button } from "./button";
 const DeleteModal = ({ onDelete }: { onDelete: () => void }) => {
   return (

@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
-import { ConfigProvider, Input } from "antd";
+import { Input } from "antd";
 import { Button } from "../ui/button";
 import { sendMail } from "@/lib/send-email";
 import { useRouter } from "next/navigation";
@@ -107,7 +106,7 @@ export default function ContactUsContent1() {
                 {t("cname")}
               </h1>
               <div className="text-xl">
-                <p className="whitespace-pre">
+                <p className="whitespace-pre-wrap">
                   {/* 119 Moo 3, Bankhai-Nonglalok Rd. Nong Lalok, <br /> */}
                   {/* Ban Khai District, Rayong 21120, Thailand */}
                   {t("caddress")}

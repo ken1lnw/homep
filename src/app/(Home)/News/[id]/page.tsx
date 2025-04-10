@@ -1,9 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/hook/supabase";
-import { NewsType } from "@/components/ManageNews/NewsType";
+
 import { use, useState } from "react";
 import { LeftOutlined } from "@ant-design/icons";
 
@@ -33,6 +31,7 @@ export default function NewsDetail({
     data: article,
     isLoading,
     error,
+    isFetching
   } = useQuery({
     queryKey: ["news_article", id],
     queryFn: async () => {

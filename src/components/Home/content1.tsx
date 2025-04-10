@@ -2,9 +2,6 @@
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
-import { Carousel } from "antd";
-import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
 
 // Import Swiper styles
 import "swiper/css";
@@ -17,18 +14,10 @@ import "swiper/css/pagination";
 import { Swiper as SwiperType } from "swiper";
 
 export default function Content1page1() {
-  const t = useTranslations("Content1");
 
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   // Function to handle next slide
-  const handleNext = () => {
-    if (swiperInstance) swiperInstance.slideNext();
-  };
 
-  // Function to handle previous slide
-  const handlePrev = () => {
-    if (swiperInstance) swiperInstance.slidePrev();
-  };
 
   return (
     <>

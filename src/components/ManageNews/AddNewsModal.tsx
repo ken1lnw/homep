@@ -14,10 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea"
 import { PlusSquareFilled } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
-import { NewsType } from "./NewsType";
 import { addNews } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
 
 export function AddNewsModal() {
@@ -77,7 +75,7 @@ export function AddNewsModal() {
             Add Article
           </DialogTitle>
           <DialogDescription>
-            Add Article to Article Page here. Click Add Article when you're done.
+            Add Article to Article Page here. Click Add Article when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

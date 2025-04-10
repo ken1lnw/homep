@@ -11,14 +11,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  DeleteOutlined,
-  EditFilled,
+
   InfoCircleFilled,
 } from "@ant-design/icons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {  useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
+
 import { Textarea } from "../ui/textarea";
 import { ProductInquiryType } from "@/types/product-inquiry";
 interface ViewPIModalProps {
@@ -26,7 +24,6 @@ interface ViewPIModalProps {
 }
 
 export function ViewProductInquiryModal({ pi }: ViewPIModalProps) {
-  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
 
   const [pId, setPId] = useState<number>(0);

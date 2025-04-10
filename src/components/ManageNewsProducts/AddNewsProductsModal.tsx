@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusSquareFilled } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/hook/supabase";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -79,7 +78,7 @@ export function AddNewsProductModal() {
           </DialogTitle>
           <DialogDescription>
             Add New Product to New Product Page here. Click Add New Product when
-            you're done.
+            you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

@@ -134,7 +134,7 @@
       const fileName = `${Date.now()}-${Math.random()}.${fileExt}`; // Unique file name
       const filePath = `${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const {  error } = await supabase.storage
         .from("product_image")
         .upload(filePath, file, {
           contentType: "image/jpeg",

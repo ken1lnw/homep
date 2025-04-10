@@ -3,19 +3,16 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import Image from "next/image";
-import { fetchArticleData, PrefetchReadMore } from "./ArticlesData";
-import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
+
 import { Button } from "../atom/buttom";
 import { fetchAllNewsProducts } from "@/app/(Admin)/Admin/dashboard/ManageNewsProducts/newsproductsdatafetch";
 import { NewsProductsType } from "../ManageNewsProducts/NewsProductsType";
@@ -31,7 +28,6 @@ export default function NewItems() {
   const {
     data: newsProductsData,
     error,
-    isLoading,
   } = useQuery({
     queryKey: ["news_product", currentPage],
     queryFn: async () => {

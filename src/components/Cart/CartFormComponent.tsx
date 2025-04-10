@@ -2,15 +2,10 @@
 import React, { useEffect, useState } from "react";
 import {
   // Button,
-  Cascader,
-  DatePicker,
+
   Form,
   Input,
-  InputNumber,
-  Mentions,
-  Segmented,
   Select,
-  TreeSelect,
 } from "antd";
 import { Button } from "../ui/button";
 import { sendMail } from "@/lib/send-email";
@@ -18,10 +13,9 @@ import { toast } from "sonner";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 import { useRouter } from "next/navigation";
 
-import { useCart } from "@/hook/useCart";
+
 import { useQuery } from "@tanstack/react-query";
 import { addProductInquiry, fetchCartItems } from "@/app/(Home)/Cart/cartdata";
-import { ProductionType } from "../Production/ProductionType";
 import { useBucket } from "@/store/bucket";
 import { useTranslations } from "next-intl";
 
@@ -37,7 +31,7 @@ export default function CartFormComponent() {
   const cartLength = Object.keys(cartItems.data).length;
   const itemsInCart = Object.keys(cartItems.data).map(Number);
 
-  const { data, isLoading, refetch, error } = useQuery({
+  const { data, } = useQuery({
     queryKey: ["item_product", itemsInCart],
     queryFn: async () => {
       if (itemsInCart.length === 0) return [];
