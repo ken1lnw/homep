@@ -16,11 +16,11 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { fetchArticleData, PrefetchReadMore } from "./ArticlesData";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
-import { useTranslations } from "next-intl";
+import { useTranslations , useLocale } from "next-intl";
 
 export default function Articles() {
   const t = useTranslations("Article");
-
+  const locale = useLocale();   
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -65,6 +65,28 @@ export default function Articles() {
     router.push(`/News/${article.id}`);
   };
 
+
+
+
+
+
+  const localized = articleData?.data.map((a) => {
+    const hasThTitle = Boolean(a.news_title_th?.trim());
+    const hasThDesc  = Boolean(a.news_description_th?.trim());
+  
+    return {
+      ...a,
+      title:
+        locale === "th" && hasThTitle
+          ? a.news_title_th!
+          : a.news_title,
+      description:
+        locale === "th" && hasThDesc
+          ? a.news_description_th!
+          : a.news_description,
+    };
+  }) || [];
+
   const totalPages = Math.ceil((articleData?.total || 0) / pageSize);
   const pageLimit = 5;
 
@@ -91,7 +113,9 @@ export default function Articles() {
         </div>
       )}
       <div className="grid md:grid-cols-3 gap-6">
-        {articleData?.data.map((article: NewsType) => (
+        {/* {articleData?.data.map((article: NewsType) => ( */}
+        {localized.map((article) => (
+
           <div
             key={article.id}
             className="border rounded-lg shadow-lg overflow-hidden"
@@ -123,13 +147,15 @@ export default function Articles() {
             {/* รายละเอียดข่าว */}
             <div className="p-4">
               <h2 className="text-2xl text-blue-500 font-bold truncate">
-                {article.news_title}
+                {/* {article.news_title} */}
+                {article.title}
               </h2>
               <p className="text-sm text-gray-500">
                 {new Date(article.created_at).toLocaleDateString()}
               </p>
               <p className="mt-2 text-gray-700 line-clamp-3 min-h-[4.5rem]">
-                {article.news_description}
+                {/* {article.news_description} */}
+                {article.description}
               </p>
 
               <button

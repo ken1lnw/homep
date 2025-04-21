@@ -7,9 +7,11 @@ import {
 } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Footer = () => {
     const t = useTranslations("footer");
+    const router = useRouter();
   
   return (
     <>
@@ -30,25 +32,25 @@ const Footer = () => {
 
         <div className="flex flex-col md:items-end space-y-4 lg:space-y-0  justify-center">
           <div className="flex flex-col space-y-2 space-x-4 xl:flex-row cursor-pointer">
-            <div className="text-xl text-white hover:text-blue-500">
+            <div className="text-xl text-white hover:text-blue-500" onClick={() => router.push("/Products")}>
               {t("Products")}
               {/* Products */}
             </div>
-            <div className="text-xl text-white hover:text-blue-500">
+            <div className="text-xl text-white hover:text-blue-500" onClick={() => router.push("/News")}>
               {/* Article */}
               {t("Article")}
 
             </div>
-            <div className="text-xl text-white hover:text-blue-500">
+            <div className="text-xl text-white hover:text-blue-500" onClick={() => router.push("/News/NewProduct")}>
               {/* New Product */}
               {t("New Product")}
 
             </div>
-            <div  className="text-xl text-white hover:text-blue-500">
+            <div  className="text-xl text-white hover:text-blue-500" onClick={() => router.push("/AboutUs")}>
               {/* About Us */}
               {t("About Us")}
             </div>
-            <div className="text-xl text-white hover:text-blue-500">
+            <div className="text-xl text-white hover:text-blue-500" onClick={() => router.push("/ContactUs")}>
               {/* Contact Us */}
               {t("Contact Us")}
             </div>

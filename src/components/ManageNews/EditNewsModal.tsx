@@ -24,6 +24,7 @@ import { Calendar } from "../ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { EditNews } from "@/app/(Admin)/Admin/dashboard/ManageNews/articlefetch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface EditNewsModalProps {
   news: NewsType;
@@ -37,8 +38,9 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
 
   const [newsTilte, setNewsTitle] = useState(news.news_title || "");
   const [newsDescription, setNewsDescription] = useState(news.news_title || "");
+  const [newsTilteTh, setNewsTitleTh] = useState(news.news_title_th || "");
+  const [newsDescriptionTh, setNewsDescriptionTh] = useState(news.news_title_th || "");
   const [date, setDate] = useState<Date>();
-
 
   const [itemFile, setItemFile] = useState<File[]>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
@@ -47,13 +49,19 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
   useEffect(() => {
     setNewsTitle(news.news_title);
     setNewsDescription(news.news_description);
-    setDate(new Date(news.created_at)); 
+    setNewsTitleTh(news.news_title_th);
+    setNewsDescriptionTh(news.news_description_th);
+    setDate(new Date(news.created_at));
   }, [news]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (updateNews: any) => {
       // Validate fields before updating
-      if (!updateNews.news_title || !updateNews.news_description || !updateNews.created_at) {
+      if (
+        !updateNews.news_title ||
+        !updateNews.news_description ||
+        !updateNews.created_at
+      ) {
         toast.error("Please fill in all the required fields.");
         throw new Error("Missing required fields");
       }
@@ -62,11 +70,13 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
         newsId: news.id,
         newsTitle: updateNews.news_title,
         newsDescription: updateNews.news_description,
-        createdAt: format(updateNews.created_at, 'y-LL-dd'),
+        newsTitleTh: updateNews.news_title_th,
+        newsDescriptionTh: updateNews.news_description_th,
+        createdAt: format(updateNews.created_at, "y-LL-dd"),
         files: itemFile,
         selectedImages: selectedImages,
       });
-      
+
       setIsOpen(false);
       resetState();
     },
@@ -84,8 +94,6 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
     },
   });
 
-
-
   const handleImageSelect = (imgPath: string) => {
     setSelectedImages((prevSelected) => {
       if (prevSelected.includes(imgPath)) {
@@ -96,25 +104,27 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
     });
   };
 
-
   const handleSubmit = async () => {
     if (!newsTilte || !newsDescription) {
       toast.error("Please fill in all the required fields.");
       return;
     }
 
-
     mutate({
       news_title: newsTilte,
       news_description: newsDescription,
-      created_at: format(date ?? new Date(), 'y-LL-dd'),
+      news_title_th: newsTilteTh,
+      news_description_th: newsDescriptionTh,
+      created_at: format(date ?? new Date(), "y-LL-dd"),
     });
   };
 
   const resetState = () => {
     setNewsTitle(news.news_title || "");
     setNewsDescription(news.news_description || "");
-    setDate(new Date(news.created_at)); 
+    setNewsTitleTh(news.news_title || "");
+    setNewsDescriptionTh(news.news_description || "");
+    setDate(new Date(news.created_at));
     setItemFile([]);
     setSelectedImages([]);
   };
@@ -143,71 +153,112 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
             Edit Article
           </DialogTitle>
           <DialogDescription>
-            Edit Article to Article Page here. Click Edit Article when you&apos;re done.
+            Edit Article to Article Page here. Click Edit Article when
+            you&apos;re done.
           </DialogDescription>
         </DialogHeader>
+
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="newstitle" className="text-right col-span-4">
-            Article Title
-            </Label>
-            <Input
-              id="newstitle"
-              placeholder="Article Title"
-              value={newsTilte}
-              onChange={(e) => setNewsTitle(e.target.value)}
-              className="col-span-4"
-            />
-          </div>
+          <Tabs defaultValue="en" className="gap-4">
+            <TabsList className="grid w-full grid-cols-2 bg-blue-500">
+              <TabsTrigger value="en">
+                English <div className="text-red-500">*</div>
+              </TabsTrigger>
+              <TabsTrigger value="th">Thai</TabsTrigger>
+            </TabsList>
 
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="newstitle" className="text-right col-span-4">
-            Article Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[180px] md:w-[240px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate} // ทำการเลือกวันที่ใหม่
-                  initialFocus
+            <TabsContent value="en">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="newstitle" className="text-right col-span-4">
+                  Article Title
+                </Label>
+                <Input
+                  id="newstitle"
+                  placeholder="Article Title"
+                  value={newsTilte}
+                  onChange={(e) => setNewsTitle(e.target.value)}
+                  className="col-span-4"
                 />
-              </PopoverContent>
-            </Popover>
-          </div>
+              </div>
+            </TabsContent>
 
+            <TabsContent value="th">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="newstitle" className="text-right col-span-4">
+                  Article Thai Title
+                </Label>
+                <Input
+                  id="newstitle"
+                  placeholder="Article Title"
+                  value={newsTilteTh}
+                  onChange={(e) => setNewsTitleTh(e.target.value)}
+                  className="col-span-4"
+                />
+              </div>
+            </TabsContent>
 
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="newstitle" className="text-right col-span-4">
+                Article Date
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[180px] md:w-[240px] justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon />
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate} // ทำการเลือกวันที่ใหม่
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
 
+            <TabsContent value="en">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="newsdes" className="col-span-4">
+                  Article Description
+                </Label>
+                <Textarea
+                  id="newsdes"
+                  placeholder="Type your Article description here."
+                  value={newsDescription}
+                  onChange={(e) => setNewsDescription(e.target.value)}
+                  // rows={2}
+                  // className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
+                  className="col-span-4 "
+                />
+              </div>
+            </TabsContent>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="newsdes" className="col-span-4">
-              Item Description
-            </Label>
-            <Textarea
-              id="newsdes"
-              placeholder="Type your Article description here."
-              value={newsDescription}
-              onChange={(e) => setNewsDescription(e.target.value)}
-              // rows={2}
-              // className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
-              className="col-span-4 "
-
-            />
-          </div>
-
+            <TabsContent value="th">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="newsdes" className="col-span-4">
+                  Article Thai Description
+                </Label>
+                <Textarea
+                  id="newsdes"
+                  placeholder="Type your Article description here."
+                  value={newsDescriptionTh}
+                  onChange={(e) => setNewsDescriptionTh(e.target.value)}
+                  // rows={2}
+                  // className="col-span-4 resize-none overflow-auto max-h-[150px] min-h-[150px]"
+                  className="col-span-4 "
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
           {/* <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="brand" className="text-right">
               Brand
@@ -249,7 +300,6 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
                     alt={`News Image ${index + 1}`}
                     width={100}
                     height={100}
-                    
                   />
                   <div
                     className={`absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity bg-black/50 text-white ${
@@ -295,6 +345,7 @@ export function EditNewsModal({ news }: EditNewsModalProps) {
           </div>
           {/* )} */}
         </div>
+
         <DialogFooter>
           <Button
             type="submit"

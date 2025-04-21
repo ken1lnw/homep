@@ -14,7 +14,7 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
 import { fetchSingleArticle } from "./singlearticledata";
 import { LoadingSpinner } from "../../Products/[id]/spinload";
-import { useTranslations } from "next-intl";
+import { useTranslations,useLocale } from "next-intl";
 
 export default function NewsDetail({
   params,
@@ -22,6 +22,7 @@ export default function NewsDetail({
   params: Promise<{ id: string }>;
 }) {
   const t = useTranslations("Article");
+  const locale = useLocale();
   const router = useRouter();
   const { id } = use(params); // ใช้ use() เพื่อดึงค่า params.id โดยไม่ต้องใช้ useEffect
 
@@ -48,6 +49,26 @@ export default function NewsDetail({
   // if (isLoading) return <p>Loading...</p>;
   // if (error) return <p>Error loading article</p>;
 
+  const localized = article
+    ? (() => {
+        const hasThTitle = Boolean(article.news_title_th?.trim());
+        const hasThDesc = Boolean(article.news_description_th?.trim());
+
+        return {
+          ...article,
+          title:
+            locale === "th" && hasThTitle
+              ? article.news_title_th!
+              : article.news_title,
+          description:
+            locale === "th" && hasThDesc
+              ? article.news_description_th!
+              : article.news_description,
+        };
+      })()
+    : null;
+
+
   return (
     <>
     {isLoading && (
@@ -59,7 +80,8 @@ export default function NewsDetail({
           
     <div className="container lg:mx-auto my-10 px-2">
       <h1 className="text-4xl font-bold text-blue-500">
-        {article?.news_title}
+        {/* {article?.news_title} */}
+        {localized?.title}
       </h1>
       <div className="bg-blue-300 h-0.5 my-2"></div>
       <p className="text-md text-gray-500">
@@ -86,7 +108,8 @@ export default function NewsDetail({
       <div
         className="mt-8 text-gray-700"
         style={{ whiteSpace: "pre-wrap" }} // CSS เพื่อแสดงการเว้นวรรคในข้อความ
-        dangerouslySetInnerHTML={{ __html: article?.news_description || "" }}
+        // dangerouslySetInnerHTML={{ __html: article?.news_description || "" }}
+        dangerouslySetInnerHTML={{ __html: localized?.description || "" }}
       />
 
       {article?.news_image && article.news_image.length > 1 && (

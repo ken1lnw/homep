@@ -100,6 +100,8 @@ async function uploadFiles(files: File[]): Promise<string[]> {
   export async function addNews(newNews: {
     news_title: string;
     news_description: string;
+    news_title_th: string;
+      news_description_th: string;
     file?: File[];
   }): Promise<void> {
     // Check for duplicate news_title
@@ -123,6 +125,8 @@ async function uploadFiles(files: File[]): Promise<string[]> {
       .insert({
         news_title: newNews.news_title,
         news_description: newNews.news_description,
+        news_title_th: newNews.news_title_th,
+        news_description_th: newNews.news_description_th,
       })
       .select("id")
       .single();
@@ -162,6 +166,8 @@ export async function EditNews({
   newsId,
   newsTitle,
   newsDescription,
+  newsTitleTh,
+  newsDescriptionTh,
   createdAt,
   files,
   selectedImages,
@@ -169,6 +175,8 @@ export async function EditNews({
   newsId: number;
   newsTitle: string;
   newsDescription: string;
+  newsTitleTh: string;
+  newsDescriptionTh: string;
   createdAt: string;
   files: File[];
   selectedImages: string[];
@@ -205,6 +213,8 @@ export async function EditNews({
     .update({
       news_title: newsTitle,
       news_description: newsDescription,
+      news_title_th: newsTitleTh,
+      news_description_th: newsDescriptionTh,
       created_at: createdAt,
     })
     .eq("id", newsId)
