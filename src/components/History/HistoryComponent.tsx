@@ -114,6 +114,7 @@ export default function HistoryComponent() {
           className="space-y-5"
         >
           <h1 className="text-3xl font-bold text-blue-500">1997</h1>
+          <p>{b("1997")}</p>
 
           {/* <p>Initial Public Offering listed in Taiwan Securities Exchange.</p> */}
         </div>

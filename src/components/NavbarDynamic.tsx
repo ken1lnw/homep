@@ -162,8 +162,9 @@ export default function NavbarDynamic() {
               zIndex: 1000,
               backgroundColor: "#0172E5",
               backdropFilter: "blur(10px)",
+              // padding:"0px 10px" ,
             }}
-            className="relative flex justify-between"
+            className="relative flex justify-between !px-2 lg:!px-[50px]"
           >
             <div className="flex items-center">
               <Link href="/">
@@ -295,7 +296,7 @@ export default function NavbarDynamic() {
                         <GiHamburgerMenu />
                       </Button>
                     </DrawerTrigger>
-                    <DrawerContent className="z-[1000]">
+                    <DrawerContent className="z-[1000] overflow-y-auto">
                       <div className="mx-auto w-full max-w-sm">
                         <DrawerHeader>
                           <DrawerTitle>
@@ -317,7 +318,8 @@ export default function NavbarDynamic() {
                             </DrawerDescription>
                           </div>
                         </DrawerHeader>
-                        <div>
+                        {/* <div> */}
+                        <div className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
                           {[
                             { label: t("Home"), href: "/" },
                             { label: t("Products"), href: "/Products" },
@@ -354,7 +356,7 @@ export default function NavbarDynamic() {
                               }`}
                             >
                               {t("Cart")} ({" "}
-                              {Object.keys(cartBucket.data).length}
+                              {Object.keys(cartBucket.data).length}{" "}
                               {t("Items")})
                             </Button>
                           </DrawerClose>
