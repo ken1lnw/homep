@@ -363,7 +363,7 @@ export default function CartComponent() {
               >
                 <div className="flex flex-col md:flex-row gap-5 items-center w-full">
                   <div
-                    className="relative group cursor-pointer"
+                    className="relative group cursor-pointer w-[150px] h-[150px] 2xl:w-[180px] 2xl:h-[180px]"
                     onClick={() => router.push(`/Products/${xx.id}`)}
                   >
                     <img
@@ -375,7 +375,10 @@ export default function CartComponent() {
                       alt={xx.tyc_no}
                       width={150}
                       height={100}
-                      className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110 lg:w-[100px] xl:w-[120px] 2xl:w-[150px]"
+                      // className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110 lg:w-[100px] xl:w-[120px] 2xl:w-[150px]"
+                      className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110 w-full h-full object-contain"
+
+                      
                     />
                   </div>
                   <div className="flex-1 h-full w-full">

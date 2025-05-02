@@ -91,12 +91,12 @@ export default function NavbarDynamic() {
         { label: t("ourp"), key: "OurProduct" ,onClick: () => router.push('/Products')},
         {
           label: (
-            <div
+            <button type='button'
               onClick={() => window.open("https://www.tyc.com.tw/ecatalog", "_blank", "noopener noreferrer")}
               style={{ cursor: "pointer", color: "inherit" }}
             >
               {t("ecat")}
-            </div>
+            </button>
           ),
           key: "E-Catalog"
         }
@@ -262,7 +262,7 @@ export default function NavbarDynamic() {
                   </div>
                 </div>
 
-                <button
+                <button type="button"
                   onClick={() => router.push("/Cart")}
                   className="hidden lg:flex relative "
                 >
@@ -279,8 +279,8 @@ export default function NavbarDynamic() {
                   </span>
                 </button>
 
-                <button
-                  className="text-white hover:text-gray-500 flex"
+                <button type="button"
+                className="text-white hover:text-gray-500 flex w-[50px] "
                   onClick={toggleLanguage}
                 >
                   <GlobalOutlined className="hover:!text-blue-400" />
@@ -296,7 +296,7 @@ export default function NavbarDynamic() {
                         <GiHamburgerMenu />
                       </Button>
                     </DrawerTrigger>
-                    <DrawerContent className="z-[1000] overflow-y-auto">
+                    <DrawerContent className="z-[1000] overflow-y-auto overflow-x-hidden">
                       <div className="mx-auto w-full max-w-sm">
                         <DrawerHeader>
                           <DrawerTitle>
