@@ -10,7 +10,8 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import 'swiper/css/zoom';
+import { FreeMode, Navigation, Thumbs, Zoom } from "swiper/modules";
 
 // import "@/style/swiper-button-productid.css"; // นำเข้า CSS ที่สร้างขึ้น
 
@@ -269,8 +270,9 @@ export default function ProdcutsDetail({
               loop={true}
               spaceBetween={10}
               navigation={true}
+              zoom={true}
               thumbs={{ swiper: thumbsSwiper }}
-              modules={[FreeMode, Navigation, Thumbs]}
+              modules={[FreeMode, Navigation, Thumbs ,Zoom]}
               className="mySwiper2"
             >
               {product &&
@@ -278,7 +280,9 @@ export default function ProdcutsDetail({
               product.item_image.length > 0 ? (
                 product.item_image.map((img) => (
                   <SwiperSlide key={img.id}>
+                    <div className="swiper-zoom-container">
                     <img src={img.path} alt={`Product Image ${img.id}`} />
+                    </div>
                   </SwiperSlide>
                 ))
               ) : (
@@ -300,15 +304,19 @@ export default function ProdcutsDetail({
               freeMode={true}
               watchSlidesProgress={true}
               modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiper"
+              className="mySwiper2thumbnail"
             >
               {product &&
               product.item_image &&
               product.item_image.length > 0 ? (
                 product.item_image.map((img) => (
+                  
                   <SwiperSlide key={img.id}>
+                    <div className="swiper-zoom-container">
                     <img src={img.path} alt={`Product Thumbnail ${img.id}`} />
+                    </div>
                   </SwiperSlide>
+                  
                 ))
               ) : (
                 <SwiperSlide>

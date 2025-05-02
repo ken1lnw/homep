@@ -555,7 +555,7 @@ export default function Prodcuts() {
                 <div className="flex flex-col border rounded-lg shadow-sm" key={allproducts.id}>
                   <div className="flex border-b-2 gap-2 bg-gray-50 p-2">
                     <div
-                      className="relative group cursor-pointer"
+                      className="relative group cursor-pointer w-[120px] h-[120px] md:w-[150px] md:h-[150px] 2xl:w-[200px] 2xl:h-[200px] "
                       onClick={() => router.push(`/Products/${allproducts.id}`)}
                     >
                       <img
@@ -567,7 +567,7 @@ export default function Prodcuts() {
                         alt={allproducts.tyc_no}
                         // width={150}
                         // height={100}
-                        className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110 w-[120px]"
+                        className="rounded-2xl transform transition-all duration-300 ease-in-out group-hover:scale-110 w-full h-full object-contain"
                       />
                     </div>
 

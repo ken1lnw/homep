@@ -172,7 +172,7 @@ body {
 
 .mySwiper2.swiper {
   width: auto;
-  height: auto;
+  height: 500px;
   margin: 0 0 10px 0;
    /* border: 3px solid #E81F76;   ตัวอย่างการเพิ่ม border */
   /* border-radius: 8px;  ปรับขอบให้มน */
@@ -207,6 +207,34 @@ body {
 }
 
 
+
+
+.mySwiper2thumbnail .swiper-slide {
+  /* width: 100px;
+  height: 100px; */
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  overflow: hidden;
+  opacity: 0.1;
+}
+
+.mySwiper2thumbnail .swiper-slide-thumb-active {
+  opacity: 1;
+  border: 0.5px solid black;  /* ตัวอย่างการเพิ่ม border */
+  border-radius: 5px; /* ปรับขอบให้มน */
+  object-fit: contain
+}
+
+.mySwiper2thumbnail .swiper-slide img {
+  /* width: auto;
+  height: 100%; */
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+
 /* หากต้องการปรับขนาดของ thumbnail แบบที่ไม่ให้สูงมากหรือต่ำมาก */
 .mySwiper .swiper-slide {
   width: 100px;
@@ -232,7 +260,7 @@ body {
 
 .mySwiper3 .swiper-slide {
   display: flex;
-       justify-content: center;
+  justify-content: center;
   width: 200px;
   height: 200px;
   text-align: center;
@@ -243,8 +271,10 @@ body {
 
 
 .mySwiper3 .swiper-slide img {
-  width: auto;
-  height: 100%;
+  /* width: auto; */
+  /* height: 100%; */
+  width: 200px;
+  height: 200px;
   object-fit: contain;
    border: 1px solid black;
   border-radius: 5px;
