@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   // Button,
 
@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ProductionType } from "./ProductionType";
 // import { Button } from "../atom/buttom";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter , useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 import {
@@ -35,28 +35,56 @@ import { useTranslations } from "next-intl";
 
 export default function Prodcuts() {
     const t = useTranslations("Product");
-  
+  const searchParams = useSearchParams();
+
+  const initialPage = parseInt(searchParams.get('page') || '1', 10);
+  const [currentPage, setCurrentPage] = useState(initialPage);
+
   const store = useBucket();
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 9;
   // const [oemNo, setOemNo] = useState<string>("");
-  const [searchOemNo, setSearchOemNo] = useState<string | null>(null);
-  const [searchTycNo, setSearchTycNo] = useState<string | null>(null);
-  const [searchVehicleBrand, setSearchVehicleBrand] = useState<string | null>(
-    null
-  );
-  const [searchVehicleModel, setSearchVehicleModel] = useState<string | null>(
-    null
-  );
-  const [searchSide, setSearchSide] = useState<string | null>(null);
-  const [searchProductBrand, setSearchProductBrand] = useState<string | null>(
-    null
-  );
-  const [searchProductType, setSearchProductType] = useState<string[]>([]);
+  // const [searchOemNo, setSearchOemNo] = useState<string | null>(null);
+  // const [searchTycNo, setSearchTycNo] = useState<string | null>(null);
+  // const [searchVehicleBrand, setSearchVehicleBrand] = useState<string | null>(
+  //   null
+  // );
+  // const [searchVehicleModel, setSearchVehicleModel] = useState<string | null>(
+  //   null
+  // );
+  // const [searchSide, setSearchSide] = useState<string | null>(null);
+  // const [searchProductBrand, setSearchProductBrand] = useState<string | null>(
+  //   null
+  // );
+  // const [searchProductType, setSearchProductType] = useState<string[]>([]);
 
-  const [searchYearFrom, setSearchYearFrom] = useState<string | null>(null);
-  const [searchYearTo, setSearchYearTo] = useState<string | null>(null);
+  // const [searchYearFrom, setSearchYearFrom] = useState<string | null>(null);
+  // const [searchYearTo, setSearchYearTo] = useState<string | null>(null);
+
+
+  
+  // ดึงค่าจาก URL params
+  const initialSearchOemNo = searchParams.get("searchOemNo") ?? "";
+  const initialSearchTycNo = searchParams.get("searchTycNo") ?? "";
+  const initialSearchVehicleBrand = searchParams.get("searchVehicleBrand") ?? "";
+  const initialSearchVehicleModel = searchParams.get("searchVehicleModel") ?? "";
+  const initialSearchSide = searchParams.get("searchSide") ?? "";
+  const initialSearchProductBrand = searchParams.get("searchProductBrand") ?? "";
+  const initialSearchProductType = searchParams.get("searchProductType")?.split(",") ?? [];
+  const initialSearchYearFrom = searchParams.get("searchYearFrom") ?? "";
+  const initialSearchYearTo = searchParams.get("searchYearTo") ?? "";
+
+  // State สำหรับค่าฟิลเตอร์
+  const [searchOemNo, setSearchOemNo] = useState(initialSearchOemNo);
+  const [searchTycNo, setSearchTycNo] = useState(initialSearchTycNo);
+  const [searchVehicleBrand, setSearchVehicleBrand] = useState(initialSearchVehicleBrand);
+  const [searchVehicleModel, setSearchVehicleModel] = useState(initialSearchVehicleModel);
+  const [searchSide, setSearchSide] = useState(initialSearchSide);
+  const [searchProductBrand, setSearchProductBrand] = useState(initialSearchProductBrand);
+  const [searchProductType, setSearchProductType] = useState<string[]>(initialSearchProductType);
+  const [searchYearFrom, setSearchYearFrom] = useState(initialSearchYearFrom);
+  const [searchYearTo, setSearchYearTo] = useState(initialSearchYearTo);
 
 
 
@@ -70,7 +98,63 @@ export default function Prodcuts() {
   const [debouncedSearchProductType] = useDebounce(searchProductType, 500);
   const [debouncedSearchYearFrom] = useDebounce(searchYearFrom, 500);
   const [debouncedSearchYearTo] = useDebounce(searchYearTo, 500);
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.replace(`?${params.toString()}`);
+    
+    setCurrentPage(page);
+  };
   
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    if (debouncedSearchOemNo) params.set("searchOemNo", debouncedSearchOemNo);
+    else params.delete("searchOemNo");
+  
+    if (debouncedSearchTycNo) params.set("searchTycNo", debouncedSearchTycNo);
+    else params.delete("searchTycNo");
+  
+    if (debouncedSearchVehicleBrand) params.set("searchVehicleBrand", debouncedSearchVehicleBrand);
+    else params.delete("searchVehicleBrand");
+  
+    if (debouncedSearchVehicleModel) params.set("searchVehicleModel", debouncedSearchVehicleModel);
+    else params.delete("searchVehicleModel");
+  
+    if (debouncedSearchSide) params.set("searchSide", debouncedSearchSide);
+    else params.delete("searchSide");
+  
+    if (debouncedSearchProductBrand) params.set("searchProductBrand", debouncedSearchProductBrand);
+    else params.delete("searchProductBrand");
+  
+    if (debouncedSearchProductType.length > 0) params.set("searchProductType", debouncedSearchProductType.join(","));
+    else params.delete("searchProductType");
+  
+    if (debouncedSearchYearFrom) params.set("searchYearFrom", debouncedSearchYearFrom);
+    else params.delete("searchYearFrom");
+  
+    if (debouncedSearchYearTo) params.set("searchYearTo", debouncedSearchYearTo);
+    else params.delete("searchYearTo");
+      const currentParams = searchParams.toString();
+    const newParams = params.toString();
+  
+    if (currentParams !== newParams) {
+      router.replace(`?${newParams}`);
+    }
+  }, [
+    searchParams, // เพิ่ม searchParams เพื่อให้ useEffect ฟังการเปลี่ยนแปลง
+    debouncedSearchOemNo,
+    debouncedSearchTycNo,
+    debouncedSearchVehicleBrand,
+    debouncedSearchVehicleModel,
+    debouncedSearchSide,
+    debouncedSearchProductBrand,
+    debouncedSearchProductType,
+    debouncedSearchYearFrom,
+    debouncedSearchYearTo,
+  ]);
 
   // Function to handle the clearing of all form fields
   const handleClear = () => {
@@ -424,7 +508,8 @@ export default function Prodcuts() {
               {getPageRange().map((page) => (
                 <PaginationItem key={page}>
                   <PaginationLink
-                    onClick={() => setCurrentPage(page)} // เปลี่ยน currentPage เมื่อกดที่หน้า
+                    // onClick={() => setCurrentPage(page)} // เปลี่ยน currentPage เมื่อกดที่หน้า
+                    onClick={() => goToPage(page)}
                     isActive={page === currentPage}
                     className={`${
                       page === currentPage
