@@ -12,6 +12,7 @@
 // }
 
 export interface ProductionType {
+    side: string
     productId: number
     id: number,
     created_at: string,

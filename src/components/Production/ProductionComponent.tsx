@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ProductionType } from "./ProductionType";
 // import { Button } from "../atom/buttom";
 import { toast } from "sonner";
-import { useRouter , useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { LoadingSpinner } from "@/app/(Home)/Products/[id]/spinload";
 import {
@@ -30,14 +30,15 @@ import {
   fetchVehicleModel,
 } from "@/app/(Home)/Products/productdatafetch";
 import { useBucket } from "@/store/bucket";
-import {useDebounce} from "use-debounce"
+import { useDebounce } from "use-debounce";
 import { useTranslations } from "next-intl";
+import { ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 
 export default function Prodcuts() {
-    const t = useTranslations("Product");
+  const t = useTranslations("Product");
   const searchParams = useSearchParams();
 
-  const initialPage = parseInt(searchParams.get('page') || '1', 10);
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   const store = useBucket();
@@ -62,32 +63,39 @@ export default function Prodcuts() {
   // const [searchYearFrom, setSearchYearFrom] = useState<string | null>(null);
   // const [searchYearTo, setSearchYearTo] = useState<string | null>(null);
 
-
-  
   // ดึงค่าจาก URL params
   const initialSearchOemNo = searchParams.get("searchOemNo") ?? "";
   const initialSearchTycNo = searchParams.get("searchTycNo") ?? "";
-  const initialSearchVehicleBrand = searchParams.get("searchVehicleBrand") ?? "";
-  const initialSearchVehicleModel = searchParams.get("searchVehicleModel") ?? "";
-  const initialSearchSide = searchParams.get("searchSide") ?? "";
-  const initialSearchProductBrand = searchParams.get("searchProductBrand") ?? "";
-  const initialSearchProductType = searchParams.get("searchProductType")?.split(",") ?? [];
+  const initialSearchVehicleBrand =
+    searchParams.get("searchVehicleBrand") ?? "";
+  const initialSearchVehicleModel =
+    searchParams.get("searchVehicleModel") ?? "";
+  const initialSearchSide = searchParams.get("searchSide") ?? null;
+  const initialSearchProductBrand =
+    searchParams.get("searchProductBrand") ?? "";
+  const initialSearchProductType =
+    searchParams.get("searchProductType")?.split(",") ?? [];
   const initialSearchYearFrom = searchParams.get("searchYearFrom") ?? "";
   const initialSearchYearTo = searchParams.get("searchYearTo") ?? "";
 
   // State สำหรับค่าฟิลเตอร์
   const [searchOemNo, setSearchOemNo] = useState(initialSearchOemNo);
   const [searchTycNo, setSearchTycNo] = useState(initialSearchTycNo);
-  const [searchVehicleBrand, setSearchVehicleBrand] = useState(initialSearchVehicleBrand);
-  const [searchVehicleModel, setSearchVehicleModel] = useState(initialSearchVehicleModel);
+  const [searchVehicleBrand, setSearchVehicleBrand] = useState(
+    initialSearchVehicleBrand
+  );
+  const [searchVehicleModel, setSearchVehicleModel] = useState(
+    initialSearchVehicleModel
+  );
   const [searchSide, setSearchSide] = useState(initialSearchSide);
-  const [searchProductBrand, setSearchProductBrand] = useState(initialSearchProductBrand);
-  const [searchProductType, setSearchProductType] = useState<string[]>(initialSearchProductType);
+  const [searchProductBrand, setSearchProductBrand] = useState(
+    initialSearchProductBrand
+  );
+  const [searchProductType, setSearchProductType] = useState<string[]>(
+    initialSearchProductType
+  );
   const [searchYearFrom, setSearchYearFrom] = useState(initialSearchYearFrom);
   const [searchYearTo, setSearchYearTo] = useState(initialSearchYearTo);
-
-
-
 
   const [debouncedSearchOemNo] = useDebounce(searchOemNo, 500);
   const [debouncedSearchTycNo] = useDebounce(searchTycNo, 500);
@@ -103,43 +111,48 @@ export default function Prodcuts() {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     router.replace(`?${params.toString()}`);
-    
+
     setCurrentPage(page);
   };
-  
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", "1");
+    // params.set("page", "1");
     if (debouncedSearchOemNo) params.set("searchOemNo", debouncedSearchOemNo);
     else params.delete("searchOemNo");
-  
+
     if (debouncedSearchTycNo) params.set("searchTycNo", debouncedSearchTycNo);
     else params.delete("searchTycNo");
-  
-    if (debouncedSearchVehicleBrand) params.set("searchVehicleBrand", debouncedSearchVehicleBrand);
+
+    if (debouncedSearchVehicleBrand)
+      params.set("searchVehicleBrand", debouncedSearchVehicleBrand);
     else params.delete("searchVehicleBrand");
-  
-    if (debouncedSearchVehicleModel) params.set("searchVehicleModel", debouncedSearchVehicleModel);
+
+    if (debouncedSearchVehicleModel)
+      params.set("searchVehicleModel", debouncedSearchVehicleModel);
     else params.delete("searchVehicleModel");
-  
+
     if (debouncedSearchSide) params.set("searchSide", debouncedSearchSide);
     else params.delete("searchSide");
-  
-    if (debouncedSearchProductBrand) params.set("searchProductBrand", debouncedSearchProductBrand);
+
+    if (debouncedSearchProductBrand)
+      params.set("searchProductBrand", debouncedSearchProductBrand);
     else params.delete("searchProductBrand");
-  
-    if (debouncedSearchProductType.length > 0) params.set("searchProductType", debouncedSearchProductType.join(","));
+
+    if (debouncedSearchProductType.length > 0)
+      params.set("searchProductType", debouncedSearchProductType.join(","));
     else params.delete("searchProductType");
-  
-    if (debouncedSearchYearFrom) params.set("searchYearFrom", debouncedSearchYearFrom);
+
+    if (debouncedSearchYearFrom)
+      params.set("searchYearFrom", debouncedSearchYearFrom);
     else params.delete("searchYearFrom");
-  
-    if (debouncedSearchYearTo) params.set("searchYearTo", debouncedSearchYearTo);
+
+    if (debouncedSearchYearTo)
+      params.set("searchYearTo", debouncedSearchYearTo);
     else params.delete("searchYearTo");
-      const currentParams = searchParams.toString();
+    const currentParams = searchParams.toString();
     const newParams = params.toString();
-  
+
     if (currentParams !== newParams) {
       router.replace(`?${newParams}`);
     }
@@ -158,6 +171,10 @@ export default function Prodcuts() {
 
   // Function to handle the clearing of all form fields
   const handleClear = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    router.replace(`?${params.toString()}`);
+    setCurrentPage(1);
     setSearchOemNo("");
     setSearchTycNo("");
     setSearchVehicleBrand("");
@@ -192,40 +209,36 @@ export default function Prodcuts() {
       debouncedSearchProductType,
       debouncedSearchYearFrom,
       debouncedSearchYearTo,
-
-
     ],
     queryFn: async () => {
       const start = (currentPage - 1) * pageSize;
       const end = start + pageSize - 1;
 
-    //   return await fetchAllProduct(start, end, {
-    //   searchOemNo: searchOemNo || undefined,
-    //   searchTycNo: searchTycNo || undefined,
-    //   searchVehicleBrand: searchVehicleBrand || undefined,
-    //   searchVehicleModel: searchVehicleModel || undefined,
-    //   searchSide: searchSide || undefined,
-    //   searchProductBrand: searchProductBrand || undefined,
-    //   searchProductType: searchProductType.length ? searchProductType : undefined,
-    //   searchYearFrom: searchYearFrom || undefined,
-    //   searchYearTo: searchYearTo || undefined,
-    // });
+      //   return await fetchAllProduct(start, end, {
+      //   searchOemNo: searchOemNo || undefined,
+      //   searchTycNo: searchTycNo || undefined,
+      //   searchVehicleBrand: searchVehicleBrand || undefined,
+      //   searchVehicleModel: searchVehicleModel || undefined,
+      //   searchSide: searchSide || undefined,
+      //   searchProductBrand: searchProductBrand || undefined,
+      //   searchProductType: searchProductType.length ? searchProductType : undefined,
+      //   searchYearFrom: searchYearFrom || undefined,
+      //   searchYearTo: searchYearTo || undefined,
+      // });
 
-
-
-    return await fetchAllProduct(start, end, {
-      searchOemNo: debouncedSearchOemNo || undefined,
-      searchTycNo: debouncedSearchTycNo || undefined,
-      searchVehicleBrand: debouncedSearchVehicleBrand || undefined,
-      searchVehicleModel: debouncedSearchVehicleModel || undefined,
-      searchSide: debouncedSearchSide || undefined,
-      searchProductBrand: debouncedSearchProductBrand || undefined,
-      searchProductType: debouncedSearchProductType.length ? debouncedSearchProductType : undefined,
-      searchYearFrom: debouncedSearchYearFrom || undefined,
-      searchYearTo: debouncedSearchYearTo || undefined,
-    });
-
-    
+      return await fetchAllProduct(start, end, {
+        searchOemNo: debouncedSearchOemNo || undefined,
+        searchTycNo: debouncedSearchTycNo || undefined,
+        searchVehicleBrand: debouncedSearchVehicleBrand || undefined,
+        searchVehicleModel: debouncedSearchVehicleModel || undefined,
+        searchSide: debouncedSearchSide || undefined,
+        searchProductBrand: debouncedSearchProductBrand || undefined,
+        searchProductType: debouncedSearchProductType.length
+          ? debouncedSearchProductType
+          : undefined,
+        searchYearFrom: debouncedSearchYearFrom || undefined,
+        searchYearTo: debouncedSearchYearTo || undefined,
+      });
     },
     // staleTime: 10 * 60 * 1000,
   });
@@ -339,15 +352,16 @@ export default function Prodcuts() {
       (_, index) => startPage + index
     );
   };
-
   return (
     <>
       <div>
-      {(isLoadingAllProduct && isLoadingProductType && isLoadingVehicleBrands ) && (
-        <div className="w-full h-full fixed top-0 left-0 bg-white bg-opacity-50 z-50 flex justify-center items-center">
-          <LoadingSpinner />
-        </div>
-      )}
+        {isLoadingAllProduct &&
+          isLoadingProductType &&
+          isLoadingVehicleBrands && (
+            <div className="w-full h-full fixed top-0 left-0 bg-white bg-opacity-50 z-50 flex justify-center items-center">
+              <LoadingSpinner />
+            </div>
+          )}
         <div className="relative">
           <div className="absolute top-0 left-0 w-full h-[300px] bg-black opacity-40" />
 
@@ -358,15 +372,14 @@ export default function Prodcuts() {
           />
 
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-10">
-            <h1 className="text-7xl font-bold">{t("title")}
+            <h1 className="text-7xl font-bold">
+              {t("title")}
               {/* Products */}
-
             </h1>
             <p className="text-xl font-bold">
               {/* Our Innovations , Our Products */}
               {t("des")}
-              
-              </p>
+            </p>
           </div>
         </div>
       </div>
@@ -438,7 +451,7 @@ export default function Prodcuts() {
                 options={vehicleModels || []} // ใช้ข้อมูล vehicle_model ที่โหลดมา
                 allowClear
                 loading={isLoadingVehicleModels}
-                value={searchVehicleModel == "" ? "null" : searchVehicleModel}
+                value={searchVehicleModel == "" ? null : searchVehicleModel}
                 onChange={setSearchVehicleModel}
               />
 
@@ -469,6 +482,18 @@ export default function Prodcuts() {
                 value={searchYearTo ?? ""}
                 onChange={(e) => setSearchYearTo(e.target.value)}
               />
+
+              <Select
+                allowClear
+                placeholder="Side"
+                onChange={setSearchSide}
+                value={searchSide}
+              >
+                <Select.Option value="LH">LH</Select.Option>
+                <Select.Option value="RH">RH</Select.Option>
+                <Select.Option value="RH+LH">RH+LH</Select.Option>
+                <Select.Option value="RH/LH">RH/LH</Select.Option>
+              </Select>
             </ConfigProvider>
           </div>
           <div className="flex justify-end mt-4 gap-4 items-center">
@@ -478,9 +503,9 @@ export default function Prodcuts() {
             <div>
               {/* Total Items:  */}
               {t("total")}
-              
-              
-              {alldata?.total}</div>
+
+              {alldata?.total}
+            </div>
 
             <Button
               onClick={handleClear}
@@ -495,6 +520,17 @@ export default function Prodcuts() {
         <div className="my-5">
           <Pagination className="md:justify-end cursor-default">
             <PaginationContent>
+              <Button
+                variant="outline"
+                className=" h-8 w-8 p-0 flex"
+                // onClick={() => table.setPageIndex(0)}
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+              // disabled={!table.getCanPreviousPage()}
+              >
+                <span className="sr-only">Go to first page</span>
+                <ChevronsLeftIcon />
+              </Button>
               <PaginationItem>
                 <PaginationPrevious
                   onClick={() =>
@@ -511,11 +547,10 @@ export default function Prodcuts() {
                     // onClick={() => setCurrentPage(page)} // เปลี่ยน currentPage เมื่อกดที่หน้า
                     onClick={() => goToPage(page)}
                     isActive={page === currentPage}
-                    className={`${
-                      page === currentPage
+                    className={`${page === currentPage
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
-                    } hover:bg-blue-400 hover:text-white`}
+                      } hover:bg-blue-400 hover:text-white`}
                   >
                     {page}
                   </PaginationLink>
@@ -531,6 +566,18 @@ export default function Prodcuts() {
                   className="bg-white text-black hover:bg-transparent hover:text-black/50"
                 />
               </PaginationItem>
+              <Button
+                variant="outline"
+                className=" size-8 "
+                size="icon"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+              // onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              // disabled={!table.getCanNextPage()}
+              >
+                <span className="sr-only">Go to last page</span>
+                <ChevronsRightIcon />
+              </Button>
             </PaginationContent>
           </Pagination>
         </div>
@@ -637,7 +684,10 @@ export default function Prodcuts() {
                 //   </div>
 
                 // </div>
-                <div className="flex flex-col border rounded-lg shadow-sm" key={allproducts.id}>
+                <div
+                  className="flex flex-col border rounded-lg shadow-sm"
+                  key={allproducts.id}
+                >
                   <div className="flex border-b-2 gap-2 bg-gray-50 p-2">
                     <div
                       className="relative group cursor-pointer w-[120px] h-[120px] md:w-[150px] md:h-[150px] 2xl:w-[200px] 2xl:h-[200px] "
@@ -684,10 +734,16 @@ export default function Prodcuts() {
                       <div className="">{allproducts.vehicle_year}</div>
                     </div>
 
-
                     <div className="flex gap-2">
                       <div className="text-gray-600">ProductType :</div>
                       <div className="">{allproducts.product_type}</div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <div className="text-gray-600">Side :</div>
+                      <div className="">
+                        {allproducts.left_right || allproducts?.side}
+                      </div>
                     </div>
                   </div>
 
