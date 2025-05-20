@@ -358,7 +358,7 @@ export default function Prodcuts() {
         {isLoadingAllProduct &&
           isLoadingProductType &&
           isLoadingVehicleBrands && (
-            <div className="w-full h-full fixed top-0 left-0 bg-white bg-opacity-50 z-50 flex justify-center items-center">
+            <div className="w-full h-full  top-0 left-0 bg-white bg-opacity-50 z-50 flex justify-center items-center">
               <LoadingSpinner />
             </div>
           )}

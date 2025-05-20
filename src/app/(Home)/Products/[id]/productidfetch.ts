@@ -94,3 +94,16 @@ export async function fetchProductId(
   // console.log("Fetched data:", data);
   return data as ProductionType;
 }
+
+export async function fetchEven(id:number) {
+  if(!id){ return null; }
+  const {data,error} = await supabase
+  .rpc('get_item_product_pairs', { _id: id });
+
+  if (error) {
+    console.error("Error fetching data:", error.message);
+    throw new Error(error.message);
+  }
+  return data as ProductionType;
+  
+}

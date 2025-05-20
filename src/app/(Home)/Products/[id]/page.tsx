@@ -13,7 +13,6 @@ import "swiper/css/thumbs";
 import 'swiper/css/zoom';
 import { FreeMode, Navigation, Thumbs, Zoom } from "swiper/modules";
 
-// import "@/style/swiper-button-productid.css"; // นำเข้า CSS ที่สร้างขึ้น
 
 import { ConfigProvider, Descriptions } from "antd";
 
@@ -25,6 +24,7 @@ import { LoadingSpinner } from "./spinload";
 import { toast } from "sonner";
 
 import {
+  fetchEven,
   fetchProductId,
   fetchRecentProducts,
 } from "@/app/(Home)/Products/[id]/productidfetch";
@@ -41,28 +41,6 @@ export default function ProdcutsDetail({
   const { id } = use(params);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const store = useBucket();
-  // const {
-  //   data: product,
-  //   isLoading,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["item_product", id],
-  //   queryFn: async () => {
-  //     const { data, error } = await supabase
-  //       .from("item_product")
-  //       .select("*,item_image(*)")
-  //       .eq("id", id)
-  //       .single();
-
-  //     if (error) throw error;
-  //     return data as ProductionType;
-  //   },
-  //   staleTime: 1000 * 60 * 5, // Cache ไว้ 5 นาที
-  //   enabled: !!id, // ใช้ query ก็ต่อเมื่อมี id
-  // });
-
-  //   if (isLoading) return <p>Loading...</p>;
-  //   if (error) return <p>Error loading Product</p>;
 
   const {
     data: product,
@@ -78,19 +56,16 @@ export default function ProdcutsDetail({
     enabled: !!id,
   });
 
-  // const { data: recentProducts } = useQuery({
-  //   queryKey: ["recent_item_products"],
-  //   queryFn: async () => {
-  //     const { data, error, count } = await supabase
-  //       .from("item_product")
-  //       .select("*,item_image(*)")
-  //       .order("id", { ascending: true })
-  //       .limit(5);
-  //     if (error) throw error;
+  const { data:evenitem, error: evenerror } = useQuery({
+    queryKey: ["evenitem",id],
+    queryFn: async () => {
+      const fetchEvenData = await fetchEven(parseInt(id));
+      return fetchEvenData;
+    },
+    enabled: !!id,
+  })
 
-  //     return { recentproducts: data as ProductionType[] };
-  //   },
-  // });
+
 
   const { data: recentProducts } = useQuery({
     queryKey: ["recent_item_products"],
@@ -101,19 +76,6 @@ export default function ProdcutsDetail({
   });
 
   const handleAddToCart = (productId: string) => {
-    // ดึงข้อมูลตระกร้าปัจจุบันจาก localStorage
-    // let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-    // // เช็คว่ามีสินค้ารายการนี้ในตระกร้าหรือไม่
-    // if (!cart.includes(productId)) {
-    //   // ถ้าไม่มี ให้เพิ่ม id ของสินค้าลงไป
-    //   cart.push(productId);
-    //   // บันทึกข้อมูลกลับไปที่ localStorage
-    //   localStorage.setItem("cart", JSON.stringify(cart));
-    //   toast.success("Product added to cart!");
-    // } else {
-    //   toast.warning("Product is already in the cart.");
-    // }
 
     if (store.data[+productId]) {
       // ถ้ามีสินค้าในตะกร้าแล้ว ให้แสดง toast error
@@ -127,6 +89,8 @@ export default function ProdcutsDetail({
     router.refresh();
   };
 
+  // console.log("evenitem", evenitem)
+  // console.log("product", product)
   return (
     <>
       {isLoading && (
@@ -136,21 +100,7 @@ export default function ProdcutsDetail({
       )}
 
       <div className="container mx-auto my-10">
-        {/* <div className="mb-5">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink>Products</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>
-                  {product?.oem_no || product?.tyc_no || "No data available"}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div> */}
+ 
 
         <h1 className="text-4xl font-bold text-blue-500">
           {/* Product Details */}
@@ -173,101 +123,11 @@ export default function ProdcutsDetail({
 
         <div className="flex flex-col lg:flex-row gap-10 my-10 mx-2">
           <div className="lg:w-1/2">
-            {/* <Swiper
-              //   spaceBetween={50}
-              //   slidesPerView={1}
-              //   onSlideChange={() => console.log("slide change")}
-              //   onSwiper={(swiper) => console.log(swiper)}
-              loop={true}
-              spaceBetween={10}
-              navigation={true}
-              thumbs={{ swiper: thumbsSwiper }}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiper2"
-            >
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996641.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996666.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996683.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996698.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996746.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-            </Swiper>
-
-            <Swiper
-              onSwiper={setThumbsSwiper}
-              loop={true}
-              spaceBetween={10}
-              slidesPerView={"auto"}
-              freeMode={true}
-              watchSlidesProgress={true}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996641.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996666.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996683.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996698.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <img
-                  src="https://www.tyc.com.tw/assets/uploads/products/cate1684996746.jpg"
-                  alt=""
-                />
-              </SwiperSlide>
-            </Swiper> */}
+           
 
             {/* Swiper สำหรับแสดงรูปหลัก */}
             <Swiper
-              loop={true}
+              // loop={true}
               spaceBetween={10}
               navigation={true}
               zoom={true}
@@ -298,7 +158,7 @@ export default function ProdcutsDetail({
             {/* Swiper สำหรับแสดงรูป thumbnail */}
             <Swiper
               onSwiper={setThumbsSwiper}
-              loop={true}
+              // loop={true}
               spaceBetween={10}
               slidesPerView={"auto"}
               freeMode={true}
@@ -426,6 +286,38 @@ export default function ProdcutsDetail({
               },
             }}
           >
+             {/* 1) slide แรกจาก evenitem */}
+  {Array.isArray(evenitem) && evenitem.length > 0 && (
+    <SwiperSlide key={`even-${evenitem[0].id}`}>
+      <div className="flex flex-col items-center relative group">
+        <img
+          src={evenitem[0].item_image?.[0]?.path || "/TH-TYC_logoWhite.jpg"}
+          alt={`Paired Product ${evenitem[0].tyc_no}`}
+        />
+        <div className="absolute h-full items-end flex">
+          {`OEM.NO : ${evenitem[0].oem_no}` ||
+            `TYC.NO : ${evenitem[0].tyc_no}`}
+        </div>
+        <div
+          className="absolute top-0  h-full w-full flex flex-col items-center justify-center bg-black/80  
+          text-[#0172E5] font-semibold p-1 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer rounded"
+          onClick={() => router.push(`/Products/${evenitem[0].id}`)}
+        >
+          <div className="text-left">
+            <div>
+              OEM.NO : {evenitem[0].oem_no ||
+                `TYC.NO : ${evenitem[0].tyc_no}`}{" "}
+            </div>
+            <div>Vehicle Brand : {evenitem[0].vehicle_brand}</div>
+            <div>Vehicle Model : {evenitem[0].vehicle_model}</div>
+            <div>Side :{evenitem[0].left_right}</div>
+          </div>
+        </div>
+      </div>
+    </SwiperSlide>
+  )}
+
+  
             {recentProducts && recentProducts.length > 0 ? (
               recentProducts.map((product) => (
                 <SwiperSlide key={product.id}>
@@ -460,6 +352,8 @@ export default function ProdcutsDetail({
                         <div>Vehicle Brand :{product.vehicle_brand}</div>
 
                         <div>Vehicle Model :{product.vehicle_model}</div>
+
+                        <div>Side :{product.left_right}</div>
                       </div>
                     </div>
                   </div>

@@ -249,8 +249,8 @@ export default function NavbarDynamic() {
                                 "https://m.media-amazon.com/images/I/61dpPjdEaAL.jpg"
                               }
                               alt={item.tyc_no || item.oem_no}
-                              width={30}
-                              height={30}
+                              width={10}
+                              height={10}
                               className="rounded-2xl"
                             />
 
